@@ -17,8 +17,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0f0d12' },
-    { media: '(prefers-color-scheme: light)', color: '#fdf8f3' },
+    { media: '(prefers-color-scheme: dark)', color: '#0c0a10' },
+    { media: '(prefers-color-scheme: light)', color: '#fef7f0' },
   ],
 }
 
@@ -73,7 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <Link href="/" className="logo footer-logo" aria-label="Mix My Boba homepage">
                   <span className="logo-emoji">🧋</span> <span>mix my</span> boba
                 </Link>
-                <p>Premium instant boba tea mixes made with real tea and natural ingredients. Boba shop taste, ready in 60 seconds at home.</p>
+                <p>Premium instant boba tea mixes made with real tea and natural ingredients. Your daily boba ritual, ready in 60 seconds. No boba shop needed.</p>
               </div>
               <nav className="footer-links" aria-label="Flavors">
                 <h4>Flavors</h4>
