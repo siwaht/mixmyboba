@@ -303,7 +303,7 @@ export default function ProductsTab({ products, showForm, setShowForm, form, set
             </label>
             <label className="form-label">
               Purity
-              <input required className="form-input" value={form.purity} onChange={e => setForm({ ...form, purity: e.target.value })} placeholder="99.8%" />
+              <input required className="form-input" value={form.purity} onChange={e => setForm({ ...form, purity: e.target.value })} placeholder="20+ Servings" />
             </label>
             <label className="form-label">
               Stock

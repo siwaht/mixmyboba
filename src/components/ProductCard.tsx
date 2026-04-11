@@ -71,7 +71,7 @@ export default function ProductCard({ product }: { product: Product }) {
       <Link href={`/product/${product.slug}`} className="product-img-wrap" aria-label={`View ${product.name} details`}>
         <Image
           src={product.imageUrl}
-          alt={`${product.name} — ${product.purity} boba tea mix`}
+          alt={`${product.name} — premium boba tea mix`}
           width={480}
           height={300}
           sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
@@ -113,7 +113,6 @@ export default function ProductCard({ product }: { product: Product }) {
           <span className="product-meta-cat">
             <span>{product.category}</span>
           </span>
-          <span className="product-meta-purity">{product.purity}</span>
         </div>
 
         {qty === 0 ? (

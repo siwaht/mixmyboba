@@ -1,6 +1,6 @@
 {
   "stripe": {
-    "enabled": false,
+    "enabled": true,
     "testMode": true,
     "publishableKey": "",
     "secretKey": "",
@@ -14,15 +14,10 @@
     "webhookId": ""
   },
   "crypto": {
-    "enabled": true,
+    "enabled": false,
     "walletAddress": "",
-    "acceptedCoins": [
-      "BTC",
-      "ETH",
-      "USDT",
-      "USDC"
-    ],
-    "network": "ERC-20"
+    "acceptedCoins": [],
+    "network": ""
   },
   "ach": {
     "enabled": false,
@@ -33,11 +28,11 @@
   },
   "cod": {
     "enabled": false,
-    "instructions": "Pay with cash when your order is delivered to your doorstep."
+    "instructions": ""
   },
   "general": {
     "currency": "USD",
     "taxRate": 0,
-    "freeShippingThreshold": 200
+    "freeShippingThreshold": 50
   }
 }

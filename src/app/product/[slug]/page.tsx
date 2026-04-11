@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!product) return {}
 
   return {
-    title: `${product.name} — ${product.purity} Boba Tea Mix`,
-    description: `${product.name} (${product.purity}) premium boba tea mix. ${product.description.slice(0, 140)}. Made with real tea. Ships fast.`,
+    title: `${product.name} — Premium Boba Tea Mix`,
+    description: `${product.name} premium boba tea mix — ${product.purity}. ${product.description.slice(0, 140)}. Made with real tea. Ships fast.`,
     openGraph: {
       title: `${product.name} | Mix My Boba`,
       description: product.description,
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${product.name} — ${product.purity}`,
+      title: `${product.name} — Premium Mix`,
       description: product.description.slice(0, 200),
       images: [product.imageUrl],
     },
@@ -143,29 +143,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             <div className="product-specs">
               <div className="spec-row">
-                <span>Purity</span>
+                <span>Servings</span>
                 <span className="spec-value">{product.purity}</span>
               </div>
-              {product.molecularWeight && (
-                <div className="spec-row">
-                  <span>Molecular Weight</span>
-                  <span className="spec-value">{product.molecularWeight}</span>
-                </div>
-              )}
-              {product.sequence && (
-                <div className="spec-row">
-                  <span>Sequence</span>
-                  <span className="spec-value" style={{ fontSize: '0.78rem' }}>{product.sequence}</span>
-                </div>
-              )}
-              {product.casNumber && (
-                <div className="spec-row">
-                  <span>CAS Number</span>
-                  <span className="spec-value">{product.casNumber}</span>
-                </div>
-              )}
               <div className="spec-row">
-                <span>Form</span>
+                <span>Format</span>
                 <span className="spec-value">{product.form}</span>
               </div>
               <div className="spec-row">
@@ -173,8 +155,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 <span className="spec-value">{product.storageTemp}</span>
               </div>
               <div className="spec-row">
-                <span>Testing</span>
-                <span className="spec-value">HPLC + Mass Spec</span>
+                <span>Dietary</span>
+                <span className="spec-value">Plant-Based Friendly · Gluten-Free</span>
+              </div>
+              <div className="spec-row">
+                <span>Ingredients</span>
+                <span className="spec-value">Real Tea · Natural Sweeteners · No Artificial Colors</span>
               </div>
               {product.batchNumber && (
                 <div className="spec-row">
@@ -208,27 +194,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             />
 
             <ProductSocialProof productId={product.id} productSlug={product.slug} stock={product.stock} productName={product.name} />
-
-            {/* COA Section */}
-            {product.coas.length > 0 && (
-              <div className="coa-section">
-                <h3>📋 Certificates of Analysis</h3>
-                <div className="coa-list">
-                  {product.coas.map(coa => (
-                    <div key={coa.id} className="coa-item">
-                      <div className="coa-info">
-                        <span className="coa-batch">Batch: {coa.batchNumber}</span>
-                        <span className="coa-lab">{coa.labName}</span>
-                      </div>
-                      <div className="coa-meta">
-                        <span className="coa-purity">{coa.purityResult}</span>
-                        <span className="coa-date">{new Date(coa.testDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
             <div className="ruo-notice">
               <p>🧋 Preparation Tip</p>
