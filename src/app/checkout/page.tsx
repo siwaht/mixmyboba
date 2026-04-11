@@ -204,7 +204,7 @@ export default function CheckoutPage() {
               </label>
               <label className="checkbox-label">
                 <input type="checkbox" checked={termsAccepted} onChange={e => setTermsAccepted(e.target.checked)} />
-                <span>I accept the <a href="/compliance" target="_blank" rel="noopener noreferrer">Terms of Service</a> and confirm these products are for research use only.</span>
+                <span>I accept the <a href="/compliance" target="_blank" rel="noopener noreferrer">Terms of Service</a> and confirm I have read the return policy.</span>
               </label>
             </div>
 

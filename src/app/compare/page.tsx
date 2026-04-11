@@ -54,11 +54,9 @@ export default function ComparePage() {
 
   const specs = [
     { label: 'Category', key: 'category' },
-    { label: 'Purity', key: 'purity' },
-    { label: 'Form', key: 'form' },
+    { label: 'Servings', key: 'purity' },
+    { label: 'Format', key: 'form' },
     { label: 'Storage', key: 'storageTemp' },
-    { label: 'Molecular Weight', key: 'molecularWeight' },
-    { label: 'CAS Number', key: 'casNumber' },
     { label: 'Variants', key: 'variantCount' },
     { label: 'Stock', key: 'stock' },
   ] as const
@@ -66,9 +64,9 @@ export default function ComparePage() {
   return (
     <section className="compare-section">
       <div className="container">
-        <h1 style={{ marginBottom: '0.5rem' }}>Compare Products</h1>
+        <h1 style={{ marginBottom: '0.5rem' }}>Compare Flavors</h1>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-          Select 2–4 products to compare side by side.
+          Select 2–4 flavors to compare side by side.
         </p>
 
         {/* Product selector */}
@@ -155,7 +153,7 @@ export default function ComparePage() {
 
         {selectedIds.length < 2 && !loading && (
           <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-            Select at least 2 products above to start comparing.
+            Select at least 2 flavors above to start comparing.
           </div>
         )}
       </div>

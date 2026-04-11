@@ -15,7 +15,7 @@ export default function GlobalError({
           <p style={{ color: '#999', marginBottom: '2rem' }}>A critical error occurred.</p>
           <button
             onClick={() => unstable_retry()}
-            style={{ padding: '0.8rem 2rem', background: '#d4b896', color: '#0d0d0d', border: 'none', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 500 }}
+            style={{ padding: '0.8rem 2rem', background: '#9333ea', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 500, borderRadius: '12px' }}
           >
             Try Again
           </button>
