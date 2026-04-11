@@ -1,0 +1,8 @@
+[
+  { "slug": "best_seller", "label": "Best Seller", "emoji": "🏆", "color": "#f59e0b" },
+  { "slug": "fast_selling", "label": "Fast Selling", "emoji": "🔥", "color": "#ef4444" },
+  { "slug": "last_few_left", "label": "Last Few Left", "emoji": "⚡", "color": "#f97316" },
+  { "slug": "staff_pick", "label": "Staff Pick", "emoji": "⭐", "color": "#8b5cf6" },
+  { "slug": "new", "label": "New", "emoji": "🆕", "color": "#22c55e" },
+  { "slug": "popular", "label": "Popular", "emoji": "📈", "color": "#3b82f6" }
+]

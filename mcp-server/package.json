@@ -1,0 +1,13 @@
+{
+  "name": "cellulalabs-mcp-server",
+  "version": "3.0.0",
+  "type": "module",
+  "description": "MCP server for AI agent control of CellulaLabs e-commerce admin",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  }
+}

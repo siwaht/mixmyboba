@@ -1,0 +1,31 @@
+{
+  "enabled": true,
+  "rules": [
+    {
+      "id": "low_stock",
+      "name": "Low Stock Alert",
+      "condition": "stock_below",
+      "threshold": 30,
+      "tagSlug": "last_few_left",
+      "enabled": true
+    },
+    {
+      "id": "high_sales",
+      "name": "Fast Selling",
+      "condition": "sold_above",
+      "threshold": 50,
+      "period": "30d",
+      "tagSlug": "fast_selling",
+      "enabled": true
+    },
+    {
+      "id": "best_seller",
+      "name": "Best Seller",
+      "condition": "sold_above",
+      "threshold": 100,
+      "period": "all",
+      "tagSlug": "best_seller",
+      "enabled": true
+    }
+  ]
+}

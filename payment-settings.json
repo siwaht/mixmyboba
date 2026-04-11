@@ -1,0 +1,43 @@
+{
+  "stripe": {
+    "enabled": false,
+    "testMode": true,
+    "publishableKey": "",
+    "secretKey": "",
+    "webhookSecret": ""
+  },
+  "paypal": {
+    "enabled": false,
+    "testMode": true,
+    "clientId": "",
+    "clientSecret": "",
+    "webhookId": ""
+  },
+  "crypto": {
+    "enabled": true,
+    "walletAddress": "",
+    "acceptedCoins": [
+      "BTC",
+      "ETH",
+      "USDT",
+      "USDC"
+    ],
+    "network": "ERC-20"
+  },
+  "ach": {
+    "enabled": false,
+    "bankName": "",
+    "routingNumber": "",
+    "accountNumber": "",
+    "accountName": ""
+  },
+  "cod": {
+    "enabled": false,
+    "instructions": "Pay with cash when your order is delivered to your doorstep."
+  },
+  "general": {
+    "currency": "USD",
+    "taxRate": 0,
+    "freeShippingThreshold": 200
+  }
+}

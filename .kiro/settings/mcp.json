@@ -1,0 +1,76 @@
+{
+  "mcpServers": {
+    "cellulalabs-admin": {
+      "command": "node",
+      "args": [
+        "mcp-server/index.js"
+      ],
+      "env": {
+        "CELLULA_BASE_URL": "http://localhost:5000",
+        "CELLULA_ADMIN_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbW50MnYxYjkwMDAwaTBtcm5hMjdkdWs2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc1ODM2OTI2LCJleHAiOjE3NzY0NDE3MjZ9.CvCJnZ_R0iiZwKJKEMVxKdZu5-nix7R3cBCSE9KQ0ns"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "*"
+      ],
+      "disabledTools": [
+        "health_check",
+        "generate_admin_token",
+        "get_dashboard_stats",
+        "list_products",
+        "get_product",
+        "search_products",
+        "create_product",
+        "update_product",
+        "delete_product",
+        "upload_product_image",
+        "list_product_variants",
+        "create_product_variant",
+        "update_product_variant",
+        "delete_product_variant",
+        "list_product_coas",
+        "create_product_coa",
+        "delete_product_coa",
+        "list_orders",
+        "get_order",
+        "update_order_status",
+        "create_order",
+        "export_orders_csv",
+        "list_customers",
+        "get_customer",
+        "update_customer_role",
+        "export_customers_csv",
+        "get_inventory",
+        "update_stock",
+        "bulk_update_stock",
+        "list_coupons",
+        "create_coupon",
+        "toggle_coupon",
+        "delete_coupon",
+        "validate_coupon",
+        "list_reviews",
+        "update_review",
+        "delete_review",
+        "get_site_settings",
+        "update_site_settings",
+        "get_payment_settings",
+        "update_payment_settings",
+        "list_product_tags",
+        "create_product_tag",
+        "delete_product_tag",
+        "get_auto_tag_settings",
+        "update_auto_tag_settings",
+        "run_auto_tags",
+        "bulk_assign_tag",
+        "get_tag_analytics",
+        "get_recent_activity",
+        "get_analytics",
+        "get_revenue_analytics",
+        "get_customer_ltv",
+        "import_products_csv",
+        "import_customers_csv",
+        "export_products_csv"
+      ]
+    }
+  }
+}

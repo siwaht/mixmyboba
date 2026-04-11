@@ -1,0 +1,26 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "tD_f2l90yK6xmLy60kCIK"
+uri = "file://artifacts/mockup-sandbox/public/images/vial-bpc-157.png"
+type = "image"
+title = "Minimalist peptide vial 1"
+
+[[generated]]
+id = "rpf2g9lW8sEXAxCOu7z1q"
+uri = "file://artifacts/mockup-sandbox/public/images/vial-tb-500.png"
+type = "image"
+title = "Minimalist peptide vial 2"
+
+[[generated]]
+id = "YHMni9qzlI1WBP5UrEW_U"
+uri = "file://artifacts/mockup-sandbox/public/images/vial-cjc-1295.png"
+type = "image"
+title = "Minimalist peptide vial 3"
+
+[[generated]]
+id = "r7fHyIduotQkvDX-idCM9"
+uri = "file://artifacts/mockup-sandbox/public/images/vial-ipamorelin.png"
+type = "image"
+title = "Minimalist peptide vial 4"
