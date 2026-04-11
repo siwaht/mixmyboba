@@ -37,7 +37,7 @@ export default async function Home() {
   })
 
   const defaultMarquee = ['Real Tea Leaves', 'No Artificial Flavors', 'Ready in 60 Seconds', 'Naturally Sweetened', 'Boba Shop Taste', 'Plant-Based Friendly', 'Under $2 a Cup']
-  const marquee2 = ['🧋 Craveable Taste', '🔥 Zero Guilt', '🍵 Authentic Flavor', '💚 Gut Friendly', '⚡ Clean Energy', '🧘 Balanced Mood']
+  const marquee2 = ['🧋 Craveable Taste', '🌸 Zero Guilt', '🍵 Authentic Flavor', '💜 Gut Friendly', '⚡ Clean Energy', '🌿 Balanced Mood']
   const defaultStats = [
     { value: '20+', label: 'Servings Per Bag' },
     { value: '<$2', label: 'Per Cup' },
@@ -76,15 +76,15 @@ export default async function Home() {
         <div className="container">
           <div className="hero-badge">
             <span className="hero-badge-dot" aria-hidden="true" />
-            Now Shipping Nationwide 🚀
+            Now Shipping Nationwide ✨
           </div>
           <h1 id="hero-heading">
-            Your daily boba ritual,<br className="hero-br" />
-            <span className="hero-highlight">made ridiculously easy.</span>
+            Sip the magic.<br className="hero-br" />
+            <span className="hero-highlight">Boba, but make it easy.</span>
           </h1>
           <p>
-            Premium instant boba mixes with real tea leaves, zero artificial anything.
-            Just scoop, mix, sip. Boba shop taste in 60 seconds flat.
+            Superfood milk tea mixes made with real tea leaves and zero artificial anything.
+            Just scoop, pour, sip — boba shop vibes in 60 seconds flat. 🧋
           </p>
           <div className="hero-ctas">
             <Link href="#store" className="btn btn-primary">
@@ -136,17 +136,17 @@ export default async function Home() {
           <div className="features-grid">
             <article className="feature-card">
               <Coffee className="feature-icon" strokeWidth={1.5} aria-hidden="true" />
-              <h3>Real Tea, Real Flavor</h3>
-              <p>Finely milled whole tea leaves — not artificial tea flavoring. Every sip delivers authentic boba shop taste with full-bodied depth.</p>
+              <h3>Real Tea, Real Flavor 🍵</h3>
+              <p>Finely milled whole tea leaves — not artificial tea flavoring. Every sip delivers authentic boba shop taste with full-bodied depth you can feel.</p>
             </article>
             <article className="feature-card">
               <Leaf className="feature-icon" strokeWidth={1.5} aria-hidden="true" />
-              <h3>Clean Ingredients</h3>
-              <p>Naturally sweetened, zero artificial colors or preservatives. Plant-based friendly. Feel good about every cup you make.</p>
+              <h3>Clean &amp; Kawaii 🌿</h3>
+              <p>Naturally sweetened, zero artificial colors or preservatives. Plant-based friendly. Feel good about every cup — your body will thank you.</p>
             </article>
             <article className="feature-card">
               <Heart className="feature-icon" strokeWidth={1.5} aria-hidden="true" />
-              <h3>Your Way, Every Day</h3>
+              <h3>Your Way, Every Day 💖</h3>
               <p>Hot or iced. Any milk. Any sweetness. Scoop, mix, done — no blender, no brewing, no cleanup. Your daily ritual, simplified.</p>
             </article>
           </div>
@@ -158,7 +158,7 @@ export default async function Home() {
         <div className="container">
           <div className="section-head">
             <h2 id="store-heading">Find Your Flavor</h2>
-            <p>Classic milk tea, taro, matcha, brown sugar, and more — crafted for boba lovers everywhere.</p>
+            <p>Classic milk tea, taro, matcha, brown sugar, and more — crafted with love for boba lovers everywhere.</p>
           </div>
           <Suspense>
             <ProductGrid initialProducts={initialProducts} />
@@ -169,8 +169,8 @@ export default async function Home() {
       {/* ── How It Works (BOBABAM-inspired playful steps) ── */}
       <section className="process-section" aria-labelledby="process-heading">
         <div className="container">
-          <h2 className="process-title" id="process-heading">60 Seconds to Boba Bliss</h2>
-          <p className="process-subtitle">No boba shop needed. No blender. No mess. Just vibes.</p>
+          <h2 className="process-title" id="process-heading">60 Seconds to Boba Bliss ✨</h2>
+          <p className="process-subtitle">No boba shop needed. No blender. No mess. Just good vibes.</p>
           <div className="process-steps">
             <article className="process-step">
               <span className="process-step-num" aria-hidden="true">01</span>
@@ -200,27 +200,27 @@ export default async function Home() {
       <section className="vibe-section" aria-labelledby="vibe-heading">
         <div className="container">
           <div className="vibe-header">
-            <h2 id="vibe-heading">Why People Are Obsessed</h2>
-            <p>Join thousands who ditched the $8 boba run for something better.</p>
+            <h2 id="vibe-heading">Why People Are Obsessed 🧋</h2>
+            <p>Join thousands who ditched the $8 boba run for something way better.</p>
           </div>
           <div className="vibe-grid">
             <div className="vibe-card">
               <span className="vibe-emoji" aria-hidden="true">💰</span>
               <span className="vibe-stat">$2/cup</span>
               <h3>Save Serious Cash</h3>
-              <p>Why spend $8-10 at a boba shop when you can make the same thing at home for under two bucks? Your wallet will thank you.</p>
+              <p>Why spend $8-10 at a boba shop when you can make the same thing at home for under two bucks? Your wallet will literally thank you.</p>
             </div>
             <div className="vibe-card">
               <span className="vibe-emoji" aria-hidden="true">⚡</span>
               <span className="vibe-stat">60 sec</span>
               <h3>Faster Than Fast</h3>
-              <p>No waiting in line. No driving. No 15-minute prep. Scoop, mix, done. Your morning boba ritual just got an upgrade.</p>
+              <p>No waiting in line. No driving. No 15-minute prep. Scoop, mix, done. Your morning boba ritual just got a serious upgrade.</p>
             </div>
             <div className="vibe-card">
-              <span className="vibe-emoji" aria-hidden="true">🌱</span>
+              <span className="vibe-emoji" aria-hidden="true">🌸</span>
               <span className="vibe-stat">100%</span>
-              <h3>Clean Ingredients</h3>
-              <p>Real tea leaves, natural sweeteners, zero artificial anything. Every ingredient you can actually pronounce. No cap.</p>
+              <h3>Clean &amp; Natural</h3>
+              <p>Real tea leaves, natural sweeteners, zero artificial anything. Every ingredient you can actually pronounce. That&apos;s the vibe.</p>
             </div>
           </div>
         </div>
@@ -231,8 +231,8 @@ export default async function Home() {
         <div className="container">
           <div className="cta-card">
             <div className="cta-content">
-              <h2 id="cta-heading">Can&apos;t Decide? Try the Sampler.</h2>
-              <p>Get a taste of every flavor with our curated sampler pack. Perfect for finding your new daily ritual — or gifting to a boba-loving friend.</p>
+              <h2 id="cta-heading">Can&apos;t Decide? Try the Sampler 🎁</h2>
+              <p>Get a taste of every flavor with our curated sampler pack. Perfect for finding your new daily ritual — or gifting to a boba-loving bestie.</p>
             </div>
             <div className="cta-actions">
               <Link href="/#store" className="btn btn-primary">Shop Now <ArrowRight size={16} aria-hidden="true" /></Link>

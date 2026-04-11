@@ -17,7 +17,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0c0a10' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1520' },
     { media: '(prefers-color-scheme: light)', color: '#fef7f0' },
   ],
 }
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     default: 'Mix My Boba — Premium Bubble Tea Mixes | Make Boba at Home',
     template: '%s | Mix My Boba',
   },
-  description: 'Premium instant boba tea mixes made with real tea and natural ingredients. Classic milk tea, taro, matcha, brown sugar — just add water and your favorite milk. Ready in 60 seconds. Shop now at mixmyboba.com.',
+  description: 'Premium superfood boba tea mixes made with real tea and natural ingredients. Classic milk tea, taro, matcha, brown sugar — just add water and your favorite milk. Ready in 60 seconds. Shop now at mixmyboba.com.',
   keywords: ['boba tea', 'bubble tea', 'milk tea mix', 'instant boba', 'boba at home', 'taro milk tea', 'matcha latte', 'brown sugar boba', 'premix boba', 'tea latte powder', 'boba kit'],
   openGraph: {
     type: 'website',
