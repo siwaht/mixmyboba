@@ -27,8 +27,8 @@ export default function ThemeToggle() {
   // Render a placeholder during SSR to avoid hydration mismatch
   if (!mounted) {
     return (
-      <button className="theme-toggle" aria-label="Toggle theme">
-        <span aria-hidden="true">🌙</span>
+      <button className="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+        🌙
       </button>
     )
   }

@@ -15,6 +15,14 @@ async function getTagDefs(): Promise<TagDef[]> {
   return getCachedJson<TagDef[]>('product-tags.json', [])
 }
 
+export async function generateStaticParams() {
+  const products = await prisma.product.findMany({
+    where: { active: true },
+    select: { slug: true },
+  })
+  return products.map(p => ({ slug: p.slug }))
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const product = await prisma.product.findUnique({ where: { slug } })

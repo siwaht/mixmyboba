@@ -38,7 +38,7 @@ export default function ProductSocialProof({ productId, productSlug, stock, prod
       .then(r => r.json())
       .then(setRelated)
       .catch(() => {})
-  }, [productId])
+  }, [productSlug])
 
   return (
     <>
