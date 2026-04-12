@@ -25,7 +25,7 @@ export default function ComplianceBanner() {
     <div className="compliance-banner" role="banner">
       <div className="container compliance-banner-inner">
         <span>
-          🧋 <strong>Free shipping</strong> on orders over $50 — use code <strong>BOBAFAM</strong> for 15% off your first order!{' '}
+          🧬 <strong>Free shipping</strong> on orders over $150 — use code <strong>PEPTIDE15</strong> for 15% off your first order!{' '}
           <Link href="/#store">Shop now →</Link>
         </span>
         <button

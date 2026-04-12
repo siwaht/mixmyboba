@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'FAQ — Boba Tea Mixes, Preparation, Shipping & More',
-  description: 'Frequently asked questions about Mix My Boba instant boba tea mixes — how to prepare, ingredients, shipping, subscriptions, and more.',
+  title: 'FAQ — Peptides, Purity, Shipping & More',
+  description: 'Frequently asked questions about Immortality Peptides — purity testing, COA, handling, shipping, and more.',
 }
 
 const faqs = [
