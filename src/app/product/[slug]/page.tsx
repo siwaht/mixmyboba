@@ -7,6 +7,7 @@ import AddToCartButton from './AddToCartButton'
 import ReviewSection from './ReviewSection'
 import ProductSocialProof from './ProductSocialProof'
 import { getCachedJson } from '@/lib/settings-cache'
+import { getProductIngredients } from '@/lib/product-ingredients'
 
 type TagDef = { slug: string; label: string; emoji: string; color: string }
 
@@ -20,8 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!product) return {}
 
   return {
-    title: `${product.name} — Premium Boba Tea Mix`,
-    description: `${product.name} premium boba tea mix — ${product.purity}. ${product.description.slice(0, 140)}. Made with real tea. Ships fast.`,
+    title: `${product.name} — Functional Boba Tea Mix`,
+    description: `${product.name} functional boba tea mix — ${product.purity}. Date-sweetened, adaptogen-infused, prebiotic fiber. ${product.description.slice(0, 120)}. Ships fast.`,
     openGraph: {
       title: `${product.name} | Mix My Boba`,
       description: product.description,
@@ -62,6 +63,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const tagDefs = product.tag ? await getTagDefs() : []
   const tagInfo = product.tag ? tagDefs.find(t => t.slug === product.tag) : null
+  const ingredientData = await getProductIngredients(slug)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -160,8 +162,20 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </div>
               <div className="spec-row">
                 <span>Ingredients</span>
-                <span className="spec-value">Real Tea · Natural Sweeteners · No Artificial Colors</span>
+                <span className="spec-value">{ingredientData ? ingredientData.ingredients : 'Real Tea · Natural Sweeteners · No Artificial Colors'}</span>
               </div>
+              {ingredientData && (
+                <div className="spec-row">
+                  <span>Sweetener</span>
+                  <span className="spec-value">Organic Date Powder (No Refined Sugar)</span>
+                </div>
+              )}
+              {ingredientData && (
+                <div className="spec-row">
+                  <span>Per Serving</span>
+                  <span className="spec-value">{ingredientData.nutritionHighlights.calories} cal · {ingredientData.nutritionHighlights.sugar} sugar · {ingredientData.nutritionHighlights.fiber} fiber</span>
+                </div>
+              )}
               <div className="spec-row">
                 <span>Availability</span>
                 <span className="spec-value" style={{ color: product.stock > 0 ? 'var(--success)' : 'var(--error)' }}>
@@ -191,10 +205,58 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             <div className="prep-tip-notice">
               <p>🧋 Preparation Tip</p>
-              <p>For best results, use hot (not boiling) water and froth with your favorite milk. Works great iced too — just pour over ice after mixing. Customize sweetness to your taste.</p>
+              <p>For best results, use hot (not boiling) water to preserve the adaptogens and nutrients. Froth with your favorite milk — oat, almond, or coconut work great. Works iced too. Customize sweetness to your taste; the date powder provides a gentle natural sweetness.</p>
             </div>
           </div>
         </div>
+
+        {/* Key Ingredients & Functional Benefits */}
+        {ingredientData && (
+          <>
+            <div className="pdp-functional-section">
+              <h2 className="pdp-functional-title">What&apos;s Inside — And Why It Matters 🧬</h2>
+              <p className="pdp-functional-subtitle">Every ingredient earns its spot. No fillers, no cheap shortcuts, no industrial junk.</p>
+              <div className="pdp-key-ingredients">
+                {ingredientData.keyIngredients.map((ing, i) => (
+                  <div key={i} className="pdp-ingredient-card">
+                    <span className="pdp-ingredient-icon" aria-hidden="true">{ing.icon}</span>
+                    <h4>{ing.name}</h4>
+                    <p>{ing.benefit}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pdp-benefits-section">
+              <h3 className="pdp-benefits-title">Functional Benefits ✨</h3>
+              <div className="pdp-benefits-grid">
+                {ingredientData.functionalBenefits.map((b, i) => (
+                  <div key={i} className="pdp-benefit-card">
+                    <span className="pdp-benefit-icon" aria-hidden="true">{b.icon}</span>
+                    <div>
+                      <h4>{b.title}</h4>
+                      <p>{b.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pdp-never-list">
+              <h3>What You&apos;ll Never Find In Our Mix 🚫</h3>
+              <div className="pdp-never-items">
+                <span>Refined Sugar</span>
+                <span>Hydrogenated Oils</span>
+                <span>Artificial Flavors</span>
+                <span>Preservatives</span>
+                <span>Tea Dust</span>
+                <span>Carrageenan</span>
+                <span>HFCS</span>
+                <span>Titanium Dioxide</span>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Preparation & Info */}
         <div className="pdp-info-grid">
@@ -204,7 +266,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
           <div className="pdp-info-card">
             <h3>📊 Quality Promise</h3>
-            <p>Made with real tea leaves and natural ingredients. No artificial colors, flavors, or preservatives. Every batch is tested for quality and consistency before packaging.</p>
+            <p>Made with real tea leaves, date-sweetened, and loaded with functional superfoods. No artificial colors, flavors, or preservatives. Every batch is tested for quality and consistency.</p>
           </div>
           <div className="pdp-info-card">
             <h3>📦 Shipping</h3>

@@ -9,7 +9,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Store',
   name: 'Mix My Boba',
-  description: 'Premium instant boba tea mixes made with real tea and natural ingredients. Classic milk tea, taro, matcha, brown sugar — just add water and your favorite milk. Ready in 60 seconds.',
+  description: 'Functional instant boba tea mixes made with real tea, date-sweetened, and loaded with adaptogens, prebiotics & vitamins. Classic milk tea, taro, matcha, brown sugar — no artificial anything. Ready in 60 seconds.',
   url: 'https://mixmyboba.com',
   sameAs: [],
   hasOfferCatalog: {
@@ -36,8 +36,8 @@ export default async function Home() {
     },
   })
 
-  const defaultMarquee = ['Real Tea Leaves', 'No Artificial Flavors', 'Ready in 60 Seconds', 'Naturally Sweetened', 'Boba Shop Taste', 'Plant-Based Friendly', 'Under $2 a Cup']
-  const marquee2 = ['🧋 Craveable Taste', '🌸 Zero Guilt', '🍵 Authentic Flavor', '💜 Gut Friendly', '⚡ Clean Energy', '🌿 Balanced Mood']
+  const defaultMarquee = ['Real Tea Leaves', 'Date-Sweetened', 'Adaptogen-Infused', 'Prebiotic Fiber', 'Vitamin-Fortified', 'No Artificial Anything', 'Under $2 a Cup']
+  const marquee2 = ['🧋 Craveable Taste', '🌸 Zero Junk', '🍵 Functional Superfoods', '💚 Gut Friendly', '⚡ Clean Energy', '🧠 Focus & Clarity', '🧘 No Crash']
   const defaultStats = [
     { value: '20+', label: 'Servings Per Bag' },
     { value: '<$2', label: 'Per Cup' },
@@ -83,8 +83,8 @@ export default async function Home() {
             <span className="hero-highlight">Boba, but make it easy.</span>
           </h1>
           <p>
-            Superfood milk tea mixes made with real tea leaves and zero artificial anything.
-            Just scoop, pour, sip — boba shop vibes in 60 seconds flat. 🧋
+            Functional milk tea mixes with real tea leaves, date-sweetened, and loaded with adaptogens &amp; vitamins.
+            No junk, no crash, no bloat — boba shop vibes in 60 seconds flat. 🧋
           </p>
           <div className="hero-ctas">
             <Link href="#store" className="btn btn-primary">
@@ -136,19 +136,53 @@ export default async function Home() {
           <div className="features-grid">
             <article className="feature-card">
               <Coffee className="feature-icon" strokeWidth={1.5} aria-hidden="true" />
-              <h3>Real Tea, Real Flavor 🍵</h3>
-              <p>Finely milled whole tea leaves — not artificial tea flavoring. Every sip delivers authentic boba shop taste with full-bodied depth you can feel.</p>
+              <h3>Real Tea, Real Superfoods 🍵</h3>
+              <p>Finely milled whole tea leaves with functional adaptogens — lion&apos;s mane, ashwagandha, reishi, maca. Every sip delivers boba shop taste plus ingredients that actually support your body.</p>
             </article>
             <article className="feature-card">
               <Leaf className="feature-icon" strokeWidth={1.5} aria-hidden="true" />
-              <h3>Clean &amp; Kawaii 🌿</h3>
-              <p>Naturally sweetened, zero artificial colors or preservatives. Plant-based friendly. Feel good about every cup — your body will thank you.</p>
+              <h3>Date-Sweetened, Zero Junk 🌿</h3>
+              <p>Sweetened with organic dates — not industrial sugar, HFCS, or artificial sweeteners. No toxic non-dairy creamer, no preservatives, no cheap tea dust. Just clean ingredients you can pronounce.</p>
             </article>
             <article className="feature-card">
               <Heart className="feature-icon" strokeWidth={1.5} aria-hidden="true" />
-              <h3>Your Way, Every Day 💖</h3>
-              <p>Hot or iced. Any milk. Any sweetness. Scoop, mix, done — no blender, no brewing, no cleanup. Your daily ritual, simplified.</p>
+              <h3>Gut Happy, No Crash 💚</h3>
+              <p>Prebiotic chicory fiber in every scoop feeds your good gut bacteria. Vitamins D3, B12, C, zinc, and magnesium for daily support. Smooth energy with zero bloating and no afternoon crash.</p>
             </article>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Not Your Average Premix — Comparison ── */}
+      <section className="comparison-section" aria-labelledby="comparison-heading">
+        <div className="container">
+          <h2 id="comparison-heading">Not Your Average Premix 🚫</h2>
+          <p className="comparison-subtitle">Most instant boba is loaded with junk. We flipped the script.</p>
+          <div className="comparison-grid">
+            <div className="comparison-col comparison-them">
+              <h3>Typical Premix</h3>
+              <ul>
+                <li><span className="comparison-x" aria-hidden="true">✕</span> Refined white sugar &amp; HFCS</li>
+                <li><span className="comparison-x" aria-hidden="true">✕</span> Hydrogenated non-dairy creamer</li>
+                <li><span className="comparison-x" aria-hidden="true">✕</span> Artificial flavors &amp; colors</li>
+                <li><span className="comparison-x" aria-hidden="true">✕</span> Cheap tea dust (fannings)</li>
+                <li><span className="comparison-x" aria-hidden="true">✕</span> Preservatives (BHA, TBHQ)</li>
+                <li><span className="comparison-x" aria-hidden="true">✕</span> Sugar crash &amp; bloating</li>
+                <li><span className="comparison-x" aria-hidden="true">✕</span> Zero nutritional value</li>
+              </ul>
+            </div>
+            <div className="comparison-col comparison-us">
+              <h3>Mix My Boba</h3>
+              <ul>
+                <li><span className="comparison-check" aria-hidden="true">✓</span> Organic date powder sweetener</li>
+                <li><span className="comparison-check" aria-hidden="true">✓</span> Coconut cream &amp; oat milk powder</li>
+                <li><span className="comparison-check" aria-hidden="true">✓</span> Real fruit &amp; natural extracts</li>
+                <li><span className="comparison-check" aria-hidden="true">✓</span> Whole-leaf finely milled tea</li>
+                <li><span className="comparison-check" aria-hidden="true">✓</span> Adaptogens &amp; functional mushrooms</li>
+                <li><span className="comparison-check" aria-hidden="true">✓</span> Prebiotic fiber for gut health</li>
+                <li><span className="comparison-check" aria-hidden="true">✓</span> Vitamins D3, B12, C, zinc &amp; more</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -158,7 +192,7 @@ export default async function Home() {
         <div className="container">
           <div className="section-head">
             <h2 id="store-heading">Find Your Flavor</h2>
-            <p>Classic milk tea, taro, matcha, brown sugar, and more — crafted with love for boba lovers everywhere.</p>
+            <p>Classic milk tea, taro, matcha, brown sugar, and more — each with its own functional superpower. Date-sweetened, adaptogen-infused, gut-friendly.</p>
           </div>
           <Suspense>
             <ProductGrid initialProducts={initialProducts} />
@@ -201,26 +235,26 @@ export default async function Home() {
         <div className="container">
           <div className="vibe-header">
             <h2 id="vibe-heading">Why People Are Obsessed 🧋</h2>
-            <p>Join thousands who ditched the $8 boba run for something way better.</p>
+            <p>Boba that tastes incredible AND supports your body? That&apos;s the whole point.</p>
           </div>
           <div className="vibe-grid">
             <div className="vibe-card">
-              <span className="vibe-emoji" aria-hidden="true">💰</span>
-              <span className="vibe-stat">$2/cup</span>
-              <h3>Save Serious Cash</h3>
-              <p>Why spend $8-10 at a boba shop when you can make the same thing at home for under two bucks? Your wallet will literally thank you.</p>
+              <span className="vibe-emoji" aria-hidden="true">🌿</span>
+              <span className="vibe-stat">0g</span>
+              <h3>Zero Refined Sugar</h3>
+              <p>Sweetened with organic dates — not industrial sugar, HFCS, or artificial sweeteners. Real sweetness with fiber, iron, and potassium built in. No blood sugar rollercoaster.</p>
             </div>
             <div className="vibe-card">
-              <span className="vibe-emoji" aria-hidden="true">⚡</span>
-              <span className="vibe-stat">60 sec</span>
-              <h3>Faster Than Fast</h3>
-              <p>No waiting in line. No driving. No 15-minute prep. Scoop, mix, done. Your morning boba ritual just got a serious upgrade.</p>
+              <span className="vibe-emoji" aria-hidden="true">💚</span>
+              <span className="vibe-stat">4g+</span>
+              <h3>Prebiotic Fiber</h3>
+              <p>Every scoop has chicory root fiber that feeds your good gut bacteria. No bloating, no discomfort — just smooth digestion and a happy microbiome.</p>
             </div>
             <div className="vibe-card">
-              <span className="vibe-emoji" aria-hidden="true">🌸</span>
-              <span className="vibe-stat">100%</span>
-              <h3>Clean &amp; Natural</h3>
-              <p>Real tea leaves, natural sweeteners, zero artificial anything. Every ingredient you can actually pronounce. That&apos;s the vibe.</p>
+              <span className="vibe-emoji" aria-hidden="true">🧠</span>
+              <span className="vibe-stat">5+</span>
+              <h3>Functional Adaptogens</h3>
+              <p>Lion&apos;s mane for focus, ashwagandha for calm, reishi for immunity, maca for energy, tulsi for stress. Each flavor has its own functional superpower.</p>
             </div>
           </div>
         </div>

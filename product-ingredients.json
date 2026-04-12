@@ -1,0 +1,154 @@
+{
+  "global": {
+    "headline": "Boba, But Make It Functional",
+    "subline": "Every scoop is loaded with real tea, natural sweeteners, and functional superfoods. No industrial sugar. No toxic creamers. No artificial anything. Just clean ingredients that taste incredible and actually support your body.",
+    "badges": [
+      { "icon": "🌿", "label": "All Natural" },
+      { "icon": "🍃", "label": "No Artificial Flavors" },
+      { "icon": "🫘", "label": "Prebiotic Fiber" },
+      { "icon": "🍵", "label": "Real Tea Leaves" },
+      { "icon": "🧠", "label": "Adaptogen-Infused" },
+      { "icon": "💪", "label": "Vitamin-Fortified" }
+    ],
+    "neverList": [
+      "Refined Sugar",
+      "Non-Dairy Creamer (Hydrogenated Oils)",
+      "Artificial Flavors or Colors",
+      "Preservatives (BHA, BHT, TBHQ)",
+      "High-Fructose Corn Syrup",
+      "Cheap Tea Dust or Fannings",
+      "Titanium Dioxide",
+      "Carrageenan"
+    ]
+  },
+  "products": {
+    "classic-milk-tea": {
+      "ingredients": "Whole-leaf Assam black tea (finely milled), organic date powder, coconut cream powder, oat milk powder, lion's mane mushroom extract, prebiotic chicory root fiber (inulin), Himalayan pink salt, vitamin D3, vitamin B12, zinc",
+      "keyIngredients": [
+        { "name": "Assam Black Tea", "icon": "🍵", "benefit": "Rich in L-theanine for calm, focused energy without the jitters" },
+        { "name": "Organic Date Powder", "icon": "🌴", "benefit": "Natural sweetness with iron, potassium & fiber — no blood sugar spike" },
+        { "name": "Lion's Mane Extract", "icon": "🧠", "benefit": "Supports cognitive function, memory & mental clarity" },
+        { "name": "Prebiotic Chicory Fiber", "icon": "💚", "benefit": "Feeds good gut bacteria — no bloating, better digestion" }
+      ],
+      "functionalBenefits": [
+        { "icon": "⚡", "title": "Sustained Energy", "desc": "L-theanine + natural caffeine = smooth energy with no crash" },
+        { "icon": "🧠", "title": "Focus & Clarity", "desc": "Lion's mane supports cognitive performance all day" },
+        { "icon": "💚", "title": "Gut Support", "desc": "Prebiotic fiber nourishes your microbiome — zero bloat" },
+        { "icon": "💪", "title": "Daily Vitamins", "desc": "Fortified with D3, B12 & zinc for immune support" }
+      ],
+      "nutritionHighlights": { "calories": "45", "sugar": "3g (from dates)", "protein": "2g", "fiber": "4g" }
+    },
+    "taro-milk-tea": {
+      "ingredients": "Real taro root powder, whole-leaf black tea (finely milled), organic date powder, coconut cream powder, oat milk powder, ashwagandha root extract, prebiotic chicory root fiber (inulin), natural vanilla bean, vitamin D3, vitamin B6, magnesium",
+      "keyIngredients": [
+        { "name": "Real Taro Root", "icon": "💜", "benefit": "Naturally purple, rich in fiber, potassium & antioxidants" },
+        { "name": "Organic Date Powder", "icon": "🌴", "benefit": "Gentle sweetness packed with minerals — no refined sugar" },
+        { "name": "Ashwagandha Extract", "icon": "🧘", "benefit": "Adaptogen that reduces stress & supports restful sleep" },
+        { "name": "Prebiotic Chicory Fiber", "icon": "💚", "benefit": "Promotes healthy digestion and reduces bloating" }
+      ],
+      "functionalBenefits": [
+        { "icon": "🧘", "title": "Stress Relief", "desc": "Ashwagandha helps lower cortisol and calm your nervous system" },
+        { "icon": "💜", "title": "Antioxidant Rich", "desc": "Taro root anthocyanins protect cells from oxidative stress" },
+        { "icon": "💚", "title": "Gut Friendly", "desc": "Prebiotic fiber + taro fiber for smooth digestion" },
+        { "icon": "😴", "title": "Better Sleep", "desc": "Magnesium + ashwagandha support deep, restorative rest" }
+      ],
+      "nutritionHighlights": { "calories": "50", "sugar": "4g (from dates & taro)", "protein": "2g", "fiber": "5g" }
+    },
+    "matcha-boba": {
+      "ingredients": "Ceremonial-grade Uji matcha, organic date powder, coconut cream powder, oat milk powder, lion's mane mushroom extract, reishi mushroom extract, prebiotic chicory root fiber (inulin), vitamin D3, vitamin B12, iron",
+      "keyIngredients": [
+        { "name": "Ceremonial Uji Matcha", "icon": "🍵", "benefit": "Stone-ground whole tea leaves — 137x more antioxidants than green tea" },
+        { "name": "Lion's Mane + Reishi", "icon": "🍄", "benefit": "Dual mushroom stack for focus, calm & immune support" },
+        { "name": "Organic Date Powder", "icon": "🌴", "benefit": "Clean sweetness with natural fiber and minerals" },
+        { "name": "Prebiotic Chicory Fiber", "icon": "💚", "benefit": "Supports gut health and nutrient absorption" }
+      ],
+      "functionalBenefits": [
+        { "icon": "🧠", "title": "Laser Focus", "desc": "Matcha L-theanine + lion's mane = peak mental performance" },
+        { "icon": "🛡️", "title": "Immune Boost", "desc": "Reishi mushroom strengthens your body's natural defenses" },
+        { "icon": "⚡", "title": "Clean Energy", "desc": "Slow-release caffeine — no jitters, no afternoon crash" },
+        { "icon": "🌿", "title": "Detox Support", "desc": "Chlorophyll-rich matcha helps your body naturally detoxify" }
+      ],
+      "nutritionHighlights": { "calories": "40", "sugar": "3g (from dates)", "protein": "2g", "fiber": "4g" }
+    },
+    "brown-sugar-boba": {
+      "ingredients": "Whole-leaf Assam black tea (finely milled), organic coconut sugar, organic date powder, blackstrap molasses, coconut cream powder, oat milk powder, maca root extract, prebiotic chicory root fiber (inulin), cinnamon bark, vitamin D3, vitamin B12, iron",
+      "keyIngredients": [
+        { "name": "Organic Coconut Sugar", "icon": "🥥", "benefit": "Low-GI natural sweetener with trace minerals — no blood sugar rollercoaster" },
+        { "name": "Blackstrap Molasses", "icon": "🍯", "benefit": "Rich in iron, calcium & magnesium — the caramel depth you crave" },
+        { "name": "Maca Root Extract", "icon": "⚡", "benefit": "Peruvian adaptogen for sustained energy, stamina & hormone balance" },
+        { "name": "Prebiotic Chicory Fiber", "icon": "💚", "benefit": "Gut-loving fiber that keeps digestion smooth" }
+      ],
+      "functionalBenefits": [
+        { "icon": "⚡", "title": "All-Day Energy", "desc": "Maca root + natural caffeine for stamina without the crash" },
+        { "icon": "🦴", "title": "Mineral Dense", "desc": "Iron, calcium & magnesium from molasses and coconut sugar" },
+        { "icon": "💚", "title": "Gut Harmony", "desc": "Prebiotic fiber + cinnamon soothe and support digestion" },
+        { "icon": "🔥", "title": "Metabolism Support", "desc": "Cinnamon helps regulate blood sugar and boost metabolism" }
+      ],
+      "nutritionHighlights": { "calories": "55", "sugar": "5g (from coconut sugar & dates)", "protein": "2g", "fiber": "4g" }
+    },
+    "thai-tea": {
+      "ingredients": "Ceylon black tea (finely milled), organic date powder, coconut cream powder, oat milk powder, star anise, cardamom, turmeric extract (curcumin), black pepper extract (piperine), prebiotic chicory root fiber (inulin), vitamin D3, vitamin C, zinc",
+      "keyIngredients": [
+        { "name": "Ceylon Black Tea", "icon": "🍵", "benefit": "Premium Sri Lankan tea with bold flavor and natural antioxidants" },
+        { "name": "Turmeric + Black Pepper", "icon": "🌶️", "benefit": "Powerful anti-inflammatory duo — piperine boosts curcumin absorption 2000%" },
+        { "name": "Cardamom & Star Anise", "icon": "✨", "benefit": "Traditional Thai spices that aid digestion and freshen breath" },
+        { "name": "Prebiotic Chicory Fiber", "icon": "💚", "benefit": "Gentle fiber for daily gut health maintenance" }
+      ],
+      "functionalBenefits": [
+        { "icon": "🔥", "title": "Anti-Inflammatory", "desc": "Turmeric curcumin fights inflammation at the cellular level" },
+        { "icon": "🛡️", "title": "Immune Defense", "desc": "Vitamin C + zinc + turmeric triple-shield your immune system" },
+        { "icon": "💚", "title": "Digestive Ease", "desc": "Cardamom + prebiotic fiber keep your gut happy and bloat-free" },
+        { "icon": "✨", "title": "Skin Glow", "desc": "Antioxidant-rich spices support radiant, healthy skin" }
+      ],
+      "nutritionHighlights": { "calories": "45", "sugar": "3g (from dates)", "protein": "2g", "fiber": "4g" }
+    },
+    "honeydew-milk-tea": {
+      "ingredients": "Real honeydew melon powder, whole-leaf green tea (finely milled), organic date powder, coconut cream powder, oat milk powder, collagen peptides (marine), prebiotic chicory root fiber (inulin), aloe vera extract, vitamin C, vitamin E, biotin",
+      "keyIngredients": [
+        { "name": "Real Honeydew Melon", "icon": "🍈", "benefit": "Natural melon flavor rich in vitamin C and potassium" },
+        { "name": "Marine Collagen Peptides", "icon": "✨", "benefit": "Supports skin elasticity, hair strength & joint health" },
+        { "name": "Aloe Vera Extract", "icon": "🌱", "benefit": "Soothes the gut lining and supports hydration from within" },
+        { "name": "Prebiotic Chicory Fiber", "icon": "💚", "benefit": "Nourishes beneficial gut bacteria for better digestion" }
+      ],
+      "functionalBenefits": [
+        { "icon": "✨", "title": "Beauty Boost", "desc": "Collagen + biotin + vitamin E for glowing skin, hair & nails" },
+        { "icon": "💧", "title": "Deep Hydration", "desc": "Honeydew + aloe vera hydrate from the inside out" },
+        { "icon": "💚", "title": "Gut Soothing", "desc": "Aloe vera + prebiotic fiber calm and nourish your digestive system" },
+        { "icon": "🌿", "title": "Antioxidant Shield", "desc": "Green tea catechins + vitamin C protect against free radicals" }
+      ],
+      "nutritionHighlights": { "calories": "42", "sugar": "3g (from dates & melon)", "protein": "3g", "fiber": "4g" }
+    },
+    "strawberry-milk-tea": {
+      "ingredients": "Freeze-dried strawberry powder, whole-leaf black tea (finely milled), organic date powder, coconut cream powder, oat milk powder, acerola cherry extract (vitamin C), prebiotic chicory root fiber (inulin), beetroot powder (color), vitamin D3, folate, iron",
+      "keyIngredients": [
+        { "name": "Freeze-Dried Strawberry", "icon": "🍓", "benefit": "Real berry flavor with natural anthocyanins and vitamin C" },
+        { "name": "Acerola Cherry Extract", "icon": "🍒", "benefit": "Nature's vitamin C powerhouse — 50x more than oranges" },
+        { "name": "Beetroot Powder", "icon": "💗", "benefit": "Natural pink color + nitric oxide for blood flow & stamina" },
+        { "name": "Prebiotic Chicory Fiber", "icon": "💚", "benefit": "Supports a thriving gut microbiome every single day" }
+      ],
+      "functionalBenefits": [
+        { "icon": "🛡️", "title": "Immune Powerhouse", "desc": "Acerola + strawberry deliver mega-dose natural vitamin C" },
+        { "icon": "❤️", "title": "Heart Health", "desc": "Beetroot nitrates support healthy blood pressure & circulation" },
+        { "icon": "💚", "title": "Happy Gut", "desc": "Prebiotic fiber feeds your good bacteria — no bloating" },
+        { "icon": "🌸", "title": "Glow From Within", "desc": "Folate + iron + vitamin C support energy and radiant skin" }
+      ],
+      "nutritionHighlights": { "calories": "43", "sugar": "4g (from dates & berries)", "protein": "2g", "fiber": "4g" }
+    },
+    "passion-fruit-boba": {
+      "ingredients": "Real passion fruit powder, whole-leaf green tea (finely milled), organic date powder, coconut cream powder, oat milk powder, adaptogenic holy basil (tulsi) extract, prebiotic chicory root fiber (inulin), ginger root extract, vitamin C, vitamin B6, magnesium",
+      "keyIngredients": [
+        { "name": "Real Passion Fruit", "icon": "🥭", "benefit": "Tropical tang loaded with vitamin C, fiber & antioxidants" },
+        { "name": "Holy Basil (Tulsi)", "icon": "🌿", "benefit": "Sacred adaptogen that reduces anxiety and supports adrenal health" },
+        { "name": "Ginger Root Extract", "icon": "🫚", "benefit": "Anti-nausea, anti-inflammatory, and warming digestive support" },
+        { "name": "Prebiotic Chicory Fiber", "icon": "💚", "benefit": "Daily gut maintenance for smooth, comfortable digestion" }
+      ],
+      "functionalBenefits": [
+        { "icon": "🧘", "title": "Calm & Centered", "desc": "Tulsi adaptogen helps your body handle stress gracefully" },
+        { "icon": "💚", "title": "Digestive Comfort", "desc": "Ginger + prebiotic fiber eliminate bloating and nausea" },
+        { "icon": "🛡️", "title": "Immune Support", "desc": "Passion fruit vitamin C + tulsi strengthen natural defenses" },
+        { "icon": "😊", "title": "Mood Lift", "desc": "B6 + magnesium support serotonin production for a brighter day" }
+      ],
+      "nutritionHighlights": { "calories": "44", "sugar": "3g (from dates & fruit)", "protein": "2g", "fiber": "5g" }
+    }
+  }
+}
