@@ -265,12 +265,12 @@ export default async function Home() {
         <div className="container">
           <div className="cta-card">
             <div className="cta-content">
-              <h2 id="cta-heading">Can&apos;t Decide? Try the Sampler 🎁</h2>
-              <p>Get a taste of every flavor with our curated sampler pack. Perfect for finding your new daily ritual — or gifting to a boba-loving bestie.</p>
+              <h2 id="cta-heading">Need Bulk or Custom Orders? 📦</h2>
+              <p>Looking for custom flavors or large-quantity orders? We offer flexible bulk options for businesses, events, and gifting. Let&apos;s chat!</p>
             </div>
             <div className="cta-actions">
-              <Link href="/#store" className="btn btn-primary">Shop Now <ArrowRight size={16} aria-hidden="true" /></Link>
-              <Link href="/faq" className="btn btn-secondary">Read FAQ</Link>
+              <Link href="/faq" className="btn btn-primary">Get in Touch <ArrowRight size={16} aria-hidden="true" /></Link>
+              <Link href="/#store" className="btn btn-secondary">Browse Products</Link>
             </div>
           </div>
         </div>
