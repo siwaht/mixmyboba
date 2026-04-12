@@ -76,7 +76,7 @@ export default async function Home() {
         <div className="container">
           <div className="hero-badge">
             <span className="hero-badge-dot" aria-hidden="true" />
-            Now Shipping Nationwide ✨
+            Now Shipping Worldwide ✨
           </div>
           <h1 id="hero-heading">
             Sip the magic.<br className="hero-br" />
