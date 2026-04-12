@@ -22,7 +22,7 @@ const sections = [
     id: 'terms',
     icon: '📜',
     title: 'Terms of Service',
-    content: 'By accessing mixmyboba.com and placing an order, you agree that: (1) You are at least 18 years of age or have parental consent. (2) All information you provide is accurate and complete. (3) You are responsible for maintaining the confidentiality of your account. (4) Mix My Boba reserves the right to refuse service, modify prices, or discontinue products at any time. (5) Product images are for illustration purposes and actual products may vary slightly. (6) Nutritional information is approximate and may vary by batch.',
+    content: 'By accessing mixmyboba.com and placing an order, you agree that: (1) All information you provide is accurate and complete. (2) You are responsible for maintaining the confidentiality of your account. (3) Mix My Boba reserves the right to refuse service, modify prices, or discontinue products at any time. (4) Product images are for illustration purposes and actual products may vary slightly. (5) Nutritional information is approximate and may vary by batch.',
   },
   {
     id: 'privacy',

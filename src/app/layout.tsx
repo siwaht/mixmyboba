@@ -79,10 +79,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <h4>Flavors</h4>
                 <ul>
                   <li><Link href="/?category=Classic#store">Classic Milk Tea</Link></li>
-                  <li><Link href="/?category=Taro#store">Taro</Link></li>
                   <li><Link href="/?category=Matcha#store">Matcha</Link></li>
                   <li><Link href="/?category=Brown+Sugar#store">Brown Sugar</Link></li>
                   <li><Link href="/?category=Fruity#store">Fruity</Link></li>
+                  <li><Link href="/?category=Toppings#store">Toppings</Link></li>
                 </ul>
               </nav>
               <nav className="footer-links" aria-label="Help">

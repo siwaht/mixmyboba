@@ -65,13 +65,13 @@ export default function ProductSocialProof({ productId, productSlug, stock, prod
       {/* Quantity discount hint */}
       <div className="qty-discount-hint">
         <span>💰</span>
-        <span>Buy 3+ of any product and get <strong>10% off</strong> at checkout with code <code>BULK3</code></span>
+        <span>First order? Use code <strong>FIRSTSIP</strong> for <strong>15% off</strong> at checkout!</span>
       </div>
 
       {/* Frequently Bought Together */}
       {related.length > 0 && (
         <div className="fbt-section">
-          <h3>🔬 Frequently Bought Together</h3>
+          <h3>🧋 Frequently Bought Together</h3>
           <div className="fbt-grid">
             {related.map(p => (
               <div key={p.id} className="fbt-card">

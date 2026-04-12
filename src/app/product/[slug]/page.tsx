@@ -152,7 +152,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </div>
               <div className="spec-row">
                 <span>Storage</span>
-                <span className="spec-value">{product.storageTemp}</span>
+                <span className="spec-value">Cool & Dry Place</span>
               </div>
               <div className="spec-row">
                 <span>Dietary</span>
@@ -162,12 +162,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 <span>Ingredients</span>
                 <span className="spec-value">Real Tea · Natural Sweeteners · No Artificial Colors</span>
               </div>
-              {product.batchNumber && (
-                <div className="spec-row">
-                  <span>Batch #</span>
-                  <span className="spec-value">{product.batchNumber}</span>
-                </div>
-              )}
               <div className="spec-row">
                 <span>Availability</span>
                 <span className="spec-value" style={{ color: product.stock > 0 ? 'var(--success)' : 'var(--error)' }}>
@@ -195,7 +189,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             <ProductSocialProof productId={product.id} productSlug={product.slug} stock={product.stock} productName={product.name} />
 
-            <div className="ruo-notice">
+            <div className="prep-tip-notice">
               <p>🧋 Preparation Tip</p>
               <p>For best results, use hot (not boiling) water and froth with your favorite milk. Works great iced too — just pour over ice after mixing. Customize sweetness to your taste.</p>
             </div>

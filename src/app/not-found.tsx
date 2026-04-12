@@ -5,8 +5,8 @@ export default function NotFound() {
     <section className="not-found-page">
       <div>
         <span className="not-found-code">404</span>
-        <h1>Page Not Found</h1>
-        <p>This page doesn&apos;t exist or has been moved.</p>
+        <h1>Oops, Nothing Here</h1>
+        <p>This page doesn&apos;t exist — maybe it spilled? 🧋</p>
         <Link href="/" className="btn btn-primary">Back to Home</Link>
       </div>
     </section>

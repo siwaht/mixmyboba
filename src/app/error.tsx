@@ -17,8 +17,8 @@ export default function ErrorPage({
     <section className="not-found-page">
       <div>
         <span className="not-found-code" aria-hidden="true">!</span>
-        <h1>Something went wrong</h1>
-        <p>An unexpected error occurred. Please try again.</p>
+        <h1>Something Went Wrong</h1>
+        <p>We spilled something behind the scenes. Let&apos;s try that again.</p>
         <button className="btn btn-primary" onClick={() => unstable_retry()}>
           Try Again
         </button>

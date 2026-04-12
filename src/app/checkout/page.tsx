@@ -23,7 +23,6 @@ export default function CheckoutPage() {
   const [couponLoading, setCouponLoading] = useState(false)
 
   // Age verification
-  const [ageVerified, setAgeVerified] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
 
   // Pre-fill email from logged-in user
@@ -97,11 +96,7 @@ export default function CheckoutPage() {
           <h1>Order Confirmed</h1>
           <p className="success-order-id">Order <code>{orderId}</code></p>
           <p className="success-msg">
-            {paymentMethod === 'crypto'
-              ? 'Send payment to the crypto address in your confirmation email. Your order ships once payment confirms.'
-              : paymentMethod === 'cod'
-              ? 'Your order has been placed. Please have cash ready when the delivery arrives.'
-              : 'Your order is being processed. Check your email for confirmation.'}
+            Your order is being processed. Check your email for confirmation and tracking details.
           </p>
           <Link href="/" className="btn btn-primary">Continue Shopping</Link>
         </div>
@@ -113,10 +108,10 @@ export default function CheckoutPage() {
     return (
       <section className="checkout-section">
         <div className="container checkout-empty">
-          <div className="empty-icon" aria-hidden="true">🛒</div>
-          <h1>Cart is Empty</h1>
-          <p>Add some products before checking out.</p>
-          <Link href="/#store" className="btn btn-primary">Browse Products</Link>
+          <div className="empty-icon" aria-hidden="true">🧋</div>
+          <h1>Your Cart is Empty</h1>
+          <p>Looks like you haven&apos;t picked any flavors yet!</p>
+          <Link href="/#store" className="btn btn-primary">Browse Flavors</Link>
         </div>
       </section>
     )
@@ -124,8 +119,8 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!ageVerified || !termsAccepted) {
-      setError('Please confirm age verification and accept terms.')
+    if (!termsAccepted) {
+      setError('Please accept the Terms of Service to continue.')
       return
     }
     setSubmitting(true)
@@ -171,7 +166,7 @@ export default function CheckoutPage() {
             <h3>Shipping Details</h3>
             <label className="form-label">
               Email
-              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="form-input" placeholder="researcher@lab.edu" autoComplete="email" />
+              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="form-input" placeholder="you@example.com" autoComplete="email" />
             </label>
             <label className="form-label">
               Shipping Address
@@ -196,20 +191,16 @@ export default function CheckoutPage() {
               <textarea value={notes} onChange={e => setNotes(e.target.value)} className="form-input" rows={2} placeholder="Special instructions..." />
             </label>
 
-            {/* Verification checkboxes */}
+            {/* Terms acceptance */}
             <div className="checkout-verifications">
               <label className="checkbox-label">
-                <input type="checkbox" checked={ageVerified} onChange={e => setAgeVerified(e.target.checked)} />
-                <span>I confirm I am at least 18 years of age.</span>
-              </label>
-              <label className="checkbox-label">
                 <input type="checkbox" checked={termsAccepted} onChange={e => setTermsAccepted(e.target.checked)} />
-                <span>I accept the <a href="/compliance" target="_blank" rel="noopener noreferrer">Terms of Service</a> and confirm I have read the return policy.</span>
+                <span>I accept the <a href="/compliance" target="_blank" rel="noopener noreferrer">Terms of Service</a> and return policy.</span>
               </label>
             </div>
 
             {error && <p className="checkout-error" role="alert" aria-live="assertive">{error}</p>}
-            <button type="submit" className="btn btn-primary checkout-submit" disabled={submitting || !ageVerified || !termsAccepted || availableMethods.length === 0}>
+            <button type="submit" className="btn btn-primary checkout-submit" disabled={submitting || !termsAccepted || availableMethods.length === 0}>
               {submitting ? 'Processing...' : `Place Order — $${total.toFixed(2)}`}
             </button>
           </form>
@@ -268,9 +259,9 @@ export default function CheckoutPage() {
               </div>
             </div>
             <div className="checkout-trust-badges">
-              <span>🔒 Encrypted</span>
-              <span>📦 Discreet</span>
-              <span>₿ Crypto</span>
+              <span>🔒 Secure Checkout</span>
+              <span>📦 Fast Shipping</span>
+              <span>💜 Happiness Guarantee</span>
             </div>
           </div>
         </div>

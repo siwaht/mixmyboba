@@ -127,7 +127,7 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
           </label>
           <label className="form-label">
             Review
-            <textarea required value={body} onChange={e => setBody(e.target.value)} className="form-input" rows={3} placeholder="Share details about the product quality, purity, packaging..." maxLength={1000} />
+            <textarea required value={body} onChange={e => setBody(e.target.value)} className="form-input" rows={3} placeholder="Share details about the taste, quality, how you prepared it..." maxLength={1000} />
           </label>
           {error && <p className="auth-error">{error}</p>}
           <button type="submit" className="btn btn-primary" disabled={submitting}>

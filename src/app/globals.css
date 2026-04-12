@@ -221,7 +221,7 @@ img { max-width: 100%; display: block; }
 }
 .btn-primary:hover {
   background: linear-gradient(135deg, var(--accent-hover), var(--accent-primary));
-  transform: translateY(-3px) scale(1.02);
+  transform: translateY(-2px) scale(1.01);
   box-shadow: 0 8px 32px var(--shadow-glow);
   color: #fff;
 }
@@ -245,7 +245,7 @@ img { max-width: 100%; display: block; }
 .btn-secondary:hover {
   border-color: var(--accent-primary);
   color: var(--accent-primary);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   background: var(--accent-subtle);
 }
 
@@ -494,6 +494,11 @@ img { max-width: 100%; display: block; }
     radial-gradient(ellipse 40% 50% at 15% 70%, var(--hero-gradient-2) 0%, transparent 50%),
     radial-gradient(ellipse 35% 35% at 85% 55%, var(--hero-gradient-3) 0%, transparent 50%);
   pointer-events: none;
+  animation: heroGradientShift 20s ease-in-out infinite;
+}
+@keyframes heroGradientShift {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 .hero::after {
   content: '';
@@ -787,8 +792,8 @@ img { max-width: 100%; display: block; }
 }
 .feature-card:hover {
   border-color: var(--accent-primary);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 50px var(--accent-glow);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px var(--accent-glow);
 }
 .feature-icon {
   width: 2.75rem;
@@ -950,7 +955,7 @@ img { max-width: 100%; display: block; }
   border-radius: inherit;
 }
 .product-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   border-color: var(--accent-primary);
   box-shadow: 0 24px 60px var(--accent-glow), 0 0 0 1px var(--accent-subtle);
 }
@@ -988,8 +993,8 @@ img { max-width: 100%; display: block; }
   transition: transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1), filter 0.8s ease;
 }
 .product-card:hover .product-img-wrap img {
-  transform: scale(1.1);
-  filter: brightness(1.06) saturate(1.1);
+  transform: scale(1.08);
+  filter: brightness(1.04) saturate(1.08);
 }
 
 .product-view-label {
@@ -1119,7 +1124,7 @@ img { max-width: 100%; display: block; }
   margin-bottom: 1rem;
   flex: 1;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1464,8 +1469,8 @@ img { max-width: 100%; display: block; }
 }
 .process-step:hover {
   border-color: var(--accent-primary);
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 50px var(--accent-glow);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px var(--accent-glow);
 }
 .process-step-num {
   display: inline-flex;
@@ -1517,7 +1522,7 @@ img { max-width: 100%; display: block; }
   overflow: hidden;
   transition: all var(--transition-base);
 }
-.cta-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); box-shadow: 0 20px 60px var(--accent-glow); }
+.cta-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); box-shadow: 0 24px 60px var(--accent-glow); }
 .cta-card::before {
   content: '';
   position: absolute;
@@ -1693,7 +1698,7 @@ img { max-width: 100%; display: block; }
   flex-wrap: wrap;
 }
 
-.ruo-notice {
+.prep-tip-notice {
   margin-top: 1.75rem;
   padding: 1.15rem 1.25rem;
   background: var(--accent-subtle);
@@ -1703,7 +1708,7 @@ img { max-width: 100%; display: block; }
   color: var(--text-secondary);
   line-height: 1.7;
 }
-.ruo-notice p:first-child { color: var(--accent-primary); font-weight: 700; margin-bottom: 0.35rem; font-size: 0.82rem; }
+.prep-tip-notice p:first-child { color: var(--accent-primary); font-weight: 700; margin-bottom: 0.35rem; font-size: 0.82rem; }
 
 /* ===== Social Proof & Urgency ===== */
 .social-proof-bar { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
@@ -2077,18 +2082,18 @@ select.form-input { cursor: pointer; }
   pointer-events: none;
 }
 .vibe-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-6px);
   border-color: var(--accent-primary);
-  box-shadow: 0 20px 50px var(--accent-glow);
+  box-shadow: 0 24px 60px var(--accent-glow);
 }
 .vibe-emoji {
   font-size: 2.2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   display: block;
   transition: transform var(--transition-spring);
 }
 .vibe-card:hover .vibe-emoji {
-  transform: scale(1.05);
+  transform: scale(1.15) rotate(-5deg);
 }
 .vibe-card h3 {
   font-size: 1.02rem;
