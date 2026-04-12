@@ -164,7 +164,7 @@ const newProducts = [
 
 const reviewPool = [
   { rating: 5, title: 'Literally tastes like the boba shop', body: 'I was skeptical but WOW. Made it with oat milk and it tastes exactly like my $8 boba order. I am never going back. This is my daily ritual now.' },
-  { rating: 5, title: 'Obsessed is an understatement', body: 'I have been making this every single morning for 3 weeks straight. The taro flavor is INSANE. My roommate keeps stealing sips. Ordering the bulk size next.' },
+  { rating: 5, title: 'Obsessed is an understatement', body: 'I have been making this every single morning for 3 weeks straight. The flavor is INSANE. My roommate keeps stealing sips. Ordering the bulk size next.' },
   { rating: 4, title: 'Really good, wish there were more flavors', body: 'The quality is legit — real tea taste, not that fake powdery stuff. Would love to see a lavender or rose flavor. But what they have is solid.' },
   { rating: 5, title: 'Best purchase I have made this year', body: 'Saving so much money making boba at home. The brown sugar flavor with tapioca pearls is chef kiss. My whole friend group is ordering now.' },
   { rating: 4, title: 'Great taste, easy to make', body: 'Super simple — scoop, mix, done. Tastes great with almond milk. Only giving 4 stars because I wish the bag was resealable. But the flavor is 10/10.' },
@@ -185,32 +185,30 @@ const reviewPool = [
   { rating: 4, title: 'Classic is a classic for a reason', body: 'Sometimes you just want the OG and this nails it. Malty, creamy, perfectly balanced. I drink it every morning instead of coffee now.' },
 ]
 
-const customers = [
-  { email: 'sarah.c@gmail.com', name: 'Sarah C.' },
-  { email: 'james.m@outlook.com', name: 'James M.' },
-  { email: 'ananya.k@gmail.com', name: 'Ananya K.' },
-  { email: 'marcus.w@yahoo.com', name: 'Marcus W.' },
-  { email: 'li.z@gmail.com', name: 'Li Z.' },
-  { email: 'elena.g@hotmail.com', name: 'Elena G.' },
-  { email: 'rob.j@gmail.com', name: 'Rob J.' },
-  { email: 'kavita.p@outlook.com', name: 'Kavita P.' },
-  { email: 'tom.s@gmail.com', name: 'Tom S.' },
-  { email: 'yuna.k@gmail.com', name: 'Yuna K.' },
-  { email: 'david.b@yahoo.com', name: 'David B.' },
-  { email: 'nat.w@gmail.com', name: 'Natalie W.' },
+const addresses = [
+  '123 Maple St, Apt 4B, Brooklyn, NY 11201',
+  '456 Sunset Blvd, Los Angeles, CA 90028',
+  '789 Michigan Ave, Unit 12, Chicago, IL 60611',
+  '321 Pearl St, Austin, TX 78701',
+  '555 Market St, San Francisco, CA 94105',
+  '100 Peachtree Rd, Atlanta, GA 30309',
+  '250 Commonwealth Ave, Boston, MA 02116',
+  '800 Pike St, Apt 7, Seattle, WA 98101',
+  '1200 NW 23rd Ave, Portland, OR 97210',
+  '75 South St, Miami, FL 33130',
 ]
 
 async function main() {
-  console.log('🔄 Replacing all products with real boba images...')
+  console.log('Replacing all products with real boba images...')
 
-  // Delete order items first (no cascade from Product to OrderItem)
   await prisma.orderItem.deleteMany({})
   await prisma.order.deleteMany({})
   await prisma.review.deleteMany({})
+  await prisma.cOA.deleteMany({})
+  await prisma.productVariant.deleteMany({})
   await prisma.product.deleteMany({})
-  console.log('  ✓ Cleared old products, orders, reviews')
+  console.log('  Cleared old products, orders, reviews, variants, COAs')
 
-  // Create new products
   const productRecords: Array<{ id: string; slug: string; price: number; name: string }> = []
   for (const { variants, ...productData } of newProducts) {
     const product = await prisma.product.create({ data: productData })
@@ -219,80 +217,86 @@ async function main() {
       await prisma.productVariant.create({ data: { ...v, productId: product.id } })
     }
   }
-  console.log(`  ✓ ${productRecords.length} new products with variants & images`)
+  console.log(`  ${productRecords.length} new products with variants & images`)
 
-  // Fetch customer records
   const customerRecords = await prisma.user.findMany({
-    where: { email: { in: customers.map(c => c.email) } },
+    where: { role: 'customer' },
     select: { id: true, email: true, name: true },
   })
+  console.log(`  Found ${customerRecords.length} customers`)
 
-  // Add reviews
-  let reviewIdx = 0
+  if (customerRecords.length === 0) {
+    console.log('  No customers found, skipping reviews and orders')
+    console.log('\nDone!')
+    return
+  }
+
+  let reviewCount = 0
+  const usedPairs = new Set<string>()
   for (let pIdx = 0; pIdx < productRecords.length; pIdx++) {
-    const reviewCount = 3 + (pIdx % 4)
-    for (let r = 0; r < reviewCount; r++) {
-      if (customerRecords.length === 0) break
+    const numReviews = 3 + (pIdx % 4)
+    for (let r = 0; r < numReviews; r++) {
       const customerIdx = (pIdx * 3 + r) % customerRecords.length
-      const review = reviewPool[reviewIdx % reviewPool.length]
-      try {
-        await prisma.review.create({
-          data: {
-            productId: productRecords[pIdx].id,
-            userId: customerRecords[customerIdx].id,
-            rating: review.rating,
-            title: review.title,
-            body: review.body,
-            verified: r < reviewCount - 1,
-            createdAt: new Date(Date.now() - (reviewIdx * 3 + r) * 86400000 * 2),
-          },
-        })
-      } catch {
-        // skip duplicate review combinations
-      }
-      reviewIdx++
+      const pairKey = `${productRecords[pIdx].id}-${customerRecords[customerIdx].id}`
+      if (usedPairs.has(pairKey)) continue
+      usedPairs.add(pairKey)
+
+      const review = reviewPool[(pIdx * 5 + r) % reviewPool.length]
+      await prisma.review.create({
+        data: {
+          productId: productRecords[pIdx].id,
+          userId: customerRecords[customerIdx].id,
+          rating: review.rating,
+          title: review.title,
+          body: review.body,
+          verified: r < numReviews - 1,
+          createdAt: new Date(Date.now() - (pIdx * 7 + r * 3) * 86400000),
+        },
+      })
+      reviewCount++
     }
   }
-  console.log(`  ✓ ${reviewIdx} reviews`)
+  console.log(`  ${reviewCount} reviews`)
 
-  // Recreate a few sample orders
-  const addresses = [
-    '123 Maple St, Apt 4B, Brooklyn, NY 11201',
-    '456 Sunset Blvd, Los Angeles, CA 90028',
-    '789 Michigan Ave, Unit 12, Chicago, IL 60611',
-    '321 Pearl St, Austin, TX 78701',
-    '555 Market St, San Francisco, CA 94105',
-  ]
-
-  const statuses = ['delivered', 'shipped', 'paid', 'pending']
+  const statuses = ['delivered', 'delivered', 'delivered', 'shipped', 'shipped', 'paid', 'paid', 'pending']
   let orderCount = 0
   for (let i = 0; i < Math.min(customerRecords.length, 10); i++) {
-    const customer = customerRecords[i]
-    const p1 = productRecords[i % productRecords.length]
-    const p2 = productRecords[(i + 1) % productRecords.length]
-    const subtotal = p1.price * 1 + p2.price * 1
-    const status = statuses[i % statuses.length]
-    const order = await prisma.order.create({
-      data: {
-        userId: customer.id,
-        email: customer.email,
-        status,
-        paymentMethod: 'card',
-        shippingAddress: addresses[i % addresses.length],
-        subtotal,
-        total: subtotal,
-        discount: 0,
-        createdAt: new Date(Date.now() - i * 5 * 86400000),
-        updatedAt: new Date(Date.now() - i * 5 * 86400000),
-      },
-    })
-    await prisma.orderItem.create({ data: { orderId: order.id, productId: p1.id, quantity: 1, price: p1.price } })
-    await prisma.orderItem.create({ data: { orderId: order.id, productId: p2.id, quantity: 1, price: p2.price } })
-    orderCount++
-  }
-  console.log(`  ✓ ${orderCount} sample orders`)
+    const numOrders = 1 + (i % 3)
+    for (let o = 0; o < numOrders; o++) {
+      const p1Idx = (i + o) % productRecords.length
+      const p2Idx = (i + o + 1) % productRecords.length
+      const p1 = productRecords[p1Idx]
+      const p2 = productRecords[p2Idx]
+      const q1 = 1 + (o % 2)
+      const q2 = 1
+      const subtotal = p1.price * q1 + p2.price * q2
+      const status = statuses[(i + o) % statuses.length]
+      const daysAgo = (i * 10 + o * 5 + 2)
+      const couponDiscount = (i + o) % 4 === 0 ? subtotal * 0.15 : 0
+      const total = subtotal - couponDiscount
 
-  console.log('\n✅ Products replaced successfully!')
+      const order = await prisma.order.create({
+        data: {
+          userId: customerRecords[i].id,
+          email: customerRecords[i].email,
+          status,
+          paymentMethod: 'card',
+          shippingAddress: addresses[(i + o) % addresses.length],
+          subtotal: Math.round(subtotal * 100) / 100,
+          total: Math.round(total * 100) / 100,
+          discount: Math.round(couponDiscount * 100) / 100,
+          couponCode: couponDiscount > 0 ? 'FIRSTSIP' : null,
+          createdAt: new Date(Date.now() - daysAgo * 86400000),
+          updatedAt: new Date(Date.now() - daysAgo * 86400000),
+        },
+      })
+      await prisma.orderItem.create({ data: { orderId: order.id, productId: p1.id, quantity: q1, price: p1.price } })
+      await prisma.orderItem.create({ data: { orderId: order.id, productId: p2.id, quantity: q2, price: p2.price } })
+      orderCount++
+    }
+  }
+  console.log(`  ${orderCount} orders`)
+  console.log('\nProducts replaced successfully!')
 }
 
 main()
