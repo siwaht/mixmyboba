@@ -71,7 +71,7 @@ export default function ProductGrid({ initialProducts }: Props) {
     return () => clearTimeout(timer)
   }, [fetchProducts, search, category, initialProducts])
 
-  const categories = ['All', 'Classic', 'Matcha', 'Brown Sugar', 'Fruity', 'Toppings', 'Bundles']
+  const categories = ['All', 'Classic', 'Matcha', 'Brown Sugar', 'Fruity']
 
   return (
     <>
