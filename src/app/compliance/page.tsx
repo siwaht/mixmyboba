@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Policies & Info',
-  description: 'Terms of Service, Privacy Policy, shipping info, return policy, handling guide, and testing information for Immortality Peptides research-grade peptides.',
+  description: 'Terms of Service, Privacy Policy, shipping info, return policy, preparation guide, and ingredient information for Mix My Boba premium boba tea mixes.',
 }
 
 const sections = [

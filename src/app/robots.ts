@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/admin/', '/account/'],
       },
     ],
-    sitemap: `${process.env.SITE_URL || 'https://immortalitypeptides.com'}/sitemap.xml`,
+    sitemap: `${process.env.SITE_URL || 'https://mixmyboba.com'}/sitemap.xml`,
   }
 }

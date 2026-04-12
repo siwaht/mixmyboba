@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Our Science — Research-Grade Peptides You Can Trust',
-  description: 'Learn about Immortality Peptides — our commitment to 99%+ purity, third-party testing, and making premium research peptides accessible to everyone.',
+  title: 'Our Story — From Boba Lovers, For Boba Lovers',
+  description: 'Learn about Mix My Boba — how two boba-obsessed friends created premium instant boba tea mixes so everyone can enjoy boba shop taste at home, every single day.',
 }
 
 export default function AboutPage() {

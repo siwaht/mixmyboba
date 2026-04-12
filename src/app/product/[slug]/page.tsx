@@ -20,22 +20,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!product) return {}
 
   return {
-    title: `${product.name} — Research-Grade Peptide`,
-    description: `${product.name} research-grade peptide — ${product.purity}. ${product.description.slice(0, 140)}. Third-party tested. Ships fast.`,
+    title: `${product.name} — Premium Boba Tea Mix`,
+    description: `${product.name} premium boba tea mix — ${product.purity}. ${product.description.slice(0, 140)}. Made with real tea. Ships fast.`,
     openGraph: {
-      title: `${product.name} | Immortality Peptides`,
+      title: `${product.name} | Mix My Boba`,
       description: product.description,
       images: [{ url: product.imageUrl, width: 600, height: 600, alt: product.name }],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${product.name} — Research Peptide`,
+      title: `${product.name} — Premium Mix`,
       description: product.description.slice(0, 200),
       images: [product.imageUrl],
     },
     alternates: {
-      canonical: `${process.env.SITE_URL || 'https://immortalitypeptides.com'}/product/${slug}`,
+      canonical: `${process.env.SITE_URL || 'https://mixmyboba.com'}/product/${slug}`,
     },
   }
 }

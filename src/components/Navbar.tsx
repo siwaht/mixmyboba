@@ -45,8 +45,8 @@ export default function Navbar() {
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="container">
           <div className="nav-left">
-            <Link href="/" className="logo" aria-label="Immortality Peptides homepage">
-              <span className="logo-emoji">⚗️</span> <span>immortality</span> peptides
+            <Link href="/" className="logo" aria-label="Mix My Boba homepage">
+              <span className="logo-emoji">🧋</span> <span>mix my</span> boba
             </Link>
             <div className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
               {menuOpen && (
@@ -59,7 +59,7 @@ export default function Navbar() {
                 </button>
               )}
               <Link href="/#store" onClick={closeMenu}>Shop</Link>
-              <Link href="/about" onClick={closeMenu}>Science</Link>
+              <Link href="/about" onClick={closeMenu}>Our Story</Link>
               <Link href="/faq" onClick={closeMenu}>FAQ</Link>
               <Link href="/compare" onClick={closeMenu}>Compare</Link>
             </div>

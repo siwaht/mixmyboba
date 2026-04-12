@@ -8,19 +8,19 @@ import { getCachedJson } from '@/lib/settings-cache'
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Store',
-  name: 'Immortality Peptides',
-  description: 'Premium research-grade peptides with 99%+ purity. BPC-157, TB-500, Semaglutide, and more. Third-party tested with COA.',
-  url: 'https://immortalitypeptides.com',
+  name: 'Mix My Boba',
+  description: 'Premium instant boba tea mixes made with real tea and natural ingredients. Classic milk tea, taro, matcha, brown sugar — just add water and your favorite milk. Ready in 60 seconds.',
+  url: 'https://mixmyboba.com',
   sameAs: [],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Research Peptides',
+    name: 'Boba Tea Mixes',
     itemListElement: [
-      { '@type': 'OfferCatalog', name: 'Recovery' },
-      { '@type': 'OfferCatalog', name: 'Weight Loss' },
-      { '@type': 'OfferCatalog', name: 'Anti-Aging' },
-      { '@type': 'OfferCatalog', name: 'Cognitive' },
-      { '@type': 'OfferCatalog', name: 'Performance' },
+      { '@type': 'OfferCatalog', name: 'Classic Milk Tea' },
+      { '@type': 'OfferCatalog', name: 'Taro' },
+      { '@type': 'OfferCatalog', name: 'Matcha' },
+      { '@type': 'OfferCatalog', name: 'Brown Sugar' },
+      { '@type': 'OfferCatalog', name: 'Fruity' },
     ],
   },
 }
@@ -36,12 +36,12 @@ export default async function Home() {
     },
   })
 
-  const defaultMarquee = ['99%+ Purity', 'Third-Party Tested', 'COA Included', 'Fast Shipping', 'Research Grade', 'Lab Verified', 'GMP Compliant']
-  const marquee2 = ['🧬 Premium Quality', '🔬 Lab Tested', '📋 COA Verified', '⚡ Fast Shipping', '🛡️ Secure Checkout', '🌿 Research Grade']
+  const defaultMarquee = ['Real Tea Leaves', 'No Artificial Flavors', 'Ready in 60 Seconds', 'Naturally Sweetened', 'Boba Shop Taste', 'Plant-Based Friendly', 'Under $2 a Cup']
+  const marquee2 = ['🧋 Craveable Taste', '🌸 Zero Guilt', '🍵 Authentic Flavor', '💜 Gut Friendly', '⚡ Clean Energy', '🌿 Balanced Mood']
   const defaultStats = [
-    { value: '99%+', label: 'Purity' },
-    { value: '48hr', label: 'Shipping' },
-    { value: 'COA', label: 'Included' },
+    { value: '20+', label: 'Servings Per Bag' },
+    { value: '<$2', label: 'Per Cup' },
+    { value: '60s', label: 'Prep Time' },
     { value: '5★', label: 'Avg Rating' },
   ]
   const settings = await getCachedJson<{ marqueeItems?: string[]; statsBar?: { value: string; label: string }[] }>(
@@ -132,7 +132,7 @@ export default async function Home() {
       {/* ── Why Section ── */}
       <section className="features-section" aria-labelledby="features-heading">
         <div className="container">
-          <h2 id="features-heading" className="sr-only">Why Immortality Peptides</h2>
+          <h2 id="features-heading" className="sr-only">Why Mix My Boba</h2>
           <div className="features-grid">
             <article className="feature-card">
               <Coffee className="feature-icon" strokeWidth={1.5} aria-hidden="true" />

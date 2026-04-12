@@ -23,28 +23,28 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL || 'https://immortalitypeptides.com'),
+  metadataBase: new URL(process.env.SITE_URL || 'https://mixmyboba.com'),
   title: {
-    default: 'Immortality Peptides — Research-Grade Peptides | 99%+ Purity',
-    template: '%s | Immortality Peptides',
+    default: 'Mix My Boba — Premium Bubble Tea Mixes | Make Boba at Home',
+    template: '%s | Mix My Boba',
   },
-  description: 'Premium research-grade peptides with 99%+ purity. BPC-157, TB-500, Semaglutide, and more. Third-party tested with COA. Fast shipping. Shop now.',
-  keywords: ['peptides', 'research peptides', 'BPC-157', 'TB-500', 'semaglutide', 'CJC-1295', 'ipamorelin', 'peptide research', 'lab-grade peptides'],
+  description: 'Premium superfood boba tea mixes made with real tea and natural ingredients. Classic milk tea, taro, matcha, brown sugar — just add water and your favorite milk. Ready in 60 seconds. Shop now at mixmyboba.com.',
+  keywords: ['boba tea', 'bubble tea', 'milk tea mix', 'instant boba', 'boba at home', 'taro milk tea', 'matcha latte', 'brown sugar boba', 'premix boba', 'tea latte powder', 'boba kit'],
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'Immortality Peptides',
-    title: 'Immortality Peptides — Research-Grade Peptides',
-    description: 'Premium research-grade peptides with 99%+ purity. Third-party tested. COA included with every order.',
+    siteName: 'Mix My Boba',
+    title: 'Mix My Boba — Premium Bubble Tea Mixes',
+    description: 'Boba shop taste at home. Premium instant mixes with real tea, natural sweeteners, and zero artificial flavors. Ready in 60 seconds.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Immortality Peptides — Research-Grade Peptides',
-    description: 'Premium research-grade peptides with 99%+ purity. Third-party tested. Fast shipping.',
+    title: 'Mix My Boba — Premium Bubble Tea Mixes',
+    description: 'Boba shop taste at home. Premium instant mixes made with real tea. Ready in 60 seconds.',
   },
   robots: { index: true, follow: true },
   alternates: {
-    canonical: process.env.SITE_URL || 'https://immortalitypeptides.com',
+    canonical: process.env.SITE_URL || 'https://mixmyboba.com',
   },
 }
 
@@ -70,28 +70,28 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <div className="container">
             <div className="footer-grid">
               <div className="footer-brand">
-                <Link href="/" className="logo footer-logo" aria-label="Immortality Peptides homepage">
-                  <span className="logo-emoji">⚗️</span> <span>immortality</span> peptides
+                <Link href="/" className="logo footer-logo" aria-label="Mix My Boba homepage">
+                  <span className="logo-emoji">🧋</span> <span>mix my</span> boba
                 </Link>
-                <p>Premium research-grade peptides with 99%+ purity. Third-party tested with Certificate of Analysis. For research use only.</p>
+                <p>Premium instant boba tea mixes made with real tea and natural ingredients. Your daily boba ritual, ready in 60 seconds. No boba shop needed.</p>
               </div>
-              <nav className="footer-links" aria-label="Categories">
-                <h4>Categories</h4>
+              <nav className="footer-links" aria-label="Flavors">
+                <h4>Flavors</h4>
                 <ul>
-                  <li><Link href="/?category=Recovery#store">Recovery</Link></li>
-                  <li><Link href="/?category=Weight+Loss#store">Weight Loss</Link></li>
-                  <li><Link href="/?category=Anti-Aging#store">Anti-Aging</Link></li>
-                  <li><Link href="/?category=Cognitive#store">Cognitive</Link></li>
-                  <li><Link href="/?category=Performance#store">Performance</Link></li>
+                  <li><Link href="/?category=Classic#store">Classic Milk Tea</Link></li>
+                  <li><Link href="/?category=Taro#store">Taro</Link></li>
+                  <li><Link href="/?category=Matcha#store">Matcha</Link></li>
+                  <li><Link href="/?category=Brown+Sugar#store">Brown Sugar</Link></li>
+                  <li><Link href="/?category=Fruity#store">Fruity</Link></li>
                 </ul>
               </nav>
               <nav className="footer-links" aria-label="Help">
                 <h4>Help</h4>
                 <ul>
-                  <li><Link href="/compliance#handling">Handling Guide</Link></li>
-                  <li><Link href="/compliance#testing">Testing & COA</Link></li>
+                  <li><Link href="/compliance#how">How to Prepare</Link></li>
+                  <li><Link href="/compliance#ingredients">Ingredients</Link></li>
                   <li><Link href="/faq">FAQ</Link></li>
-                  <li><Link href="/about">Our Science</Link></li>
+                  <li><Link href="/about">Our Story</Link></li>
                 </ul>
               </nav>
               <nav className="footer-links" aria-label="Legal">
@@ -105,7 +105,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               </nav>
             </div>
             <div className="footer-bottom">
-              <p>© {new Date().getFullYear()} Immortality Peptides. All rights reserved. For research use only.</p>
+              <p>© {new Date().getFullYear()} Mix My Boba. All rights reserved.</p>
               <div className="footer-ssl">
                 <Shield size={14} strokeWidth={1.5} aria-hidden="true" />
                 Secure SSL Checkout

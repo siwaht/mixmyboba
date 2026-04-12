@@ -7,7 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     select: { slug: true, updatedAt: true },
   })
 
-  const base = process.env.SITE_URL || 'https://immortalitypeptides.com'
+  const base = process.env.SITE_URL || 'https://mixmyboba.com'
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: base, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
