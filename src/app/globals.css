@@ -1903,7 +1903,19 @@ select.form-input { cursor: pointer; }
 /* ===== Checkout ===== */
 .checkout-section { padding: 2rem 0 5rem; }
 .checkout-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; }
-@media (max-width: 768px) { .checkout-grid { grid-template-columns: 1fr; } .checkout-sidebar { position: static; order: -1; } }
+@media (max-width: 768px) {
+  .checkout-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .checkout-sidebar { position: static; order: -1; }
+  .checkout-trust-badges { flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0.5rem 0 0; }
+  .checkout-form.glass, .checkout-summary.glass {
+    background: var(--bg-primary);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    position: relative;
+    z-index: 1;
+  }
+  .checkout-form, .checkout-summary { padding: 1.25rem; }
+}
 .checkout-form, .checkout-summary { padding: 2rem; border-radius: var(--radius-lg); }
 .checkout-form h3, .checkout-summary h3 { margin-bottom: 1.5rem; font-size: 1.1rem; }
 .checkout-item { display: flex; justify-content: space-between; padding: 0.7rem 0; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-secondary); }
