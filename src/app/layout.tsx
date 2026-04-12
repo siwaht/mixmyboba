@@ -82,7 +82,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   <li><Link href="/?category=Matcha#store">Matcha</Link></li>
                   <li><Link href="/?category=Brown+Sugar#store">Brown Sugar</Link></li>
                   <li><Link href="/?category=Fruity#store">Fruity</Link></li>
-                  <li><Link href="/?category=Toppings#store">Toppings</Link></li>
+                  <li><span className="footer-coming-soon">Toppings — Coming Soon</span></li>
                 </ul>
               </nav>
               <nav className="footer-links" aria-label="Help">

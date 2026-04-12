@@ -294,7 +294,7 @@ export default function AdminPage() {
           ))}
         </nav>
         <div className="admin-sidebar-footer">
-          <Link href="/account" className="admin-sidebar-item" title="Back to Account">
+          <Link href="/" className="admin-sidebar-item" title="Back to Site">
             <span className="admin-sidebar-icon">←</span>
             {sidebarOpen && <span className="admin-sidebar-label">Back to Site</span>}
           </Link>
