@@ -192,13 +192,13 @@ export default function CheckoutPage() {
             <label className="form-label">
               Payment Method
               {methodsLoading ? (
-                <select className="form-input" disabled><option>Loading methods...</option></select>
+                <select className="form-input" disabled aria-busy="true"><option value="">Loading methods...</option></select>
               ) : availableMethods.length === 0 ? (
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '0.5rem 0' }}>No payment methods are currently available. Please try again later.</p>
               ) : (
-                <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="form-input">
+                <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="form-input" disabled={false}>
                   {availableMethods.map(m => (
-                    <option key={m.value} value={m.value}>{m.label}</option>
+                    <option key={m.value} value={m.value} disabled={false}>{m.label}</option>
                   ))}
                 </select>
               )}

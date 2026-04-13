@@ -27,7 +27,7 @@ function Stars({ rating, size = '1rem' }: { rating: number; size?: string }) {
   )
 }
 
-export default function ReviewSection({ productId, reviews: initialReviews, avgRating, reviewCount }: Props) {
+export default function ReviewSection({ productId, reviews: initialReviews, avgRating: initialAvgRating, reviewCount: initialReviewCount }: Props) {
   const [reviews, setReviews] = useState(initialReviews)
   const [showForm, setShowForm] = useState(false)
   const [rating, setRating] = useState(5)
@@ -35,6 +35,12 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
   const [body, setBody] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+
+  // Derive count and average from the live reviews state so they update after submission
+  const currentReviewCount = reviews.length
+  const currentAvgRating = reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    : initialAvgRating
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -83,12 +89,12 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
       <div className="reviews-header">
         <div className="reviews-summary">
           <h2>Customer Reviews</h2>
-          {avgRating ? (
+          {currentAvgRating ? (
             <div className="reviews-overview">
               <div className="reviews-avg">
-                <span className="reviews-avg-num">{avgRating.toFixed(1)}</span>
-                <Stars rating={Math.round(avgRating)} size="1.1rem" />
-                <span className="reviews-count">{reviewCount} review{reviewCount !== 1 ? 's' : ''}</span>
+                <span className="reviews-avg-num">{currentAvgRating.toFixed(1)}</span>
+                <Stars rating={Math.round(currentAvgRating)} size="1.1rem" />
+                <span className="reviews-count">{currentReviewCount} review{currentReviewCount !== 1 ? 's' : ''}</span>
               </div>
               <div className="rating-bars">
                 {dist.map(d => (
