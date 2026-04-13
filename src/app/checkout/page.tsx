@@ -153,7 +153,14 @@ export default function CheckoutPage() {
           paymentMethod,
           notes,
           couponCode: appliedCoupon?.code || undefined,
-          items: items.map(i => ({ productId: i.productId.split('__')[0], quantity: i.quantity })),
+          items: items.map(i => {
+            const [baseId, ...rest] = i.productId.split('__')
+            return {
+              productId: baseId,
+              quantity: i.quantity,
+              variantLabel: rest.length > 0 ? i.name.replace(/^.*\((.+)\)$/, '$1') : undefined,
+            }
+          }),
         }),
       })
       if (!res.ok) {

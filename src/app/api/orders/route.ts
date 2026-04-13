@@ -23,23 +23,32 @@ export async function POST(req: NextRequest) {
   const { email, shippingAddress, phone, paymentMethod, items, notes, couponCode } = parsed.data
 
   // Validate products exist and are active
-  const productIds = items.map((i: { productId: string }) => i.productId)
+  // Deduplicate product IDs since multiple variants of the same product share one ID
+  const productIds = [...new Set(items.map((i: { productId: string }) => i.productId))]
   const products = await prisma.product.findMany({
     where: { id: { in: productIds }, active: true },
   })
 
-  if (products.length !== items.length) {
+  if (products.length !== productIds.length) {
     return NextResponse.json({ error: 'One or more products not found or inactive' }, { status: 400 })
   }
 
-  // Validate stock availability
+  // Validate stock availability (aggregate quantities per product)
   const productMap = new Map(products.map(p => [p.id, p]))
+  const aggregatedQty = new Map<string, number>()
   for (const item of items as Array<{ productId: string; quantity: number }>) {
-    const product = productMap.get(item.productId)!
+    const product = productMap.get(item.productId)
+    if (!product) {
+      return NextResponse.json({ error: 'One or more products not found or inactive' }, { status: 400 })
+    }
     if (item.quantity <= 0) {
       return NextResponse.json({ error: `Invalid quantity for ${product.name}` }, { status: 400 })
     }
-    if (product.stock < item.quantity) {
+    aggregatedQty.set(item.productId, (aggregatedQty.get(item.productId) || 0) + item.quantity)
+  }
+  for (const [pid, totalQty] of aggregatedQty) {
+    const product = productMap.get(pid)!
+    if (product.stock < totalQty) {
       return NextResponse.json(
         { error: `Insufficient stock for ${product.name}. Available: ${product.stock}` },
         { status: 400 }
@@ -92,11 +101,11 @@ export async function POST(req: NextRequest) {
   // Create order and decrement stock in a transaction
   try {
     const order = await prisma.$transaction(async (tx) => {
-      // Decrement stock for each product
-      for (const item of items as Array<{ productId: string; quantity: number }>) {
+      // Decrement stock for each product (aggregate quantities per product)
+      for (const [pid, totalQty] of aggregatedQty) {
         const updated = await tx.product.update({
-          where: { id: item.productId },
-          data: { stock: { decrement: item.quantity } },
+          where: { id: pid },
+          data: { stock: { decrement: totalQty } },
         })
         if (updated.stock < 0) {
           throw new Error(`Insufficient stock for ${updated.name}`)
