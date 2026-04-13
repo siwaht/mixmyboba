@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useCartStore } from '@/lib/cartStore'
 
 interface Props {
@@ -55,7 +56,7 @@ export default function CartDrawer({ open, onClose }: Props) {
             <div className="cart-items">
               {items.map(item => (
                 <div key={item.productId} className="cart-item">
-                  <img src={item.imageUrl} alt="" className="cart-item-img" loading="lazy" />
+                  <Image src={item.imageUrl} alt="" className="cart-item-img" width={52} height={52} loading="lazy" />
                   <div className="cart-item-info">
                     <h4>{item.name}</h4>
                     <p className="cart-item-price">${(item.price * item.quantity).toFixed(2)}</p>

@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db'
 import { getCachedJson } from '@/lib/settings-cache'
 
 export const metadata = {
-  title: 'Shop | Mix My Boba',
+  title: 'Shop All Flavors',
   description: 'Browse our full collection of functional boba tea mixes — date-sweetened, adaptogen-infused, and gut-friendly.',
 }
 

@@ -963,6 +963,10 @@ img { max-width: 100%; display: block; }
     transform: scale(0.98);
     transition-duration: 0.1s;
   }
+  .product-view-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .product-img-wrap {
   width: 100%;
@@ -1905,7 +1909,7 @@ select.form-input { cursor: pointer; }
 .checkout-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; }
 @media (max-width: 768px) {
   .checkout-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  .checkout-sidebar { position: static; order: -1; }
+  .checkout-sidebar { position: static; }
   .checkout-trust-badges { flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0.5rem 0 0; }
   .checkout-form.glass, .checkout-summary.glass {
     background: var(--bg-primary);
@@ -2207,9 +2211,7 @@ select.form-input { cursor: pointer; }
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-@media (max-width: 768px) {
-  .vibe-grid { grid-template-columns: 1fr; }
-}
+/* Scrollbar removed duplicate vibe-grid breakpoint — handled in main responsive section */
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar { width: 6px; }
@@ -2375,10 +2377,29 @@ select.form-input { cursor: pointer; }
   .how-steps { flex-direction: column; align-items: center; }
   .how-step-arrow { display: none; }
   .reviews-overview { flex-direction: column; gap: 1.5rem; }
+  .process-steps { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .process-title { font-size: 1.8rem; }
+  .process-subtitle { margin-bottom: 2.5rem; }
+  .process-step { padding: 1.75rem 1.25rem; }
+  .vibe-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .cart-drawer { width: 100vw; }
+  .checkout-sidebar { order: 0; }
+}
+
+@media (min-width: 640px) and (max-width: 768px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .vibe-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 480px) {
   .footer-grid { grid-template-columns: 1fr; }
   .account-stats { grid-template-columns: 1fr; }
   .admin-stats-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+  .hero-ctas { flex-direction: column; align-items: stretch; }
+  .hero-ctas .btn { width: 100%; }
+  .process-steps { grid-template-columns: 1fr; }
+  .comparison-section h2 { font-size: 1.4rem; }
+  .checkout-form, .checkout-summary { padding: 1rem; }
 }

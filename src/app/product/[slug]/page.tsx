@@ -60,7 +60,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       variants: { where: { active: true }, orderBy: { price: 'asc' } },
       coas: { orderBy: { testDate: 'desc' }, take: 5 },
       reviews: {
-        include: { user: { select: { name: true, role: true } } },
         orderBy: { createdAt: 'desc' },
         take: 20,
         select: {
