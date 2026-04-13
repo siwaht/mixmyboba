@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ReferralSection from '@/components/ReferralSection'
@@ -28,6 +28,14 @@ interface Order {
 }
 
 export default function AccountPage() {
+  return (
+    <Suspense fallback={<section className="account-page"><div className="container" style={{ padding: '4rem 0', textAlign: 'center' }}>Loading...</div></section>}>
+      <AccountPageContent />
+    </Suspense>
+  )
+}
+
+function AccountPageContent() {
   const [user, setUser] = useState<User | null>(null)
   const [orders, setOrders] = useState<Order[]>([])
   const [tab, setTab] = useState<'login' | 'register'>('login')
