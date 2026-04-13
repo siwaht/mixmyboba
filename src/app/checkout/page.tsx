@@ -201,7 +201,7 @@ export default function CheckoutPage() {
               {fieldErrors.address && <span className="field-error" role="alert">{fieldErrors.address}</span>}
             </label>
             <label className="form-label">
-              Phone Number {paymentMethod === 'cod' ? '' : '(optional)'}
+              Phone Number {paymentMethod === 'cod' ? '(required)' : '(optional)'}
               <input type="tel" value={phone} onChange={e => { setPhone(e.target.value); setFieldErrors(prev => ({ ...prev, phone: undefined })) }} className={`form-input${fieldErrors.phone ? ' input-error' : ''}`} placeholder="+1 (555) 123-4567" autoComplete="tel" required={paymentMethod === 'cod'} />
               {fieldErrors.phone && <span className="field-error" role="alert">{fieldErrors.phone}</span>}
             </label>
