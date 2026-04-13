@@ -174,6 +174,7 @@ export const OrderScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   email: 'email',
+  phone: 'phone',
   status: 'status',
   paymentMethod: 'paymentMethod',
   paymentRef: 'paymentRef',

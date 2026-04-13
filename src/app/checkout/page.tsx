@@ -8,6 +8,7 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCartStore()
   const [email, setEmail] = useState('')
   const [address, setAddress] = useState('')
+  const [phone, setPhone] = useState('')
   const [paymentMethod, setPaymentMethod] = useState('')
   const [notes, setNotes] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -26,7 +27,7 @@ export default function CheckoutPage() {
   const [termsAccepted, setTermsAccepted] = useState(false)
 
   // Field-level validation errors
-  const [fieldErrors, setFieldErrors] = useState<{ email?: string; address?: string }>({})
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; address?: string; phone?: string }>({})
 
   // Pre-fill email from logged-in user (skip admin accounts)
   useEffect(() => {
@@ -125,10 +126,11 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const errors: { email?: string; address?: string } = {}
+    const errors: { email?: string; address?: string; phone?: string } = {}
     if (!email.trim()) errors.email = 'Email is required.'
     if (!address.trim()) errors.address = 'Shipping address is required.'
     else if (address.trim().length < 10) errors.address = 'Please provide a full shipping address (at least 10 characters).'
+    if (paymentMethod === 'cod' && !phone.trim()) errors.phone = 'Phone number is required for Cash on Delivery.'
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors)
       return
@@ -147,6 +149,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           email,
           shippingAddress: address,
+          phone: phone.trim() || undefined,
           paymentMethod,
           notes,
           couponCode: appliedCoupon?.code || undefined,
@@ -188,6 +191,11 @@ export default function CheckoutPage() {
               Shipping Address
               <textarea required value={address} onChange={e => { setAddress(e.target.value); setFieldErrors(prev => ({ ...prev, address: undefined })) }} className={`form-input${fieldErrors.address ? ' input-error' : ''}`} rows={3} placeholder="Full shipping address" autoComplete="street-address" minLength={10} />
               {fieldErrors.address && <span className="field-error" role="alert">{fieldErrors.address}</span>}
+            </label>
+            <label className="form-label">
+              Phone Number {paymentMethod === 'cod' ? '' : '(optional)'}
+              <input type="tel" value={phone} onChange={e => { setPhone(e.target.value); setFieldErrors(prev => ({ ...prev, phone: undefined })) }} className={`form-input${fieldErrors.phone ? ' input-error' : ''}`} placeholder="+1 (555) 123-4567" autoComplete="tel" required={paymentMethod === 'cod'} />
+              {fieldErrors.phone && <span className="field-error" role="alert">{fieldErrors.phone}</span>}
             </label>
             <label className="form-label">
               Payment Method

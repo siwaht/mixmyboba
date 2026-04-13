@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       body: reviewBody.trim(),
       verified: !!purchased,
     },
-    include: { user: { select: { name: true } } },
+    include: { user: { select: { name: true, role: true } } },
   })
 
   return NextResponse.json(review, { status: 201 })

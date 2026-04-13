@@ -57,7 +57,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       variants: { where: { active: true }, orderBy: { price: 'asc' } },
       coas: { orderBy: { testDate: 'desc' }, take: 5 },
       reviews: {
-        include: { user: { select: { name: true } } },
+        include: { user: { select: { name: true, role: true } } },
         orderBy: { createdAt: 'desc' },
         take: 20,
       },
@@ -291,7 +291,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             title: r.title,
             body: r.body,
             verified: r.verified,
-            userName: r.user.name || 'Anonymous',
+            userName: (r.user.role === 'admin' ? r.user.name || 'Staff' : r.user.name) || 'Anonymous',
             createdAt: r.createdAt.toISOString(),
           }))}
           avgRating={avgRating}

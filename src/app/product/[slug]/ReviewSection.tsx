@@ -67,7 +67,7 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
       title: review.title,
       body: review.body,
       verified: review.verified,
-      userName: review.user?.name || 'You',
+      userName: review.user?.name || review.userName || 'You',
       createdAt: review.createdAt,
     }, ...prev])
     setShowForm(false)

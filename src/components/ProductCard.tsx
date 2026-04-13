@@ -76,9 +76,9 @@ export default function ProductCard({ product }: { product: Product }) {
           height={300}
           sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          loading="lazy"
+          loading="eager"
           placeholder="blur"
-          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFhIi8+PC9zdmc+"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlNGRmIi8+PC9zdmc+"
         />
         <span className="purity-badge" aria-label={`${product.purity}`}>{product.purity}</span>
         {tagInfo && (

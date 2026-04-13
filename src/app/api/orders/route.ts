@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const { email, shippingAddress, paymentMethod, items, notes, couponCode } = parsed.data
+  const { email, shippingAddress, phone, paymentMethod, items, notes, couponCode } = parsed.data
 
   // Validate products exist and are active
   const productIds = items.map((i: { productId: string }) => i.productId)
@@ -115,6 +115,7 @@ export async function POST(req: NextRequest) {
         data: {
           userId: user?.id || null,
           email: email.trim().toLowerCase(),
+          phone: phone?.trim() || null,
           shippingAddress: shippingAddress.trim(),
           paymentMethod: paymentMethod || 'crypto',
           subtotal,

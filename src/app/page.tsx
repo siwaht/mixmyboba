@@ -89,7 +89,7 @@ export default async function Home() {
   const cta = (hp.ctaSection ?? {}) as Record<string, unknown>
   const ctaTitle = (cta.title as string) || 'Need Bulk or Custom Orders? 📦'
   const ctaDesc = (cta.description as string) || "Looking for custom flavors or large-quantity orders? We offer flexible bulk options for businesses, events, and gifting. Let's chat!"
-  const ctaPrimary = (cta.primaryCta as { text: string; href: string }) || { text: 'Get in Touch', href: '/faq' }
+  const ctaPrimary = (cta.primaryCta as { text: string; href: string }) || { text: 'Get in Touch', href: '/contact' }
   const ctaSecondary = (cta.secondaryCta as { text: string; href: string }) || { text: 'Browse Products', href: '/#store' }
 
   const iconMap: Record<string, typeof Coffee> = { Coffee, Leaf, Heart }

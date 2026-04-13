@@ -114,6 +114,7 @@ model Order {
   userId          String?
   user            User?       @relation(fields: [userId], references: [id])
   email           String
+  phone           String?
   status          String      @default("pending") // pending | paid | shipped | delivered | cancelled
   paymentMethod   String      @default("crypto") // crypto | ach | card
   paymentRef      String?
