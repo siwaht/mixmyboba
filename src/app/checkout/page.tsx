@@ -25,12 +25,12 @@ export default function CheckoutPage() {
   // Age verification
   const [termsAccepted, setTermsAccepted] = useState(false)
 
-  // Pre-fill email from logged-in user
+  // Pre-fill email from logged-in user (skip admin accounts)
   useEffect(() => {
     fetch('/api/auth/me')
       .then(r => r.json())
       .then(data => {
-        if (data.user?.email && !email) {
+        if (data.user?.email && data.user?.role !== 'admin' && !email) {
           setEmail(data.user.email)
         }
       })

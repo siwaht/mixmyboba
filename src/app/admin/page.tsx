@@ -80,6 +80,60 @@ export default function AdminPage() {
   const [tab, setTab] = useState<Tab>('dashboard')
   const [error, setError] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [authed, setAuthed] = useState(false)
+  const [authLoading, setAuthLoading] = useState(true)
+  const [loginEmail, setLoginEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [loginError, setLoginError] = useState('')
+  const [loginSubmitting, setLoginSubmitting] = useState(false)
+
+  // Read tab from URL hash on mount (supports /admin#orders, etc.)
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '') as Tab
+    if (hash && TABS.some(t => t.key === hash)) {
+      setTab(hash)
+    }
+  }, [])
+
+  // Check if user is authenticated as admin
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(data => {
+        if (data.user?.role === 'admin') {
+          setAuthed(true)
+        }
+      })
+      .catch(() => {})
+      .finally(() => setAuthLoading(false))
+  }, [])
+
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoginError('')
+    setLoginSubmitting(true)
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setLoginError(data.error || 'Invalid credentials')
+        return
+      }
+      if (data.user?.role !== 'admin') {
+        setLoginError('This account does not have admin access.')
+        return
+      }
+      setAuthed(true)
+    } catch {
+      setLoginError('Login failed. Please try again.')
+    } finally {
+      setLoginSubmitting(false)
+    }
+  }
 
   // Dashboard
   const [stats, setStats] = useState<Stats | null>(null)
@@ -269,6 +323,55 @@ export default function AdminPage() {
     setTimeout(() => setPagesSaved(false), 2000)
   }
 
+  // ─── Auth gate ───
+  if (authLoading) {
+    return (
+      <section className="admin-section">
+        <div className="container" style={{ padding: '6rem 2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+          Checking authentication...
+        </div>
+      </section>
+    )
+  }
+
+  if (!authed) {
+    return (
+      <section className="admin-section">
+        <div className="container" style={{ maxWidth: 400, padding: '6rem 2rem' }}>
+          <div className="glass" style={{ padding: '2.5rem', borderRadius: '1rem', textAlign: 'center' }}>
+            <h1 style={{ marginBottom: '0.5rem' }}>🔒 Admin Login</h1>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>Sign in with your admin account to continue.</p>
+            <form onSubmit={handleAdminLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <input
+                type="email"
+                required
+                value={loginEmail}
+                onChange={e => setLoginEmail(e.target.value)}
+                className="form-input"
+                placeholder="Admin email"
+                autoComplete="email"
+              />
+              <input
+                type="password"
+                required
+                value={loginPassword}
+                onChange={e => setLoginPassword(e.target.value)}
+                className="form-input"
+                placeholder="Password"
+                autoComplete="current-password"
+              />
+              {loginError && <p style={{ color: 'var(--error)', fontSize: '0.85rem', margin: 0 }}>{loginError}</p>}
+              <button type="submit" className="btn btn-primary" disabled={loginSubmitting} style={{ width: '100%' }}>
+                {loginSubmitting ? 'Signing in...' : 'Sign In'}
+              </button>
+            </form>
+            <Link href="/" style={{ display: 'inline-block', marginTop: '1rem', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>← Back to site</Link>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   // ─── Error state ───
   if (error) {
     return (
@@ -306,7 +409,7 @@ export default function AdminPage() {
             <button
               key={t.key}
               className={`admin-sidebar-item ${tab === t.key ? 'active' : ''}`}
-              onClick={() => setTab(t.key)}
+              onClick={() => { setTab(t.key); window.history.replaceState(null, '', `/admin#${t.key}`) }}
               title={t.label}
             >
               <span className="admin-sidebar-icon">{t.icon}</span>
@@ -339,7 +442,7 @@ export default function AdminPage() {
             <button
               key={t.key}
               className={`admin-mobile-tab ${tab === t.key ? 'active' : ''}`}
-              onClick={() => setTab(t.key)}
+              onClick={() => { setTab(t.key); window.history.replaceState(null, '', `/admin#${t.key}`) }}
             >
               <span>{t.icon}</span>
               <span className="admin-mobile-tab-label">{t.label}</span>

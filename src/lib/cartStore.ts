@@ -67,6 +67,14 @@ export const useCartStore = create<CartState>()(
       totalPrice: () =>
         get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
     }),
-    { name: 'mixmyboba-cart' }
+    { 
+      name: 'mixmyboba-cart',
+      onRehydrateStorage: () => (state) => {
+        // Recalculate itemCount from persisted items after hydration
+        if (state && state.items) {
+          state.itemCount = state.items.reduce((sum: number, i: CartItem) => sum + i.quantity, 0)
+        }
+      },
+    }
   )
 )

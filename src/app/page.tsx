@@ -33,7 +33,7 @@ export default async function Home() {
   const marquee2 = (Array.isArray(hp.marquee2) && hp.marquee2.length) ? hp.marquee2 as string[] : defaultMarquee2
   const statsBar = (Array.isArray(settings.statsBar) && settings.statsBar.length) ? settings.statsBar : defaultStats
 
-  const heroBadge = (hp.heroBadge as string) || 'Now Shipping Worldwide ✨'
+  const heroBadge = (hp.heroBadge as string) || 'Free US Shipping on $50+ ✨'
   const heroTitle = (hp.heroTitle as string) || 'Sip the magic.'
   const heroHighlight = (hp.heroHighlight as string) || 'Boba, but make it easy.'
   const heroSubtitle = (hp.heroSubtitle as string) || 'Functional milk tea mixes with real tea leaves, date-sweetened, and loaded with adaptogens & vitamins. No junk, no crash, no bloat — boba shop vibes in 60 seconds flat. 🧋'
