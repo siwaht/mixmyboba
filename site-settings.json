@@ -61,5 +61,7 @@
       "label": "Avg Rating"
     }
   ],
-  "announcement": ""
+  "announcement": "Free shipping on orders over $50 — use code FIRSTSIP for 15% off your first order!",
+  "announcementLink": "/#store",
+  "announcementLinkText": "Shop now →"
 }

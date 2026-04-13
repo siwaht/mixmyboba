@@ -1,13 +1,12 @@
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
-import Link from 'next/link'
 import { Inter, Outfit } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import ComplianceBanner from '@/components/ComplianceBanner'
 import Toast from '@/components/Toast'
 import ScrollToTop from '@/components/ScrollToTop'
-import { Shield } from 'lucide-react'
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600'], variable: '--font-inter', display: 'swap' })
 const outfit = Outfit({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-outfit', display: 'swap' })
@@ -65,54 +64,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Toast />
         <main id="main-content" style={{ flex: 1 }}>{children}</main>
         <ScrollToTop />
-
-        <footer className="footer" role="contentinfo">
-          <div className="container">
-            <div className="footer-grid">
-              <div className="footer-brand">
-                <Link href="/" className="logo footer-logo" aria-label="Mix My Boba homepage">
-                  <span className="logo-emoji">🧋</span> <span>mix my</span> boba
-                </Link>
-                <p>Premium instant boba tea mixes made with real tea and natural ingredients. Your daily boba ritual, ready in 60 seconds. No boba shop needed.</p>
-              </div>
-              <nav className="footer-links" aria-label="Flavors">
-                <h4>Flavors</h4>
-                <ul>
-                  <li><Link href="/?category=Classic#store">Classic Milk Tea</Link></li>
-                  <li><Link href="/?category=Matcha#store">Matcha</Link></li>
-                  <li><Link href="/?category=Brown+Sugar#store">Brown Sugar</Link></li>
-                  <li><Link href="/?category=Fruity#store">Fruity</Link></li>
-                  <li><span className="footer-coming-soon">Toppings — Coming Soon</span></li>
-                </ul>
-              </nav>
-              <nav className="footer-links" aria-label="Help">
-                <h4>Help</h4>
-                <ul>
-                  <li><Link href="/compliance#how">How to Prepare</Link></li>
-                  <li><Link href="/compliance#ingredients">Ingredients</Link></li>
-                  <li><Link href="/faq">FAQ</Link></li>
-                  <li><Link href="/about">Our Story</Link></li>
-                </ul>
-              </nav>
-              <nav className="footer-links" aria-label="Legal">
-                <h4>Legal</h4>
-                <ul>
-                  <li><Link href="/compliance#terms">Terms of Service</Link></li>
-                  <li><Link href="/compliance#privacy">Privacy Policy</Link></li>
-                  <li><Link href="/compliance#returns">Return Policy</Link></li>
-                  <li><Link href="/compliance#shipping">Shipping Info</Link></li>
-                </ul>
-              </nav>
-            </div>
-            <div className="footer-bottom">
-              <p>© {new Date().getFullYear()} Mix My Boba. All rights reserved.</p>
-              <div className="footer-ssl">
-                <Shield size={14} strokeWidth={1.5} aria-hidden="true" />
-                Secure SSL Checkout
-              </div>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </body>
     </html>
   )

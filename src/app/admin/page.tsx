@@ -10,6 +10,7 @@ import InventoryTab from './InventoryTab'
 import PaymentsTab from './PaymentsTab'
 import ContentTab from './ContentTab'
 import CouponsTab from './CouponsTab'
+import PagesTab from './PagesTab'
 import McpTab from './McpTab'
 
 // ─── Types ───
@@ -54,9 +55,11 @@ interface SiteSettings {
   marqueeItems: string[]
   statsBar: { value: string; label: string }[]
   announcement: string
+  announcementLink?: string
+  announcementLinkText?: string
 }
 
-type Tab = 'dashboard' | 'products' | 'orders' | 'customers' | 'inventory' | 'payments' | 'coupons' | 'content' | 'mcp'
+type Tab = 'dashboard' | 'products' | 'orders' | 'customers' | 'inventory' | 'payments' | 'coupons' | 'content' | 'pages' | 'mcp'
 
 const TABS: { key: Tab; label: string; icon: string }[] = [
   { key: 'dashboard', label: 'Dashboard', icon: '📊' },
@@ -67,6 +70,7 @@ const TABS: { key: Tab; label: string; icon: string }[] = [
   { key: 'payments', label: 'Payments', icon: '💳' },
   { key: 'coupons', label: 'Coupons', icon: '🏷️' },
   { key: 'content', label: 'Site Content', icon: '✏️' },
+  { key: 'pages', label: 'Pages', icon: '📄' },
   { key: 'mcp', label: 'MCP', icon: '🤖' },
 ]
 
@@ -108,6 +112,11 @@ export default function AdminPage() {
   const [settings, setSettings] = useState<SiteSettings | null>(null)
   const [settingsSaved, setSettingsSaved] = useState(false)
 
+  // Pages
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [pageContent, setPageContent] = useState<any>(null)
+  const [pagesSaved, setPagesSaved] = useState(false)
+
   // Tab loading
   const [tabLoading, setTabLoading] = useState(false)
 
@@ -145,6 +154,9 @@ export default function AdminPage() {
         break
       case 'content':
         fetch('/api/admin/settings').then(r => r.json()).then(d => { setSettings(d); done() }).catch(done)
+        break
+      case 'pages':
+        fetch('/api/admin/page-content').then(r => r.json()).then(d => { setPageContent(d); done() }).catch(done)
         break
       default:
         done()
@@ -246,6 +258,15 @@ export default function AdminPage() {
     })
     setSettingsSaved(true)
     setTimeout(() => setSettingsSaved(false), 2000)
+  }
+
+  const savePageContent = async () => {
+    if (!pageContent) return
+    await fetch('/api/admin/page-content', {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pageContent),
+    })
+    setPagesSaved(true)
+    setTimeout(() => setPagesSaved(false), 2000)
   }
 
   // ─── Error state ───
@@ -401,6 +422,11 @@ export default function AdminPage() {
           {/* ═══ CONTENT ═══ */}
           {tab === 'content' && settings && (
             <ContentTab settings={settings} setSettings={setSettings} onSave={saveSettings} saved={settingsSaved} />
+          )}
+
+          {/* ═══ PAGES ═══ */}
+          {tab === 'pages' && pageContent && (
+            <PagesTab content={pageContent} setContent={setPageContent} onSave={savePageContent} saved={pagesSaved} />
           )}
 
           {/* ═══ MCP ═══ */}

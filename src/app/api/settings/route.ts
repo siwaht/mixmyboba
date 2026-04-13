@@ -35,6 +35,8 @@ const DEFAULT_SETTINGS = {
     { value: '5★', label: 'Avg Rating' },
   ],
   announcement: '',
+  announcementLink: '',
+  announcementLinkText: '',
 }
 
 export async function GET() {

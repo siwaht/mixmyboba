@@ -144,9 +144,9 @@ function errorResult(message) {
 
 const server = new McpServer({
   name: "cellulalabs-admin",
-  version: "3.0.0",
+  version: "4.0.0",
   description:
-    "Full admin control of the CellulaLabs e-commerce site. Manage products, orders, customers, inventory, coupons, reviews, site content, payment settings, analytics, and data import/export.",
+    "Full admin control of the CellulaLabs e-commerce site. Manage products, orders, customers, inventory, coupons, reviews, site content, page content (navbar, homepage, about, FAQ, policies, footer, SEO), payment settings, analytics, and data import/export.",
 });
 
 // ═══════════════════════════════════════════════════════════════════
@@ -868,6 +868,8 @@ server.tool(
       label: z.string().describe("Stat label, e.g. 'Minimum Purity', 'Fulfillment'"),
     })).optional().describe("Array of stats displayed below the marquee. Pass the full array to replace all stats."),
     announcement: z.string().optional().describe("Announcement banner text. Empty string hides the banner."),
+    announcementLink: z.string().optional().describe("Announcement banner link URL. Empty string removes the link."),
+    announcementLinkText: z.string().optional().describe("Announcement banner link text, e.g. 'Shop now →'."),
   },
   async (args) => {
     const current = await api("/api/admin/settings");
@@ -885,7 +887,156 @@ server.tool(
     if (args.marqueeItems !== undefined) merged.marqueeItems = args.marqueeItems;
     if (args.statsBar !== undefined) merged.statsBar = args.statsBar;
     if (args.announcement !== undefined) merged.announcement = args.announcement;
+    if (args.announcementLink !== undefined) merged.announcementLink = args.announcementLink;
+    if (args.announcementLinkText !== undefined) merged.announcementLinkText = args.announcementLinkText;
     const r = await api("/api/admin/settings", {
+      method: "PUT",
+      body: JSON.stringify(merged),
+    });
+    return result(r);
+  }
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// PAGE CONTENT — Navbar, homepage sections, about, FAQ, policies, footer, SEO
+// ═══════════════════════════════════════════════════════════════════
+
+server.tool(
+  "get_page_content",
+  "Get all page content: navbar (logo, links), homepage sections (hero, features, comparison, process, vibe, CTA), about page, FAQ, policies, footer, and SEO metadata. This controls every piece of text on the site.",
+  {},
+  async () => {
+    const r = await api("/api/admin/page-content");
+    return result(r);
+  }
+);
+
+server.tool(
+  "update_page_content",
+  "Update page content. Merges with existing content — only pass the top-level keys you want to change. Supports: navbar, homepage, about, faq, policies, footer, seo. Each key replaces its entire section.",
+  {
+    navbar: z.object({
+      logoEmoji: z.string().optional().describe("Logo emoji, e.g. '🧋'"),
+      logoText: z.string().optional().describe("Logo text, e.g. 'mix my boba'"),
+      links: z.array(z.object({
+        label: z.string().describe("Link label"),
+        href: z.string().describe("Link URL"),
+      })).optional().describe("Navigation links array"),
+    }).optional().describe("Navigation bar settings"),
+    homepage: z.object({
+      heroBadge: z.string().optional().describe("Badge text above hero title"),
+      heroTitle: z.string().optional().describe("Main hero title"),
+      heroHighlight: z.string().optional().describe("Highlighted text in hero"),
+      heroSubtitle: z.string().optional().describe("Hero subtitle/description"),
+      heroPrimaryCta: z.object({ text: z.string(), href: z.string() }).optional(),
+      heroSecondaryCta: z.object({ text: z.string(), href: z.string() }).optional(),
+      marquee2: z.array(z.string()).optional().describe("Second marquee items"),
+      featureCards: z.array(z.object({
+        icon: z.string().describe("Icon name: Coffee, Leaf, or Heart"),
+        title: z.string(),
+        description: z.string(),
+      })).optional().describe("Feature cards below marquee"),
+      comparison: z.object({
+        title: z.string().optional(),
+        subtitle: z.string().optional(),
+        themLabel: z.string().optional(),
+        themItems: z.array(z.string()).optional(),
+        usLabel: z.string().optional(),
+        usItems: z.array(z.string()).optional(),
+      }).optional().describe("Comparison section (us vs them)"),
+      storeSection: z.object({
+        title: z.string().optional(),
+        subtitle: z.string().optional(),
+      }).optional(),
+      processSection: z.object({
+        title: z.string().optional(),
+        subtitle: z.string().optional(),
+        steps: z.array(z.object({
+          num: z.string(),
+          title: z.string(),
+          description: z.string(),
+        })).optional(),
+      }).optional().describe("How-it-works process steps"),
+      vibeSection: z.object({
+        title: z.string().optional(),
+        subtitle: z.string().optional(),
+        cards: z.array(z.object({
+          emoji: z.string(),
+          stat: z.string(),
+          title: z.string(),
+          description: z.string(),
+        })).optional(),
+      }).optional().describe("Social proof / vibe cards"),
+      ctaSection: z.object({
+        title: z.string().optional(),
+        description: z.string().optional(),
+        primaryCta: z.object({ text: z.string(), href: z.string() }).optional(),
+        secondaryCta: z.object({ text: z.string(), href: z.string() }).optional(),
+      }).optional().describe("Bottom CTA section"),
+    }).optional().describe("Homepage content"),
+    about: z.object({
+      pageTitle: z.string().optional(),
+      pageSubtitle: z.string().optional(),
+      sections: z.array(z.object({
+        icon: z.string(),
+        title: z.string(),
+        content: z.string(),
+        isList: z.boolean().optional(),
+        contactEmail: z.string().optional(),
+        contactNote: z.string().optional(),
+      })).optional(),
+    }).optional().describe("About page content"),
+    faq: z.array(z.object({
+      category: z.string(),
+      items: z.array(z.object({
+        q: z.string().describe("Question"),
+        a: z.string().describe("Answer"),
+      })),
+    })).optional().describe("FAQ categories and Q&A pairs"),
+    policies: z.array(z.object({
+      id: z.string().describe("URL anchor ID"),
+      icon: z.string(),
+      title: z.string(),
+      content: z.string(),
+    })).optional().describe("Policy/compliance page sections"),
+    footer: z.object({
+      brandDescription: z.string().optional(),
+      sections: z.array(z.object({
+        title: z.string(),
+        links: z.array(z.object({ label: z.string(), href: z.string() })),
+        comingSoon: z.string().optional(),
+      })).optional(),
+    }).optional().describe("Footer content"),
+    seo: z.object({
+      siteTitle: z.string().optional(),
+      siteDescription: z.string().optional(),
+      siteKeywords: z.string().optional(),
+    }).optional().describe("SEO metadata"),
+  },
+  async (args) => {
+    // Fetch current content and merge
+    const current = await api("/api/admin/page-content");
+    if (current.status >= 400) return result(current);
+    const merged = { ...current.data };
+    if (args.navbar) merged.navbar = { ...current.data.navbar, ...args.navbar };
+    if (args.homepage) {
+      merged.homepage = { ...current.data.homepage };
+      for (const [k, v] of Object.entries(args.homepage)) {
+        if (v !== undefined) {
+          if (typeof v === 'object' && !Array.isArray(v) && current.data.homepage[k]) {
+            merged.homepage[k] = { ...current.data.homepage[k], ...v };
+          } else {
+            merged.homepage[k] = v;
+          }
+        }
+      }
+    }
+    if (args.about) merged.about = { ...current.data.about, ...args.about };
+    if (args.faq !== undefined) merged.faq = args.faq;
+    if (args.policies !== undefined) merged.policies = args.policies;
+    if (args.footer) merged.footer = { ...current.data.footer, ...args.footer };
+    if (args.seo) merged.seo = { ...current.data.seo, ...args.seo };
+    const r = await api("/api/admin/page-content", {
       method: "PUT",
       body: JSON.stringify(merged),
     });
@@ -1357,10 +1508,73 @@ server.resource(
   }
 );
 
+server.resource(
+  "page-content",
+  "cellula://content/pages",
+  { description: "All page content: navbar, homepage sections, about, FAQ, policies, footer, SEO metadata", mimeType: "application/json" },
+  async () => {
+    const r = await api("/api/admin/page-content");
+    return {
+      contents: [{
+        uri: "cellula://content/pages",
+        mimeType: "application/json",
+        text: JSON.stringify(r.data, null, 2),
+      }],
+    };
+  }
+);
+
+server.resource(
+  "site-settings",
+  "cellula://content/settings",
+  { description: "Site settings: hero, badges, marquee, stats bar, announcement banner", mimeType: "application/json" },
+  async () => {
+    const r = await api("/api/admin/settings");
+    return {
+      contents: [{
+        uri: "cellula://content/settings",
+        mimeType: "application/json",
+        text: JSON.stringify(r.data, null, 2),
+      }],
+    };
+  }
+);
+
 
 // ═══════════════════════════════════════════════════════════════════
 // MCP PROMPTS — Pre-built admin workflow templates
 // ═══════════════════════════════════════════════════════════════════
+
+server.prompt(
+  "site-content-audit",
+  "Review all site content and suggest improvements for copy, SEO, and consistency.",
+  {},
+  async () => {
+    return {
+      messages: [{
+        role: "user",
+        content: {
+          type: "text",
+          text: `Perform a comprehensive site content audit.
+
+Steps:
+1. Use get_site_settings to fetch hero, badges, marquee, stats, and announcement
+2. Use get_page_content to fetch all page content (navbar, homepage, about, FAQ, policies, footer, SEO)
+3. Review and report on:
+   - SEO: Are title, description, and keywords optimized?
+   - Consistency: Does the brand voice match across all pages?
+   - Completeness: Are there any empty or placeholder sections?
+   - FAQ: Are common customer questions covered?
+   - Policies: Are all legal requirements addressed?
+   - Navigation: Are all important pages linked?
+   - CTAs: Are calls-to-action clear and compelling?
+4. Suggest specific improvements with exact text changes
+5. If changes are approved, use update_page_content and update_site_settings to apply them`,
+        },
+      }],
+    };
+  }
+);
 
 server.prompt(
   "weekly-sales-report",
@@ -1490,4 +1704,4 @@ Steps:
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
-log("info", "CellulaLabs MCP server v3.0.0 started", { baseUrl: BASE_URL, authenticated: !!ADMIN_TOKEN });
+log("info", "CellulaLabs MCP server v4.0.0 started", { baseUrl: BASE_URL, authenticated: !!ADMIN_TOKEN });

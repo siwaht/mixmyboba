@@ -43,6 +43,8 @@ const DEFAULT_SETTINGS = {
     { value: '5★', label: 'Avg Rating' },
   ],
   announcement: '',
+  announcementLink: '',
+  announcementLinkText: '',
 }
 
 function getSettings() {

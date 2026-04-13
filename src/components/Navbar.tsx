@@ -7,17 +7,39 @@ import { useCartStore } from '@/lib/cartStore'
 import CartDrawer from './CartDrawer'
 import ThemeToggle from './ThemeToggle'
 
+interface NavLink { label: string; href: string }
+
 export default function Navbar() {
   const [cartOpen, setCartOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mounted, setMounted] = useState(false)
   const totalItems = useCartStore(s => s.totalItems)
+  const [navLinks, setNavLinks] = useState<NavLink[]>([
+    { label: 'Shop', href: '/#store' },
+    { label: 'Our Story', href: '/about' },
+    { label: 'FAQ', href: '/faq' },
+    { label: 'Compare', href: '/compare' },
+  ])
+  const [logoEmoji, setLogoEmoji] = useState('🧋')
+  const [logoText, setLogoText] = useState('mix my boba')
 
   useEffect(() => {
     setMounted(true)
     const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', onScroll, { passive: true })
+
+    fetch('/api/page-content')
+      .then(r => r.json())
+      .then(data => {
+        if (data.navbar) {
+          if (Array.isArray(data.navbar.links) && data.navbar.links.length) setNavLinks(data.navbar.links)
+          if (data.navbar.logoEmoji) setLogoEmoji(data.navbar.logoEmoji)
+          if (data.navbar.logoText) setLogoText(data.navbar.logoText)
+        }
+      })
+      .catch(() => {})
+
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -45,8 +67,8 @@ export default function Navbar() {
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="container">
           <div className="nav-left">
-            <Link href="/" className="logo" aria-label="Mix My Boba homepage">
-              <span className="logo-emoji">🧋</span> <span>mix my</span> boba
+            <Link href="/" className="logo" aria-label="Homepage">
+              <span className="logo-emoji">{logoEmoji}</span> <span>{logoText.split(' ').slice(0, -1).join(' ')}</span> {logoText.split(' ').slice(-1)[0]}
             </Link>
             <div className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
               {menuOpen && (
@@ -58,10 +80,9 @@ export default function Navbar() {
                   <X size={24} strokeWidth={1.5} />
                 </button>
               )}
-              <Link href="/#store" onClick={closeMenu}>Shop</Link>
-              <Link href="/about" onClick={closeMenu}>Our Story</Link>
-              <Link href="/faq" onClick={closeMenu}>FAQ</Link>
-              <Link href="/compare" onClick={closeMenu}>Compare</Link>
+              {navLinks.map((link, i) => (
+                <Link key={i} href={link.href} onClick={closeMenu}>{link.label}</Link>
+              ))}
             </div>
           </div>
 

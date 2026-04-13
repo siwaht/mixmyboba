@@ -10,6 +10,8 @@ interface SiteSettings {
   marqueeItems: string[]
   statsBar: { value: string; label: string }[]
   announcement: string
+  announcementLink?: string
+  announcementLinkText?: string
 }
 
 interface Props {
@@ -207,10 +209,31 @@ export default function ContentTab({ settings, setSettings, onSave, saved }: Pro
       {/* Announcement Banner */}
       <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
         <h3 className="admin-card-title">Announcement Banner</h3>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+          This banner appears at the very top of the site. Leave the text empty to hide it.
+        </p>
         <label className="form-label">
-          Banner Text (leave empty to hide)
-          <input className="form-input" value={settings.announcement} onChange={e => setSettings({ ...settings, announcement: e.target.value })} placeholder="e.g. Free shipping on orders over $200" />
+          Banner Text
+          <input className="form-input" value={settings.announcement} onChange={e => setSettings({ ...settings, announcement: e.target.value })} placeholder="e.g. Free shipping on orders over $50 — use code FIRSTSIP for 15% off!" />
         </label>
+        <div className="admin-form-grid" style={{ gridTemplateColumns: '1fr 1fr', marginTop: '0.5rem' }}>
+          <label className="form-label">
+            Link URL (optional)
+            <input className="form-input" value={settings.announcementLink ?? ''} onChange={e => setSettings({ ...settings, announcementLink: e.target.value })} placeholder="e.g. /#store" />
+          </label>
+          <label className="form-label">
+            Link Text (optional)
+            <input className="form-input" value={settings.announcementLinkText ?? ''} onChange={e => setSettings({ ...settings, announcementLinkText: e.target.value })} placeholder="e.g. Shop now →" />
+          </label>
+        </div>
+        {settings.announcement && (
+          <div style={{ marginTop: '0.75rem', padding: '0.6rem 1rem', background: 'var(--bg-warm)', borderRadius: '0.5rem', fontSize: '0.85rem', textAlign: 'center' }}>
+            🧋 {settings.announcement}
+            {settings.announcementLink && (
+              <> <a href={settings.announcementLink} style={{ color: 'var(--accent)', fontWeight: 500 }}>{settings.announcementLinkText || 'Learn more →'}</a></>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Preview */}
