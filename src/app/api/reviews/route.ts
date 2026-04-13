@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const { productId, rating, title, body: reviewBody } = parsed.data
+  const { productId, rating, title, body: reviewBody, displayName } = parsed.data
 
   // Check if user already reviewed this product
   const existing = await prisma.review.findUnique({
@@ -49,10 +49,18 @@ export async function POST(req: NextRequest) {
       rating,
       title: title.trim(),
       body: reviewBody.trim(),
+      displayName: displayName?.trim() || null,
       verified: !!purchased,
     },
     include: { user: { select: { name: true, role: true } } },
   })
+
+  // Revalidate the product page so review stats are fresh
+  const { revalidatePath } = await import('next/cache')
+  const product = await prisma.product.findUnique({ where: { id: productId }, select: { slug: true } })
+  if (product) {
+    revalidatePath(`/product/${product.slug}`)
+  }
 
   return NextResponse.json(review, { status: 201 })
 }

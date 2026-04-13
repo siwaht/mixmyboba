@@ -60,7 +60,8 @@ export default function CheckoutPage() {
 
   const subtotal = totalPrice()
   const discount = appliedCoupon?.discount || 0
-  const total = subtotal - discount
+  const shipping = subtotal >= 50 ? 0 : 5.99
+  const total = subtotal + shipping - discount
 
   const applyCoupon = async () => {
     setCouponError('')
@@ -277,6 +278,10 @@ export default function CheckoutPage() {
                 <div className="checkout-subtotal-row">
                   <span>Subtotal</span>
                   <span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="checkout-subtotal-row">
+                  <span>Shipping</span>
+                  <span>{subtotal >= 50 ? <span style={{ color: 'var(--success, #22c55e)' }}>Free</span> : '$5.99'}</span>
                 </div>
                 {discount > 0 && (
                   <div className="checkout-discount-row">

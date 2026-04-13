@@ -182,30 +182,50 @@ const customers = [
   { email: 'nat.w@gmail.com', name: 'Natalie W.', password: 'flavor666' },
 ]
 
-// ─── Reviews Pool ────────────────────────────────────────────────────────────
+// ─── Reviews Pool (keyed by product slug for correct association) ─────────────
 
-const reviewPool = [
+const genericReviews = [
   { rating: 5, title: 'Literally tastes like the boba shop', body: 'I was skeptical but WOW. Made it with oat milk and it tastes exactly like my $8 boba order. I am never going back. This is my daily ritual now.' },
-  { rating: 5, title: 'Obsessed is an understatement', body: 'I have been making this every single morning for 3 weeks straight. The taro flavor is INSANE. My roommate keeps stealing sips. Ordering the bulk size next.' },
   { rating: 4, title: 'Really good, wish there were more flavors', body: 'The quality is legit — real tea taste, not that fake powdery stuff. Would love to see a lavender or rose flavor. But what they have is solid.' },
+  { rating: 5, title: 'Game changer for WFH life', body: 'I used to walk 15 min to the boba shop every afternoon. Now I just make it at my desk in 60 seconds. Better for my wallet and my schedule.' },
+  { rating: 5, title: 'Gifted this and everyone loved it', body: 'Bought the sampler pack as a gift for my sister. She texted me the next day asking where to order more. Now our whole family is hooked.' },
+  { rating: 4, title: 'Great value for the servings', body: 'At less than $2 a cup this is a no-brainer. I was spending $50+ a week on boba runs. Now I spend that in a month and drink it every day.' },
+  { rating: 5, title: 'Finally a clean boba option', body: 'No artificial colors or flavors and it still tastes THIS good? Take my money. I have been looking for something like this forever.' },
+  { rating: 4, title: 'Wish I found this sooner', body: 'Been making boba at home with other brands and this is by far the best tasting one. Real tea flavor, not chalky at all. Very impressed.' },
+  { rating: 5, title: 'Better than the boba shop honestly', body: 'I can customize it exactly how I want — less sweet, extra creamy with coconut milk. It is actually better than what I get at shops because it is MY way.' },
+  { rating: 3, title: 'Good but a bit sweet for me', body: 'The flavor is authentic and the quality is there. Just a touch sweeter than I prefer. I add less powder and it is perfect. Still a great product overall.' },
   { rating: 5, title: 'Best purchase I have made this year', body: 'Saving so much money making boba at home. The brown sugar flavor with tapioca pearls is *chef kiss*. My whole friend group is ordering now.' },
   { rating: 4, title: 'Great taste, easy to make', body: 'Super simple — scoop, mix, done. Tastes great with almond milk. Only giving 4 stars because I wish the bag was resealable. But the flavor is 10/10.' },
   { rating: 5, title: 'My kids are OBSESSED', body: 'My 12-year-old makes her own boba every day after school now. She loves the strawberry flavor. It is actually wholesome ingredients too which I appreciate as a parent.' },
-  { rating: 5, title: 'Game changer for WFH life', body: 'I used to walk 15 min to the boba shop every afternoon. Now I just make it at my desk in 60 seconds. Better for my wallet and my schedule.' },
-  { rating: 5, title: 'Gifted this and everyone loved it', body: 'Bought the sampler pack as a gift for my sister. She texted me the next day asking where to order more. Now our whole family is hooked.' },
-  { rating: 4, title: 'Solid quality, fast shipping', body: 'Arrived in 2 days, well packaged. The matcha flavor is smooth and not bitter at all. Will definitely reorder when I run out.' },
-  { rating: 3, title: 'Good but a bit sweet for me', body: 'The flavor is authentic and the quality is there. Just a touch sweeter than I prefer. I add less powder and it is perfect. Still a great product overall.' },
-  { rating: 5, title: 'Better than the boba shop honestly', body: 'I can customize it exactly how I want — less sweet, extra creamy with coconut milk. It is actually better than what I get at shops because it is MY way.' },
-  { rating: 5, title: 'The thai tea is ELITE', body: 'Spiced, creamy, that gorgeous orange color — I am obsessed. The flavor is so fragrant and the base is clearly real tea. Sophisticated and delicious.' },
-  { rating: 4, title: 'Great value for the servings', body: 'At less than $2 a cup this is a no-brainer. I was spending $50+ a week on boba runs. Now I spend that in a month and drink it every day.' },
-  { rating: 5, title: 'Passion fruit is incredible', body: 'Bright, tropical, tangy — this passion fruit boba is everything I wanted. So refreshing over ice. New summer staple for sure.' },
-  { rating: 5, title: 'Finally a clean boba option', body: 'No artificial colors or flavors and it still tastes THIS good? Take my money. I have been looking for something like this forever.' },
-  { rating: 5, title: 'The honeydew is so refreshing', body: 'Light, sweet, naturally melon-flavored — perfect for hot days. I make it over ice with a sprig of mint and it is the best thing ever.' },
-  { rating: 4, title: 'Wish I found this sooner', body: 'Been making boba at home with other brands and this is by far the best tasting one. Real tea flavor, not chalky at all. Very impressed.' },
-  { rating: 5, title: 'Brown sugar is dangerous', body: 'It is too good. I make it every single day. That toasty caramel flavor is addictive. My wallet thanks me for not going to the boba shop anymore.' },
-  { rating: 5, title: 'Strawberry is surprisingly good', body: 'I expected it to be artificial-tasting but it is genuinely fruity and fresh. Beautiful pink color and the flavor is spot on. Ordering the large next time.' },
-  { rating: 4, title: 'Classic is a classic for a reason', body: 'Sometimes you just want the OG and this nails it. Malty, creamy, perfectly balanced. I drink it every morning instead of coffee now.' },
 ]
+
+// Product-specific reviews mapped by slug
+const productSpecificReviews: Record<string, Array<{ rating: number; title: string; body: string }>> = {
+  'classic-milk-tea': [
+    { rating: 4, title: 'Classic is a classic for a reason', body: 'Sometimes you just want the OG and this nails it. Malty, creamy, perfectly balanced. I drink it every morning instead of coffee now.' },
+  ],
+  'taro-milk-tea': [
+    { rating: 5, title: 'Obsessed is an understatement', body: 'I have been making this every single morning for 3 weeks straight. The taro flavor is INSANE. My roommate keeps stealing sips. Ordering the bulk size next.' },
+  ],
+  'matcha-boba': [
+    { rating: 4, title: 'Solid quality, fast shipping', body: 'Arrived in 2 days, well packaged. The matcha flavor is smooth and not bitter at all. Will definitely reorder when I run out.' },
+  ],
+  'brown-sugar-boba': [
+    { rating: 5, title: 'Brown sugar is dangerous', body: 'It is too good. I make it every single day. That toasty caramel flavor is addictive. My wallet thanks me for not going to the boba shop anymore.' },
+  ],
+  'thai-tea': [
+    { rating: 5, title: 'The thai tea is ELITE', body: 'Spiced, creamy, that gorgeous orange color — I am obsessed. The flavor is so fragrant and the base is clearly real tea. Sophisticated and delicious.' },
+  ],
+  'honeydew-milk-tea': [
+    { rating: 5, title: 'The honeydew is so refreshing', body: 'Light, sweet, naturally melon-flavored — perfect for hot days. I make it over ice with a sprig of mint and it is the best thing ever.' },
+  ],
+  'strawberry-milk-tea': [
+    { rating: 5, title: 'Strawberry is surprisingly good', body: 'I expected it to be artificial-tasting but it is genuinely fruity and fresh. Beautiful pink color and the flavor is spot on. Ordering the large next time.' },
+  ],
+  'passion-fruit-boba': [
+    { rating: 5, title: 'Passion fruit is incredible', body: 'Bright, tropical, tangy — this passion fruit boba is everything I wanted. So refreshing over ice. New summer staple for sure.' },
+  ],
+}
 
 // ─── Coupons ─────────────────────────────────────────────────────────────────
 
@@ -292,14 +312,20 @@ async function main() {
   }
   console.log(`  ✓ ${productRecords.length} products with variants`)
 
-  // ── Reviews (spread across all products and customers) ──
+  // ── Reviews (product-specific first, then generic) ──
   await prisma.review.deleteMany({})
   let reviewIdx = 0
+  let genericIdx = 0
   for (let pIdx = 0; pIdx < productRecords.length; pIdx++) {
+    const slug = productRecords[pIdx].slug
+    const specific = productSpecificReviews[slug] || []
     const reviewCount = 3 + (pIdx % 4) // 3, 4, 5, 6, 3, 4, ...
     for (let r = 0; r < reviewCount; r++) {
       const customerIdx = (pIdx * 3 + r) % customerRecords.length
-      const review = reviewPool[reviewIdx % reviewPool.length]
+      // Use product-specific reviews first, then fill with generic ones
+      const review = r < specific.length
+        ? specific[r]
+        : genericReviews[genericIdx++ % genericReviews.length]
       await prisma.review.create({
         data: {
           productId: productRecords[pIdx].id,

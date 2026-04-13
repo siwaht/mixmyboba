@@ -23,6 +23,9 @@ export async function generateStaticParams() {
   return products.map(p => ({ slug: p.slug }))
 }
 
+// Revalidate product pages periodically and on-demand (via revalidatePath after review submission)
+export const revalidate = 60
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const product = await prisma.product.findUnique({ where: { slug } })
@@ -60,6 +63,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         include: { user: { select: { name: true, role: true } } },
         orderBy: { createdAt: 'desc' },
         take: 20,
+        select: {
+          id: true,
+          rating: true,
+          title: true,
+          body: true,
+          verified: true,
+          displayName: true,
+          createdAt: true,
+          user: { select: { name: true, role: true } },
+        },
       },
     },
   })
@@ -291,7 +304,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             title: r.title,
             body: r.body,
             verified: r.verified,
-            userName: (r.user.role === 'admin' ? r.user.name || 'Staff' : r.user.name) || 'Anonymous',
+            userName: r.displayName || (r.user.role === 'admin' ? 'Staff' : r.user.name) || 'Anonymous',
             createdAt: r.createdAt.toISOString(),
           }))}
           avgRating={avgRating}

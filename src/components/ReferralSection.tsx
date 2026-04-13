@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 
 export default function ReferralSection() {
-  const [data, setData] = useState<{ referralCode: string; referralCount: number; reward: string } | null>(null)
+  const [data, setData] = useState<{ referralCode: string; referralCount: number; reward: string; couponsGenerated: number } | null>(null)
   const [copied, setCopied] = useState(false)
   const [refInput, setRefInput] = useState('')
   const [applyMsg, setApplyMsg] = useState('')
@@ -51,7 +51,7 @@ export default function ReferralSection() {
     <div className="referral-section">
       <h2 style={{ fontSize: '1.1rem', marginBottom: '0.75rem' }}>🎁 Referral Program — Give $10, Get $10</h2>
       <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '1rem' }}>
-        Share your code with friends. When they sign up and use it, you both get a $10 coupon.
+        Share your code with friends. When they sign up and apply it on their Account page, you both get a $10 coupon code to use at checkout.
       </p>
 
       <div className="referral-code-box">
@@ -93,6 +93,18 @@ export default function ReferralSection() {
         </div>
         {applyMsg && <p style={{ color: 'var(--success)', fontSize: '0.82rem', marginTop: '0.5rem' }}>{applyMsg}</p>}
         {applyError && <p style={{ color: 'var(--error)', fontSize: '0.82rem', marginTop: '0.5rem' }}>{applyError}</p>}
+      </div>
+
+      {/* How it works */}
+      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+        <p style={{ fontWeight: 600, marginBottom: '0.4rem' }}>How it works:</p>
+        <ol style={{ margin: 0, paddingLeft: '1.2rem', lineHeight: 1.7 }}>
+          <li>Share your referral code or link with a friend</li>
+          <li>They sign up and paste your code in the &quot;Have a referral code?&quot; box above</li>
+          <li>You both receive a $10 coupon code (min. $30 order)</li>
+          <li>Enter the coupon code at checkout to apply the discount</li>
+        </ol>
+        <p style={{ marginTop: '0.5rem', fontStyle: 'italic' }}>Note: Referral codes are not coupon codes — they generate a coupon after your friend applies them.</p>
       </div>
     </div>
   )

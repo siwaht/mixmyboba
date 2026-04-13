@@ -81,16 +81,17 @@ model COA {
 }
 
 model Review {
-  id        String   @id @default(cuid())
-  productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  rating    Int      // 1-5
-  title     String
-  body      String
-  verified  Boolean  @default(false) // verified purchase
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  rating      Int      // 1-5
+  title       String
+  body        String
+  displayName String?  // custom public name for the reviewer
+  verified    Boolean  @default(false) // verified purchase
+  createdAt   DateTime @default(now())
 
   @@unique([productId, userId])
   @@index([productId])

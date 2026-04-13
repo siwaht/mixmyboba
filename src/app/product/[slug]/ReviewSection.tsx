@@ -33,6 +33,7 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
   const [rating, setRating] = useState(5)
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
+  const [displayName, setDisplayName] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -50,7 +51,7 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
     const res = await fetch('/api/reviews', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productId, rating, title, body }),
+      body: JSON.stringify({ productId, rating, title, body, displayName: displayName.trim() || undefined }),
     })
 
     if (!res.ok) {
@@ -67,12 +68,13 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
       title: review.title,
       body: review.body,
       verified: review.verified,
-      userName: review.user?.name || review.userName || 'You',
+      userName: review.displayName || review.user?.name || 'You',
       createdAt: review.createdAt,
     }, ...prev])
     setShowForm(false)
     setTitle('')
     setBody('')
+    setDisplayName('')
     setRating(5)
     setSubmitting(false)
   }
@@ -127,6 +129,10 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
               ))}
             </div>
           </div>
+          <label className="form-label">
+            Your Name
+            <input type="text" value={displayName} onChange={e => setDisplayName(e.target.value)} className="form-input" placeholder="e.g. Sarah M." maxLength={100} />
+          </label>
           <label className="form-label">
             Title
             <input type="text" required value={title} onChange={e => setTitle(e.target.value)} className="form-input" placeholder="Summarize your experience" maxLength={100} />

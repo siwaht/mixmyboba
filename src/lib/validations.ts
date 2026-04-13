@@ -38,6 +38,7 @@ export const createReviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
   title: z.string().min(1, 'Title is required').max(200),
   body: z.string().min(1, 'Review body is required').max(2000),
+  displayName: z.string().max(100).optional(),
 })
 
 // ─── Admin: Products ───
