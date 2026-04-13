@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ReferralSection from '@/components/ReferralSection'
 
@@ -35,6 +36,9 @@ export default function AccountPage() {
   const [name, setName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const redirectTo = searchParams.get('redirect')
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -42,11 +46,15 @@ export default function AccountPage() {
       .then(data => {
         if (data.user) {
           setUser(data.user)
+          if (redirectTo) {
+            router.push(redirectTo)
+            return
+          }
           fetch('/api/orders').then(r => r.json()).then(setOrders)
         }
       })
       .finally(() => setLoading(false))
-  }, [])
+  }, [redirectTo, router])
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -65,6 +73,10 @@ export default function AccountPage() {
       return
     }
     setUser(data.user)
+    if (redirectTo) {
+      router.push(redirectTo)
+      return
+    }
     fetch('/api/orders').then(r => r.json()).then(setOrders)
   }
 
