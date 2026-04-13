@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const { code, type, value, minOrder, maxUses, expiresAt } = parsed.data
+  const { code, type, value, minOrder, maxUses, maxUsesPerCustomer, expiresAt } = parsed.data
   const coupon = await prisma.coupon.create({
     data: {
       code: code.toUpperCase().trim(),
@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
       value,
       minOrder,
       maxUses: maxUses ?? null,
+      maxUsesPerCustomer: maxUsesPerCustomer ?? null,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
       active: true,
     },

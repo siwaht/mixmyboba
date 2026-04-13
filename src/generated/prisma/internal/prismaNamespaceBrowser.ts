@@ -163,6 +163,7 @@ export const CouponScalarFieldEnum = {
   minOrder: 'minOrder',
   maxUses: 'maxUses',
   usedCount: 'usedCount',
+  maxUsesPerCustomer: 'maxUsesPerCustomer',
   active: 'active',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt'

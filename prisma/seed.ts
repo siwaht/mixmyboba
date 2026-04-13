@@ -230,7 +230,7 @@ const productSpecificReviews: Record<string, Array<{ rating: number; title: stri
 // ─── Coupons ─────────────────────────────────────────────────────────────────
 
 const coupons = [
-  { code: 'FIRSTSIP', type: 'percent', value: 15, minOrder: 0, maxUses: 500, usedCount: 127, active: true },
+  { code: 'FIRSTSIP', type: 'percent', value: 15, minOrder: 0, maxUses: 500, usedCount: 127, active: true, maxUsesPerCustomer: 1 },
   { code: 'BOBA20', type: 'percent', value: 20, minOrder: 50, maxUses: 200, usedCount: 89, active: true },
   { code: 'SAVE10', type: 'fixed', value: 10, minOrder: 40, active: true },
   { code: 'BULKBOBA', type: 'percent', value: 15, minOrder: 100, active: true },

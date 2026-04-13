@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
   const body = await safeJson(req)
   if (isErrorResponse(body)) return body
-  const { code, subtotal } = body as { code: string; subtotal: number }
+  const { code, subtotal, email } = body as { code: string; subtotal: number; email?: string }
 
   if (!code) {
     return NextResponse.json({ error: 'Coupon code required' }, { status: 400 })
@@ -30,6 +30,18 @@ export async function POST(req: NextRequest) {
 
   if (coupon.maxUses && coupon.usedCount >= coupon.maxUses) {
     return NextResponse.json({ error: 'Coupon usage limit reached' }, { status: 410 })
+  }
+
+  if (coupon.maxUsesPerCustomer && email) {
+    const customerUses = await prisma.order.count({
+      where: { email, couponCode: coupon.code },
+    })
+    if (customerUses >= coupon.maxUsesPerCustomer) {
+      return NextResponse.json(
+        { error: "You've already used this coupon" },
+        { status: 400 }
+      )
+    }
   }
 
   if (subtotal < coupon.minOrder) {

@@ -9,6 +9,7 @@ interface Coupon {
   value: number
   minOrder: number
   maxUses: number | null
+  maxUsesPerCustomer: number | null
   usedCount: number
   active: boolean
   expiresAt: string | null
@@ -18,7 +19,7 @@ interface Coupon {
 export default function CouponsTab() {
   const [coupons, setCoupons] = useState<Coupon[]>([])
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ code: '', type: 'percent', value: '', minOrder: '0', maxUses: '', expiresAt: '' })
+  const [form, setForm] = useState({ code: '', type: 'percent', value: '', minOrder: '0', maxUses: '', maxUsesPerCustomer: '', expiresAt: '' })
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function CouponsTab() {
     const coupon = await res.json()
     setCoupons(prev => [coupon, ...prev])
     setShowForm(false)
-    setForm({ code: '', type: 'percent', value: '', minOrder: '0', maxUses: '', expiresAt: '' })
+    setForm({ code: '', type: 'percent', value: '', minOrder: '0', maxUses: '', maxUsesPerCustomer: '', expiresAt: '' })
   }
 
   const toggleActive = async (coupon: Coupon) => {
@@ -97,6 +98,10 @@ export default function CouponsTab() {
               <input type="number" value={form.maxUses} onChange={e => setForm({ ...form, maxUses: e.target.value })} className="form-input" />
             </label>
             <label className="form-label">
+              Max Per Customer (blank = unlimited)
+              <input type="number" value={form.maxUsesPerCustomer} onChange={e => setForm({ ...form, maxUsesPerCustomer: e.target.value })} className="form-input" />
+            </label>
+            <label className="form-label">
               Expires (optional)
               <input type="date" value={form.expiresAt} onChange={e => setForm({ ...form, expiresAt: e.target.value })} className="form-input" />
             </label>
@@ -125,7 +130,7 @@ export default function CouponsTab() {
                 <td><code>{c.code}</code></td>
                 <td>{c.type === 'percent' ? `${c.value}%` : `$${c.value.toFixed(2)}`}</td>
                 <td>${c.minOrder.toFixed(2)}</td>
-                <td>{c.usedCount}{c.maxUses ? ` / ${c.maxUses}` : ''}</td>
+                <td>{c.usedCount}{c.maxUses ? ` / ${c.maxUses}` : ''}{c.maxUsesPerCustomer ? ` (${c.maxUsesPerCustomer}/customer)` : ''}</td>
                 <td>{c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : '\u2014'}</td>
                 <td>
                   <span className={`order-status ${c.active ? 'status-delivered' : 'status-cancelled'}`}>

@@ -94,6 +94,7 @@ export const createCouponSchema = z.object({
   value: z.number().positive('Value must be positive'),
   minOrder: z.number().min(0).default(0),
   maxUses: z.number().int().positive().nullable().optional(),
+  maxUsesPerCustomer: z.number().int().positive().nullable().optional(),
   expiresAt: z.string().optional(), // ISO date string
 })
 

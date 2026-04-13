@@ -105,6 +105,7 @@ model Coupon {
   minOrder      Float    @default(0)
   maxUses       Int?
   usedCount     Int      @default(0)
+  maxUsesPerCustomer Int?
   active        Boolean  @default(true)
   expiresAt     DateTime?
   createdAt     DateTime @default(now())

@@ -70,7 +70,7 @@ export default function CheckoutPage() {
       const res = await fetch('/api/coupons/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: couponCode, subtotal }),
+        body: JSON.stringify({ code: couponCode, subtotal, email }),
       })
       const data = await res.json()
       if (!res.ok) {
