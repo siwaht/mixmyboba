@@ -27,8 +27,8 @@
     "accountName": ""
   },
   "cod": {
-    "enabled": false,
-    "instructions": ""
+    "enabled": true,
+    "instructions": "Pay with cash when your order is delivered."
   },
   "general": {
     "currency": "USD",

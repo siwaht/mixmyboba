@@ -14,7 +14,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const totalItems = useCartStore(s => s.totalItems)
+  const itemCount = useCartStore(s => s.itemCount)
   const [navLinks, setNavLinks] = useState<NavLink[]>([
     { label: 'Shop', href: '/#store' },
     { label: 'Our Story', href: '/about' },
@@ -28,6 +28,12 @@ export default function Navbar() {
     setMounted(true)
     const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', onScroll, { passive: true })
+
+    // Auto-open cart drawer if redirected from /cart
+    if (sessionStorage.getItem('open-cart')) {
+      sessionStorage.removeItem('open-cart')
+      setCartOpen(true)
+    }
 
     fetch('/api/page-content')
       .then(r => r.json())
@@ -89,9 +95,9 @@ export default function Navbar() {
           <div className="nav-right">
             <ThemeToggle />
             <Link href="/account" className="nav-account-link">Account</Link>
-            <button className="cart-btn" onClick={() => setCartOpen(true)} aria-label={`Open cart, ${mounted ? totalItems() : 0} items`}>
+            <button className="cart-btn" onClick={() => setCartOpen(true)} aria-label={`Open cart, ${mounted ? itemCount : 0} items`}>
               <ShoppingCart size={18} strokeWidth={1.5} aria-hidden="true" />
-              <span className="cart-badge" aria-hidden="true">{mounted ? totalItems() : 0}</span>
+              <span className="cart-badge" aria-hidden="true">{mounted ? itemCount : 0}</span>
             </button>
             <button
               className="hamburger"

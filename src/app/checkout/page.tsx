@@ -134,7 +134,7 @@ export default function CheckoutPage() {
           shippingAddress: address,
           paymentMethod,
           notes,
-          couponCode: appliedCoupon?.code || null,
+          couponCode: appliedCoupon?.code || undefined,
           items: items.map(i => ({ productId: i.productId.split('__')[0], quantity: i.quantity })),
         }),
       })

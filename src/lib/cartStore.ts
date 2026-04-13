@@ -20,30 +20,33 @@ interface CartState {
   clearCart: () => void
   totalItems: () => number
   totalPrice: () => number
+  itemCount: number
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      itemCount: 0,
 
       addItem: (item) => {
         const existing = get().items.find(i => i.productId === item.productId)
+        let newItems: CartItem[]
         if (existing) {
-          set({
-            items: get().items.map(i =>
-              i.productId === item.productId
-                ? { ...i, quantity: i.quantity + 1 }
-                : i
-            ),
-          })
+          newItems = get().items.map(i =>
+            i.productId === item.productId
+              ? { ...i, quantity: i.quantity + 1 }
+              : i
+          )
         } else {
-          set({ items: [...get().items, { ...item, quantity: 1 }] })
+          newItems = [...get().items, { ...item, quantity: 1 }]
         }
+        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0) })
       },
 
       removeItem: (productId) => {
-        set({ items: get().items.filter(i => i.productId !== productId) })
+        const newItems = get().items.filter(i => i.productId !== productId)
+        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0) })
       },
 
       updateQuantity: (productId, quantity) => {
@@ -51,14 +54,13 @@ export const useCartStore = create<CartState>()(
           get().removeItem(productId)
           return
         }
-        set({
-          items: get().items.map(i =>
-            i.productId === productId ? { ...i, quantity } : i
-          ),
-        })
+        const newItems = get().items.map(i =>
+          i.productId === productId ? { ...i, quantity } : i
+        )
+        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0) })
       },
 
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], itemCount: 0 }),
 
       totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
 

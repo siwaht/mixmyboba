@@ -26,8 +26,8 @@ export const createOrderSchema = z.object({
   shippingAddress: z.string().min(10, 'Please provide a full shipping address'),
   paymentMethod: z.enum(['crypto', 'ach', 'card', 'paypal', 'cod']).default('crypto'),
   items: z.array(orderItemSchema).min(1, 'At least one item is required'),
-  notes: z.string().optional(),
-  couponCode: z.string().optional(),
+  notes: z.union([z.string(), z.null()]).optional(),
+  couponCode: z.union([z.string(), z.null()]).optional(),
 })
 
 // ─── Reviews ───
