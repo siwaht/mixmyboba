@@ -25,6 +25,9 @@ export default function CheckoutPage() {
   // Age verification
   const [termsAccepted, setTermsAccepted] = useState(false)
 
+  // Field-level validation errors
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; address?: string }>({})
+
   // Pre-fill email from logged-in user (skip admin accounts)
   useEffect(() => {
     fetch('/api/auth/me')
@@ -119,9 +122,6 @@ export default function CheckoutPage() {
       </section>
     )
   }
-
-  // Field-level validation errors
-  const [fieldErrors, setFieldErrors] = useState<{ email?: string; address?: string }>({})
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
