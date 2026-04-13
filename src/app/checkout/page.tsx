@@ -98,7 +98,10 @@ export default function CheckoutPage() {
           <p className="success-msg">
             Your order is being processed. Check your email for confirmation and tracking details.
           </p>
-          <Link href="/" className="btn btn-primary">Continue Shopping</Link>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href={`/account/orders/${orderId}`} className="btn btn-primary">View Order Details</Link>
+            <Link href="/" className="btn btn-secondary">Continue Shopping</Link>
+          </div>
         </div>
       </section>
     )
@@ -117,8 +120,20 @@ export default function CheckoutPage() {
     )
   }
 
+  // Field-level validation errors
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; address?: string }>({})
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const errors: { email?: string; address?: string } = {}
+    if (!email.trim()) errors.email = 'Email is required.'
+    if (!address.trim()) errors.address = 'Shipping address is required.'
+    else if (address.trim().length < 10) errors.address = 'Please provide a full shipping address (at least 10 characters).'
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      return
+    }
+    setFieldErrors({})
     if (!termsAccepted) {
       setError('Please accept the Terms of Service to continue.')
       return
@@ -166,11 +181,13 @@ export default function CheckoutPage() {
             <h3>Shipping Details</h3>
             <label className="form-label">
               Email
-              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="form-input" placeholder="you@example.com" autoComplete="email" />
+              <input type="email" required value={email} onChange={e => { setEmail(e.target.value); setFieldErrors(prev => ({ ...prev, email: undefined })) }} className={`form-input${fieldErrors.email ? ' input-error' : ''}`} placeholder="you@example.com" autoComplete="email" />
+              {fieldErrors.email && <span className="field-error" role="alert">{fieldErrors.email}</span>}
             </label>
             <label className="form-label">
               Shipping Address
-              <textarea required value={address} onChange={e => setAddress(e.target.value)} className="form-input" rows={3} placeholder="Full shipping address" autoComplete="street-address" />
+              <textarea required value={address} onChange={e => { setAddress(e.target.value); setFieldErrors(prev => ({ ...prev, address: undefined })) }} className={`form-input${fieldErrors.address ? ' input-error' : ''}`} rows={3} placeholder="Full shipping address" autoComplete="street-address" minLength={10} />
+              {fieldErrors.address && <span className="field-error" role="alert">{fieldErrors.address}</span>}
             </label>
             <label className="form-label">
               Payment Method

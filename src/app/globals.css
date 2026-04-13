@@ -1942,6 +1942,8 @@ select.form-input { cursor: pointer; }
 .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.35; }
 .checkout-empty p { color: var(--text-secondary); margin-bottom: 2rem; }
 .checkout-error { color: var(--error); font-size: 0.85rem; padding: 0.6rem 0.8rem; background: rgba(251, 113, 133, 0.05); border: 1px solid rgba(251, 113, 133, 0.12); border-radius: var(--radius-sm); }
+.field-error { display: block; color: var(--error); font-size: 0.8rem; margin-top: 0.3rem; }
+.input-error { border-color: var(--error) !important; box-shadow: 0 0 0 1px rgba(251, 113, 133, 0.3); }
 .checkout-submit { width: 100%; margin-top: 1rem; padding: 0.9rem; font-size: 0.95rem; border-radius: 100px; }
 
 /* Coupon */

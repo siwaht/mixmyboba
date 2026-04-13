@@ -176,7 +176,7 @@ export default function AccountPage() {
         ) : (
           <div className="orders-list">
             {orders.map(order => (
-              <div key={order.id} className="order-card glass">
+              <Link key={order.id} href={`/account/orders/${order.id}`} className="order-card glass" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
                 <div className="order-header">
                   <span className="order-id">#{order.id.slice(-8)}</span>
                   <span className={`order-status status-${order.status}`}>{order.status}</span>
@@ -192,7 +192,7 @@ export default function AccountPage() {
                   </span>
                   <span className="order-total">${order.total.toFixed(2)}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
