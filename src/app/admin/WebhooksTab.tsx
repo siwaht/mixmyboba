@@ -558,6 +558,174 @@ export default function WebhooksTab() {
           ))}
         </>
       )}
+
+      {/* ═══ EVENTS ═══ */}
+      {activeSection === 'events' && (
+        <>
+          <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
+            <h3 className="admin-card-title">⚡ Global Event Toggles</h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+              Enable or disable specific event types globally. Disabled events won't be sent to any endpoint, regardless of endpoint configuration.
+            </p>
+            {Object.entries(EVENT_CATEGORIES).map(([category, events]) => (
+              <div key={category} style={{ marginBottom: '1.25rem' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, display: 'block', marginBottom: '0.5rem' }}>
+                  {category}
+                </span>
+                <div className="admin-list">
+                  {events.map(eventKey => {
+                    const config = settings.events[eventKey]
+                    if (!config) return null
+                    return (
+                      <div key={eventKey} className="admin-list-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <span style={{ fontSize: '1.1rem' }}>{EVENT_ICONS[eventKey] || '📡'}</span>
+                          <div>
+                            <code style={{ fontSize: '0.82rem', color: 'var(--accent-primary)' }}>{eventKey}</code>
+                            <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginLeft: '0.75rem' }}>{config.description}</span>
+                          </div>
+                        </div>
+                        <button
+                          className={`btn ${config.enabled ? 'btn-primary' : 'btn-secondary'}`}
+                          style={{ fontSize: '0.75rem', padding: '0.3rem 0.75rem', minWidth: '80px' }}
+                          onClick={() => toggleGlobalEvent(eventKey)}
+                        >
+                          {config.enabled ? '● Enabled' : '○ Disabled'}
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* ═══ DELIVERY LOG ═══ */}
+      {activeSection === 'logs' && (
+        <>
+          <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
+            <h3 className="admin-card-title">📋 Delivery Log</h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+              Recent webhook delivery attempts. Logs are stored in memory and reset when the server restarts.
+            </p>
+            {deliveries.length === 0 ? (
+              <div className="admin-empty">
+                <p style={{ margin: 0 }}>No deliveries recorded yet.</p>
+                <p style={{ margin: '0.5rem 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  Webhook delivery history will appear here once events are triggered. Enable webhooks and add an endpoint to get started.
+                </p>
+              </div>
+            ) : (
+              <div className="admin-list">
+                {deliveries.map(d => (
+                  <div key={d.id} className="admin-list-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: 0 }}>
+                      <span style={{ fontSize: '1rem' }}>{d.status === 'success' ? '✅' : '❌'}</span>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          <code style={{ fontSize: '0.8rem', color: 'var(--accent-primary)' }}>{EVENT_ICONS[d.event] || '📡'} {d.event}</code>
+                          {d.statusCode && (
+                            <span className="admin-badge" style={{ fontSize: '0.7rem' }}>HTTP {d.statusCode}</span>
+                          )}
+                          <span className="admin-badge" style={{ fontSize: '0.7rem' }}>{d.duration}ms</span>
+                        </div>
+                        <p style={{ margin: '0.2rem 0 0', fontSize: '0.75rem', color: 'var(--text-secondary)', wordBreak: 'break-all' }}>
+                          → {d.endpoint}
+                        </p>
+                        {d.error && (
+                          <p style={{ margin: '0.2rem 0 0', fontSize: '0.75rem', color: 'var(--error)' }}>{d.error}</p>
+                        )}
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', flexShrink: 0, whiteSpace: 'nowrap' }}>
+                      {new Date(d.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* ═══ N8N GUIDE ═══ */}
+      {activeSection === 'guide' && (
+        <>
+          <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
+            <h3 className="admin-card-title">📖 n8n Integration Guide</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.7', marginBottom: '1.25rem' }}>
+              <strong style={{ color: 'var(--text-primary)' }}>n8n</strong> is a free, open-source workflow automation tool. Connect Mix My Boba webhooks to automate order confirmations, Slack alerts, Google Sheets updates, and more.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {/* Step 1 */}
+              <div style={{ padding: '1rem', background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)', borderRadius: '10px' }}>
+                <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: 'var(--accent-primary)' }}>Step 1 — Create a Webhook Trigger in n8n</h4>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  In your n8n workflow, add a <strong style={{ color: 'var(--text-primary)' }}>Webhook</strong> node as the trigger. Set the method to <code>POST</code> and copy the generated webhook URL.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div style={{ padding: '1rem', background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)', borderRadius: '10px' }}>
+                <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: 'var(--accent-primary)' }}>Step 2 — Add the URL Here</h4>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  Go to the <strong style={{ color: 'var(--text-primary)' }}>Endpoints</strong> tab, click <strong style={{ color: 'var(--text-primary)' }}>+ Add Endpoint</strong>, paste the n8n URL, and choose which events to subscribe to.
+                </p>
+              </div>
+
+              {/* Step 3 */}
+              <div style={{ padding: '1rem', background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)', borderRadius: '10px' }}>
+                <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: 'var(--accent-primary)' }}>Step 3 — Verify with Test</h4>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  Click the <strong style={{ color: 'var(--text-primary)' }}>🧪 Test</strong> button on your endpoint to send a sample <code>order.created</code> payload. Check the n8n execution log to confirm it was received.
+                </p>
+              </div>
+
+              {/* Step 4 */}
+              <div style={{ padding: '1rem', background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)', borderRadius: '10px' }}>
+                <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: 'var(--accent-primary)' }}>Step 4 — Build Your Workflow</h4>
+                <p style={{ margin: '0 0 0.75rem', fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  After your Webhook node, add actions. Common automations:
+                </p>
+                <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '2' }}>
+                  <li><strong style={{ color: 'var(--text-primary)' }}>order.created</strong> → Send order confirmation email via Gmail</li>
+                  <li><strong style={{ color: 'var(--text-primary)' }}>order.status_changed</strong> → Post to Slack #fulfillment channel</li>
+                  <li><strong style={{ color: 'var(--text-primary)' }}>inventory.low_stock</strong> → Email your supplier</li>
+                  <li><strong style={{ color: 'var(--text-primary)' }}>customer.registered</strong> → Add to Mailchimp / email list</li>
+                  <li><strong style={{ color: 'var(--text-primary)' }}>review.created</strong> → Post to your team Discord</li>
+                </ul>
+              </div>
+
+              {/* Payload structure */}
+              <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px' }}>
+                <h4 style={{ margin: '0 0 0.75rem', fontSize: '0.9rem' }}>Webhook Payload Format</h4>
+                <pre style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-secondary)', overflowX: 'auto', lineHeight: '1.6' }}>{`{
+  "event": "order.created",
+  "timestamp": "2026-04-14T10:00:00.000Z",
+  "data": {
+    "orderId": "cm...",
+    "email": "customer@example.com",
+    "total": 49.99,
+    "status": "pending",
+    ...
+  }
+}`}</pre>
+              </div>
+
+              {/* Security note */}
+              <div style={{ padding: '1rem', background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.15)', borderRadius: '10px' }}>
+                <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.9rem', color: '#f59e0b' }}>🔐 Verifying Signatures (Optional)</h4>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  If you set a <strong style={{ color: 'var(--text-primary)' }}>Webhook Secret</strong> in the Endpoints tab, every request includes an <code>X-Webhook-Signature</code> header with an HMAC-SHA256 signature. In n8n, use a <strong style={{ color: 'var(--text-primary)' }}>Function</strong> node to verify: <code>sha256=HMAC(secret, body)</code>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

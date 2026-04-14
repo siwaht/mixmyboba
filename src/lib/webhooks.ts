@@ -8,10 +8,13 @@ export type WebhookEventType =
   | 'customer.registered'
   | 'order.created'
   | 'order.status_changed'
+  | 'order.cancelled'
   | 'inventory.low_stock'
   | 'inventory.out_of_stock'
   | 'review.created'
+  | 'product.created'
   | 'product.updated'
+  | 'product.deleted'
 
 interface WebhookEndpoint {
   id: string
@@ -139,8 +142,8 @@ async function _dispatchEvent(event: WebhookEventType, data: Record<string, unkn
     data,
   }
 
-  // Send to all active endpoints subscribed to this event
-  const targets = settings.endpoints.filter(ep => ep.active && ep.url && ep.events.includes(event))
+  // Send to all active endpoints subscribed to this event (or all events via '*')
+  const targets = settings.endpoints.filter(ep => ep.active && ep.url && (ep.events.includes('*' as WebhookEventType) || ep.events.includes(event)))
 
   if (!targets.length) return
 
