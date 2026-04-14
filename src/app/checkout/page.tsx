@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { useCartStore } from '@/lib/cartStore'
 
@@ -23,11 +23,49 @@ export default function CheckoutPage() {
   const [couponError, setCouponError] = useState('')
   const [couponLoading, setCouponLoading] = useState(false)
 
-  // Age verification
+  // Age verification — use ref to prevent re-render resets
   const [termsAccepted, setTermsAccepted] = useState(false)
+  const termsRef = useRef<HTMLInputElement>(null)
 
   // Field-level validation errors
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; address?: string; phone?: string }>({})
+
+  // Refs for syncing programmatic/autofill input with React state
+  const emailRef = useRef<HTMLInputElement>(null)
+  const addressRef = useRef<HTMLTextAreaElement>(null)
+  const phoneRef = useRef<HTMLInputElement>(null)
+
+  // Sync DOM values to React state on blur (catches autofill/paste that skips onChange)
+  const syncFieldOnBlur = useCallback((field: 'email' | 'address' | 'phone') => {
+    return () => {
+      if (field === 'email' && emailRef.current && emailRef.current.value !== email) {
+        setEmail(emailRef.current.value)
+        setFieldErrors(prev => ({ ...prev, email: undefined }))
+      } else if (field === 'address' && addressRef.current && addressRef.current.value !== address) {
+        setAddress(addressRef.current.value)
+        setFieldErrors(prev => ({ ...prev, address: undefined }))
+      } else if (field === 'phone' && phoneRef.current && phoneRef.current.value !== phone) {
+        setPhone(phoneRef.current.value)
+        setFieldErrors(prev => ({ ...prev, phone: undefined }))
+      }
+    }
+  }, [email, address, phone])
+
+  // Periodically sync DOM values to catch autofill that doesn't fire any events
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (emailRef.current && emailRef.current.value !== email) {
+        setEmail(emailRef.current.value)
+      }
+      if (addressRef.current && addressRef.current.value !== address) {
+        setAddress(addressRef.current.value)
+      }
+      if (phoneRef.current && phoneRef.current.value !== phone) {
+        setPhone(phoneRef.current.value)
+      }
+    }, 500)
+    return () => clearInterval(interval)
+  }, [email, address, phone])
 
   // Pre-fill email from logged-in user (skip admin accounts)
   useEffect(() => {
@@ -127,17 +165,29 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // Sync DOM values to state before validation (catches autofill/paste that skipped onChange)
+    const currentEmail = emailRef.current?.value ?? email
+    const currentAddress = addressRef.current?.value ?? address
+    const currentPhone = phoneRef.current?.value ?? phone
+    const currentTerms = termsRef.current?.checked ?? termsAccepted
+
+    // Update state to match DOM
+    if (currentEmail !== email) setEmail(currentEmail)
+    if (currentAddress !== address) setAddress(currentAddress)
+    if (currentPhone !== phone) setPhone(currentPhone)
+    if (currentTerms !== termsAccepted) setTermsAccepted(currentTerms)
+
     const errors: { email?: string; address?: string; phone?: string } = {}
-    if (!email.trim()) errors.email = 'Email is required.'
-    if (!address.trim()) errors.address = 'Shipping address is required.'
-    else if (address.trim().length < 10) errors.address = 'Please provide a full shipping address (at least 10 characters).'
-    if (paymentMethod === 'cod' && !phone.trim()) errors.phone = 'Phone number is required for Cash on Delivery.'
+    if (!currentEmail.trim()) errors.email = 'Email is required.'
+    if (!currentAddress.trim()) errors.address = 'Shipping address is required.'
+    else if (currentAddress.trim().length < 10) errors.address = 'Please provide a full shipping address (at least 10 characters).'
+    if (paymentMethod === 'cod' && !currentPhone.trim()) errors.phone = 'Phone number is required for Cash on Delivery.'
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors)
       return
     }
     setFieldErrors({})
-    if (!termsAccepted) {
+    if (!currentTerms) {
       setError('Please accept the Terms of Service to continue.')
       return
     }
@@ -148,9 +198,9 @@ export default function CheckoutPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email,
-          shippingAddress: address,
-          phone: phone.trim() || undefined,
+          email: currentEmail,
+          shippingAddress: currentAddress,
+          phone: currentPhone.trim() || undefined,
           paymentMethod,
           notes,
           couponCode: appliedCoupon?.code || undefined,
@@ -192,17 +242,17 @@ export default function CheckoutPage() {
             <h3>Shipping Details</h3>
             <label className="form-label">
               Email
-              <input type="email" required value={email} onChange={e => { setEmail(e.target.value); setFieldErrors(prev => ({ ...prev, email: undefined })) }} className={`form-input${fieldErrors.email ? ' input-error' : ''}`} placeholder="you@example.com" autoComplete="email" />
+              <input ref={emailRef} type="email" required value={email} onChange={e => { setEmail(e.target.value); setFieldErrors(prev => ({ ...prev, email: undefined })) }} onBlur={syncFieldOnBlur('email')} onInput={e => { const val = (e.target as HTMLInputElement).value; if (val !== email) { setEmail(val); setFieldErrors(prev => ({ ...prev, email: undefined })) } }} className={`form-input${fieldErrors.email ? ' input-error' : ''}`} placeholder="you@example.com" autoComplete="email" />
               {fieldErrors.email && <span className="field-error" role="alert">{fieldErrors.email}</span>}
             </label>
             <label className="form-label">
               Shipping Address
-              <textarea required value={address} onChange={e => { setAddress(e.target.value); setFieldErrors(prev => ({ ...prev, address: undefined })) }} className={`form-input${fieldErrors.address ? ' input-error' : ''}`} rows={3} placeholder="Full shipping address" autoComplete="street-address" minLength={10} />
+              <textarea ref={addressRef} required value={address} onChange={e => { setAddress(e.target.value); setFieldErrors(prev => ({ ...prev, address: undefined })) }} onBlur={syncFieldOnBlur('address')} onInput={e => { const val = (e.target as HTMLTextAreaElement).value; if (val !== address) { setAddress(val); setFieldErrors(prev => ({ ...prev, address: undefined })) } }} className={`form-input${fieldErrors.address ? ' input-error' : ''}`} rows={3} placeholder="Full shipping address" autoComplete="street-address" minLength={10} />
               {fieldErrors.address && <span className="field-error" role="alert">{fieldErrors.address}</span>}
             </label>
             <label className="form-label">
               Phone Number {paymentMethod === 'cod' ? '(required)' : '(optional)'}
-              <input type="tel" value={phone} onChange={e => { setPhone(e.target.value); setFieldErrors(prev => ({ ...prev, phone: undefined })) }} className={`form-input${fieldErrors.phone ? ' input-error' : ''}`} placeholder="+1 (555) 123-4567" autoComplete="tel" required={paymentMethod === 'cod'} />
+              <input ref={phoneRef} type="tel" value={phone} onChange={e => { setPhone(e.target.value); setFieldErrors(prev => ({ ...prev, phone: undefined })) }} onBlur={syncFieldOnBlur('phone')} onInput={e => { const val = (e.target as HTMLInputElement).value; if (val !== phone) { setPhone(val); setFieldErrors(prev => ({ ...prev, phone: undefined })) } }} className={`form-input${fieldErrors.phone ? ' input-error' : ''}`} placeholder="+1 (555) 123-4567" autoComplete="tel" required={paymentMethod === 'cod'} />
               {fieldErrors.phone && <span className="field-error" role="alert">{fieldErrors.phone}</span>}
             </label>
             <label className="form-label">
@@ -227,7 +277,7 @@ export default function CheckoutPage() {
             {/* Terms acceptance */}
             <div className="checkout-verifications">
               <label className="checkbox-label">
-                <input type="checkbox" checked={termsAccepted} onChange={e => setTermsAccepted(e.target.checked)} />
+                <input ref={termsRef} type="checkbox" checked={termsAccepted} onChange={e => setTermsAccepted(e.target.checked)} />
                 <span>I accept the <a href="/compliance" target="_blank" rel="noopener noreferrer">Terms of Service</a> and return policy.</span>
               </label>
             </div>
