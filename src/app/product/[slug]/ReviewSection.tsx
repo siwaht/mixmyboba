@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface ReviewData {
   id: string
@@ -36,6 +36,15 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
   const [displayName, setDisplayName] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
+
+  // Check auth state on mount
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(data => setIsLoggedIn(!!data.user))
+      .catch(() => setIsLoggedIn(false))
+  }, [])
 
   // Derive count and average from the live reviews state so they update after submission
   const currentReviewCount = reviews.length
@@ -114,9 +123,13 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
             <p className="no-reviews-text">No reviews yet. Be the first to share your experience.</p>
           )}
         </div>
-        <button className="btn btn-secondary" onClick={() => setShowForm(!showForm)}>
-          {showForm ? 'Cancel' : 'Write a Review'}
-        </button>
+        {isLoggedIn === false ? (
+          <a href="/login" className="btn btn-secondary">Sign in to Review</a>
+        ) : (
+          <button className="btn btn-secondary" onClick={() => setShowForm(!showForm)} disabled={isLoggedIn === null}>
+            {showForm ? 'Cancel' : 'Write a Review'}
+          </button>
+        )}
       </div>
 
       {showForm && (

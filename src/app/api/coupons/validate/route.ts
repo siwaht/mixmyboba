@@ -32,7 +32,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Coupon usage limit reached' }, { status: 410 })
   }
 
-  if (coupon.maxUsesPerCustomer && email) {
+  if (coupon.maxUsesPerCustomer) {
+    if (!email) {
+      return NextResponse.json(
+        { error: 'Email is required to use this coupon' },
+        { status: 400 }
+      )
+    }
     const customerUses = await prisma.order.count({
       where: { email, couponCode: coupon.code },
     })

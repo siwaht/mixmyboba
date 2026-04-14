@@ -252,7 +252,7 @@ export default function CheckoutPage() {
             </label>
             <label className="form-label">
               Phone Number {paymentMethod === 'cod' ? '(required)' : '(optional)'}
-              <input ref={phoneRef} type="tel" value={phone} onChange={e => { setPhone(e.target.value); setFieldErrors(prev => ({ ...prev, phone: undefined })) }} onBlur={syncFieldOnBlur('phone')} onInput={e => { const val = (e.target as HTMLInputElement).value; if (val !== phone) { setPhone(val); setFieldErrors(prev => ({ ...prev, phone: undefined })) } }} className={`form-input${fieldErrors.phone ? ' input-error' : ''}`} placeholder="+1 (555) 123-4567" autoComplete="tel" required={paymentMethod === 'cod'} />
+              <input ref={phoneRef} type="tel" value={phone} onChange={e => { setPhone(e.target.value); setFieldErrors(prev => ({ ...prev, phone: undefined })) }} onBlur={syncFieldOnBlur('phone')} onInput={e => { const val = (e.target as HTMLInputElement).value; if (val !== phone) { setPhone(val); setFieldErrors(prev => ({ ...prev, phone: undefined })) } }} className={`form-input${fieldErrors.phone ? ' input-error' : ''}`} placeholder="Your phone number" autoComplete="tel" required={paymentMethod === 'cod'} />
               {fieldErrors.phone && <span className="field-error" role="alert">{fieldErrors.phone}</span>}
             </label>
             <label className="form-label">

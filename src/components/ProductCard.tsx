@@ -19,7 +19,7 @@ interface Product {
   avgRating?: number | null
   reviewCount?: number
   startingPrice?: number
-  variants?: { label: string; price: number }[]
+  variants?: { id: string; label: string; price: number }[]
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -30,25 +30,30 @@ export default function ProductCard({ product }: { product: Product }) {
   const showToast = useToast(s => s.show)
   const { getTag } = useProductTags()
 
-  const cartItem = items.find(i => i.productId === product.id)
+  // Use the first (cheapest) variant for quick-add so the cart shows the size label
+  const defaultVariant = product.variants && product.variants.length > 0 ? product.variants[0] : null
+  const defaultVariantId = defaultVariant
+    ? `${product.id}__${defaultVariant.id}`
+    : product.id
+  const cartItem = items.find(i => i.productId === defaultVariantId)
   const qty = cartItem?.quantity || 0
 
   const handleAdd = () => {
     addItem({
-      productId: product.id,
+      productId: defaultVariantId,
       slug: product.slug,
-      name: product.name,
+      name: defaultVariant ? `${product.name} (${defaultVariant.label})` : product.name,
       price: product.startingPrice || product.price,
       imageUrl: product.imageUrl,
     })
-    showToast(`${product.name} added to cart`)
+    showToast(`${product.name}${defaultVariant ? ` (${defaultVariant.label})` : ''} added to cart`)
   }
 
   const handleIncrement = () => {
     addItem({
-      productId: product.id,
+      productId: defaultVariantId,
       slug: product.slug,
-      name: product.name,
+      name: defaultVariant ? `${product.name} (${defaultVariant.label})` : product.name,
       price: product.startingPrice || product.price,
       imageUrl: product.imageUrl,
     })
@@ -56,9 +61,9 @@ export default function ProductCard({ product }: { product: Product }) {
 
   const handleDecrement = () => {
     if (qty <= 1) {
-      removeItem(product.id)
+      removeItem(defaultVariantId)
     } else {
-      updateQuantity(product.id, qty - 1)
+      updateQuantity(defaultVariantId, qty - 1)
     }
   }
 
