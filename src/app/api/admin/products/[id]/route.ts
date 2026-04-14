@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db'
 import { getCurrentUser } from '@/lib/auth'
 import { updateProductSchema } from '@/lib/validations'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
+import { emitWebhookEvent } from '@/lib/webhooks'
 
 async function requireAdmin() {
   const user = await getCurrentUser()
@@ -55,7 +56,22 @@ export async function PATCH(
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
+  const before = await prisma.product.findUnique({ where: { id }, select: { stock: true, price: true, active: true, name: true } })
   const product = await prisma.product.update({ where: { id }, data: parsed.data })
+
+  // 🔔 Webhook: product updated
+  emitWebhookEvent('product.updated', {
+    productId: product.id,
+    productName: product.name,
+    slug: product.slug,
+    changes: parsed.data,
+    previousValues: before ? { stock: before.stock, price: before.price, active: before.active } : null,
+    currentStock: product.stock,
+    currentPrice: product.price,
+    active: product.active,
+    updatedAt: product.updatedAt.toISOString(),
+  })
+
   return NextResponse.json(product)
 }
 

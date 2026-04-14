@@ -4,6 +4,7 @@ import { getCurrentUser } from '@/lib/auth'
 import { createOrderSchema } from '@/lib/validations'
 import { rateLimit, rateLimitCombo } from '@/lib/rate-limit'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
+import { emitWebhookEvent, getLowStockThreshold } from '@/lib/webhooks'
 
 export async function POST(req: NextRequest) {
   // Rate limit: 5 orders per minute per IP
@@ -138,6 +139,57 @@ export async function POST(req: NextRequest) {
         include: { items: { include: { product: true } } },
       })
     })
+
+    // 🔔 Webhook: order created
+    emitWebhookEvent('order.created', {
+      orderId: order.id,
+      email: order.email,
+      total: order.total,
+      subtotal: order.subtotal,
+      discount: order.discount,
+      shipping: order.shipping,
+      paymentMethod: order.paymentMethod,
+      status: order.status,
+      couponCode: order.couponCode,
+      items: order.items.map(i => ({
+        productId: i.productId,
+        productName: i.product.name,
+        quantity: i.quantity,
+        price: i.price,
+        variantLabel: i.variantLabel,
+      })),
+      shippingAddress: order.shippingAddress,
+      createdAt: order.createdAt.toISOString(),
+    })
+
+    // 🔔 Webhook: check for low stock / out of stock after order
+    const threshold = getLowStockThreshold()
+    for (const [pid] of aggregatedQty) {
+      const product = await prisma.product.findUnique({
+        where: { id: pid },
+        select: { id: true, name: true, slug: true, stock: true, category: true },
+      })
+      if (product) {
+        if (product.stock <= 0) {
+          emitWebhookEvent('inventory.out_of_stock', {
+            productId: product.id,
+            productName: product.name,
+            slug: product.slug,
+            stock: product.stock,
+            category: product.category,
+          })
+        } else if (product.stock <= threshold) {
+          emitWebhookEvent('inventory.low_stock', {
+            productId: product.id,
+            productName: product.name,
+            slug: product.slug,
+            stock: product.stock,
+            threshold,
+            category: product.category,
+          })
+        }
+      }
+    }
 
     return NextResponse.json(order, { status: 201 })
   } catch (err) {

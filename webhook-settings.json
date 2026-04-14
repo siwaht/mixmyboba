@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "secret": "",
+  "endpoints": [
+    {
+      "id": "n8n-primary",
+      "name": "n8n Primary Workflow",
+      "url": "",
+      "events": [
+        "customer.registered",
+        "order.created",
+        "order.status_changed",
+        "inventory.low_stock",
+        "inventory.out_of_stock",
+        "review.created",
+        "product.updated"
+      ],
+      "active": false,
+      "headers": {}
+    }
+  ],
+  "lowStockThreshold": 20,
+  "retries": 2,
+  "timeoutMs": 10000
+}

@@ -4,6 +4,7 @@ import { getCurrentUser } from '@/lib/auth'
 import { createReviewSchema } from '@/lib/validations'
 import { rateLimit } from '@/lib/rate-limit'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
+import { emitWebhookEvent } from '@/lib/webhooks'
 
 export async function POST(req: NextRequest) {
   const user = await getCurrentUser()
@@ -57,10 +58,24 @@ export async function POST(req: NextRequest) {
 
   // Revalidate the product page so review stats are fresh
   const { revalidatePath } = await import('next/cache')
-  const product = await prisma.product.findUnique({ where: { id: productId }, select: { slug: true } })
+  const product = await prisma.product.findUnique({ where: { id: productId }, select: { slug: true, name: true } })
   if (product) {
     revalidatePath(`/product/${product.slug}`)
   }
+
+  // 🔔 Webhook: new review created
+  emitWebhookEvent('review.created', {
+    reviewId: review.id,
+    productId,
+    productName: product?.name || 'Unknown',
+    rating,
+    title: review.title,
+    body: review.body,
+    verified: review.verified,
+    displayName: review.displayName || review.user?.name || 'Anonymous',
+    userId: user.id,
+    createdAt: review.createdAt.toISOString(),
+  })
 
   return NextResponse.json(review, { status: 201 })
 }

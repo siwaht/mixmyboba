@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { getCurrentUser } from '@/lib/auth'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
+import { emitWebhookEvent } from '@/lib/webhooks'
 
 export async function GET(
   _req: NextRequest,
@@ -45,11 +46,36 @@ export async function PATCH(
     return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
   }
 
+  const existing = await prisma.order.findUnique({ where: { id }, select: { status: true, email: true } })
+  if (!existing) {
+    return NextResponse.json({ error: 'Order not found' }, { status: 404 })
+  }
+
+  const oldStatus = existing.status
+
   const order = await prisma.order.update({
     where: { id },
     data: { status },
     include: { items: { include: { product: true } } },
   })
+
+  // 🔔 Webhook: order status changed
+  if (oldStatus !== status) {
+    emitWebhookEvent('order.status_changed', {
+      orderId: order.id,
+      email: order.email,
+      oldStatus,
+      newStatus: status,
+      total: order.total,
+      paymentMethod: order.paymentMethod,
+      items: order.items.map(i => ({
+        productName: i.product.name,
+        quantity: i.quantity,
+        price: i.price,
+      })),
+      updatedAt: order.updatedAt.toISOString(),
+    })
+  }
 
   return NextResponse.json(order)
 }

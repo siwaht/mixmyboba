@@ -4,6 +4,7 @@ import { hashPassword, signToken } from '@/lib/auth'
 import { registerSchema } from '@/lib/validations'
 import { rateLimit } from '@/lib/rate-limit'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
+import { emitWebhookEvent } from '@/lib/webhooks'
 
 export async function POST(req: NextRequest) {
   // Rate limit: 5 registrations per minute per IP
@@ -42,6 +43,14 @@ export async function POST(req: NextRequest) {
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7,
     path: '/',
+  })
+
+  // 🔔 Webhook: new customer registered
+  emitWebhookEvent('customer.registered', {
+    userId: user.id,
+    email: user.email,
+    name: user.name,
+    registeredAt: user.createdAt.toISOString(),
   })
 
   return res

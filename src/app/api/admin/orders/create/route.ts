@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { getCurrentUser } from '@/lib/auth'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
+import { emitWebhookEvent } from '@/lib/webhooks'
 
 async function requireAdmin() {
   const user = await getCurrentUser()
@@ -73,6 +74,27 @@ export async function POST(req: NextRequest) {
       items: { create: orderItems },
     },
     include: { items: { include: { product: true } } },
+  })
+
+  // 🔔 Webhook: order created (admin-created)
+  emitWebhookEvent('order.created', {
+    orderId: order.id,
+    email: order.email,
+    total: order.total,
+    subtotal: order.subtotal,
+    discount: order.discount,
+    paymentMethod: order.paymentMethod,
+    status: order.status,
+    items: order.items.map(i => ({
+      productId: i.productId,
+      productName: i.product.name,
+      quantity: i.quantity,
+      price: i.price,
+      variantLabel: i.variantLabel,
+    })),
+    shippingAddress: order.shippingAddress,
+    source: 'admin',
+    createdAt: order.createdAt.toISOString(),
   })
 
   return NextResponse.json(order, { status: 201 })
