@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Shield } from 'lucide-react'
 import { getCachedJson } from '@/lib/settings-cache'
+import FooterLogoLink from './FooterLogoLink'
 
 interface FooterLink { label: string; href: string }
 interface FooterSection { title: string; links: FooterLink[]; comingSoon?: string }
@@ -28,9 +29,12 @@ export default async function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <Link href="/" className="logo footer-logo" aria-label="Homepage">
-              <span className="logo-emoji">{logoEmoji}</span> <span>{logoFirst} {logoRest.length > 1 ? logoRest.slice(0, -1).join(' ') : ''}</span> {logoRest.length > 0 ? logoRest[logoRest.length - 1] : ''}
-            </Link>
+            <FooterLogoLink
+              logoEmoji={logoEmoji}
+              logoFirst={logoFirst}
+              logoMiddle={logoRest.length > 1 ? logoRest.slice(0, -1).join(' ') : ''}
+              logoLast={logoRest.length > 0 ? logoRest[logoRest.length - 1] : ''}
+            />
             <p>{footer.brandDescription || defaultFooter.brandDescription}</p>
           </div>
           {(footer.sections || defaultFooter.sections).map((section, i) => (
