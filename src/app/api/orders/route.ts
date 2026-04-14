@@ -142,6 +142,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(order, { status: 201 })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to create order'
+    console.error('Order creation error:', err)
     // Stock-related errors are user-facing
     if (message.includes('Insufficient stock')) {
       return NextResponse.json({ error: message }, { status: 409 })
