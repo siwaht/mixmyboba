@@ -21,8 +21,10 @@ export const orderItemSchema = z.object({
   variantLabel: z.string().optional(),
 })
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export const createOrderSchema = z.object({
-  email: z.email('Invalid email address'),
+  email: z.string().min(1, 'Email is required').regex(emailRegex, 'Invalid email address'),
   shippingAddress: z.string().min(10, 'Please provide a full shipping address'),
   phone: z.union([z.string(), z.null()]).optional(),
   paymentMethod: z.enum(['crypto', 'ach', 'card', 'paypal', 'cod']).default('crypto'),
