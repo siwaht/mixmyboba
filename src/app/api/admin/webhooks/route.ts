@@ -99,7 +99,7 @@ function saveSettings(clientSettings: Record<string, unknown>) {
     : current.endpoints
 
   const saved = {
-    enabled: clientSettings.enabled ?? current.enabled,
+    enabled: typeof clientSettings.enabled === 'boolean' ? clientSettings.enabled : current.enabled,
     secret,
     endpoints,
     events: (clientSettings.events as Record<string, { enabled: boolean; description: string }>) || ALL_EVENTS,
