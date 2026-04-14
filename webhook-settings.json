@@ -5,6 +5,7 @@
     {
       "id": "n8n-primary",
       "name": "n8n Primary Workflow",
+      "label": "n8n Primary Workflow",
       "url": "",
       "events": [
         "customer.registered",
@@ -16,10 +17,24 @@
         "product.updated"
       ],
       "active": false,
-      "headers": {}
+      "headers": {},
+      "createdAt": "2026-04-14T00:00:00.000Z"
     }
   ],
+  "events": {
+    "customer.registered": { "enabled": true, "description": "A new customer signs up" },
+    "order.created": { "enabled": true, "description": "A new order is placed" },
+    "order.status_changed": { "enabled": true, "description": "An order status is updated" },
+    "order.cancelled": { "enabled": true, "description": "An order is cancelled" },
+    "inventory.low_stock": { "enabled": true, "description": "Product stock falls below threshold" },
+    "inventory.out_of_stock": { "enabled": true, "description": "Product goes out of stock" },
+    "review.created": { "enabled": true, "description": "A customer leaves a review" },
+    "product.created": { "enabled": true, "description": "A new product is added" },
+    "product.updated": { "enabled": true, "description": "A product is edited" },
+    "product.deleted": { "enabled": true, "description": "A product is removed" }
+  },
   "lowStockThreshold": 20,
   "retries": 2,
+  "retryAttempts": 2,
   "timeoutMs": 10000
 }
