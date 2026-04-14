@@ -12,6 +12,7 @@ import ContentTab from './ContentTab'
 import CouponsTab from './CouponsTab'
 import PagesTab from './PagesTab'
 import McpTab from './McpTab'
+import WebhooksTab from './WebhooksTab'
 
 // ─── Types ───
 interface Product {
@@ -59,7 +60,7 @@ interface SiteSettings {
   announcementLinkText?: string
 }
 
-type Tab = 'dashboard' | 'products' | 'orders' | 'customers' | 'inventory' | 'payments' | 'coupons' | 'content' | 'pages' | 'mcp'
+type Tab = 'dashboard' | 'products' | 'orders' | 'customers' | 'inventory' | 'payments' | 'coupons' | 'content' | 'pages' | 'webhooks' | 'mcp'
 
 const TABS: { key: Tab; label: string; icon: string }[] = [
   { key: 'dashboard', label: 'Dashboard', icon: '📊' },
@@ -71,6 +72,7 @@ const TABS: { key: Tab; label: string; icon: string }[] = [
   { key: 'coupons', label: 'Coupons', icon: '🏷️' },
   { key: 'content', label: 'Site Content', icon: '✏️' },
   { key: 'pages', label: 'Pages', icon: '📄' },
+  { key: 'webhooks', label: 'Webhooks', icon: '🔔' },
   { key: 'mcp', label: 'MCP', icon: '🤖' },
 ]
 
@@ -531,6 +533,9 @@ export default function AdminPage() {
           {tab === 'pages' && pageContent && (
             <PagesTab content={pageContent} setContent={setPageContent} onSave={savePageContent} saved={pagesSaved} />
           )}
+
+          {/* ═══ WEBHOOKS ═══ */}
+          {tab === 'webhooks' && <WebhooksTab />}
 
           {/* ═══ MCP ═══ */}
           {tab === 'mcp' && <McpTab />}

@@ -9,7 +9,7 @@ interface Stats {
   topProducts: { name: string; revenue: number; sold: number }[]
 }
 
-type Tab = 'dashboard' | 'products' | 'orders' | 'customers' | 'inventory' | 'payments' | 'coupons' | 'content' | 'mcp'
+type Tab = 'dashboard' | 'products' | 'orders' | 'customers' | 'inventory' | 'payments' | 'coupons' | 'content' | 'webhooks' | 'mcp'
 
 export default function DashboardTab({ stats, setTab }: { stats: Stats; setTab: (t: Tab) => void }) {
   return (
