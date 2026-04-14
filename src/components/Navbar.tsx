@@ -73,7 +73,7 @@ export default function Navbar() {
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="container">
           <div className="nav-left">
-            <Link href="/" className="logo" aria-label="Homepage" onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}>
+            <Link href="/" className="logo" aria-label="Homepage" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <span className="logo-emoji">{logoEmoji}</span> <span>{logoText.split(' ').slice(0, -1).join(' ')}</span> {logoText.split(' ').slice(-1)[0]}
             </Link>
             <div className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>

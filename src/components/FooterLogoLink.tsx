@@ -15,7 +15,7 @@ export default function FooterLogoLink({ logoEmoji, logoFirst, logoMiddle, logoL
       href="/"
       className="logo footer-logo"
       aria-label="Homepage"
-      onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
     >
       <span className="logo-emoji">{logoEmoji}</span>{' '}
       <span>{logoFirst}{logoMiddle ? ` ${logoMiddle}` : ''}</span>{logoLast ? ` ${logoLast}` : ''}
