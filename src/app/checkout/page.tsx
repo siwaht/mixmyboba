@@ -204,6 +204,7 @@ export default function CheckoutPage() {
           paymentMethod,
           notes,
           couponCode: appliedCoupon?.code || undefined,
+          shipping,
           items: items.map(i => {
             const [baseId, ...rest] = i.productId.split('__')
             return {
@@ -321,7 +322,12 @@ export default function CheckoutPage() {
                     </button>
                   </div>
                 )}
-                {couponError && <p className="coupon-error" role="alert" aria-live="polite">{couponError}</p>}
+                {couponError && (
+                  <div className={`coupon-error-alert${couponError.toLowerCase().includes('email') ? ' coupon-error-highlight' : ''}`} role="alert" aria-live="assertive">
+                    <span className="coupon-error-icon">⚠️</span>
+                    <span>{couponError}{couponError.toLowerCase().includes('email') ? ' — please fill in your email above first.' : ''}</span>
+                  </div>
+                )}
               </div>
 
               <div className="checkout-totals">

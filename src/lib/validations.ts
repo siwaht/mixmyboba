@@ -29,6 +29,7 @@ export const createOrderSchema = z.object({
   items: z.array(orderItemSchema).min(1, 'At least one item is required'),
   notes: z.union([z.string(), z.null()]).optional(),
   couponCode: z.union([z.string(), z.null()]).optional(),
+  shipping: z.number().min(0).optional(),
 })
 
 // ─── Reviews ───

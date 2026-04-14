@@ -122,6 +122,7 @@ model Order {
   paymentRef      String?
   shippingAddress String
   subtotal        Float
+  shipping        Float       @default(0)
   total           Float
   discount        Float       @default(0)
   couponCode      String?

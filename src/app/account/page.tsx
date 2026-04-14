@@ -16,6 +16,7 @@ interface OrderItem {
   id: string
   quantity: number
   price: number
+  variantLabel: string | null
   product: { name: string }
 }
 
@@ -191,7 +192,7 @@ function AccountPageContent() {
                 </div>
                 <div className="order-items">
                   {order.items.map(item => (
-                    <span key={item.id}>{item.product.name} × {item.quantity}</span>
+                    <span key={item.id}>{item.product.name}{item.variantLabel ? ` — ${item.variantLabel}` : ''} × {item.quantity}</span>
                   ))}
                 </div>
                 <div className="order-footer">

@@ -8,6 +8,7 @@ interface OrderItem {
   id: string
   quantity: number
   price: number
+  variantLabel: string | null
   product: { name: string; slug: string; imageUrl: string }
 }
 
@@ -18,6 +19,7 @@ interface Order {
   paymentMethod: string
   shippingAddress: string
   subtotal: number
+  shipping: number
   total: number
   discount: number
   couponCode: string | null
@@ -132,6 +134,9 @@ export default function OrderDetailPage() {
                   <Link href={`/product/${item.product.slug}`} style={{ fontWeight: 500, color: 'var(--text-primary)' }}>
                     {item.product.name}
                   </Link>
+                  {item.variantLabel && (
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '0.35rem' }}>— {item.variantLabel}</span>
+                  )}
                   <span style={{ color: 'var(--text-secondary)', marginLeft: '0.5rem' }}>× {item.quantity}</span>
                 </div>
                 <span style={{ fontWeight: 500 }}>${(item.price * item.quantity).toFixed(2)}</span>
@@ -147,6 +152,9 @@ export default function OrderDetailPage() {
                 <span>Discount {order.couponCode && `(${order.couponCode})`}</span><span>-${order.discount.toFixed(2)}</span>
               </div>
             )}
+            <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
+              <span>Shipping</span><span>{order.shipping > 0 ? `$${order.shipping.toFixed(2)}` : <span style={{ color: 'var(--success, #22c55e)' }}>Free</span>}</span>
+            </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600, fontSize: '1.05rem', paddingTop: '0.5rem', borderTop: '1px solid var(--border-color)' }}>
               <span>Total</span><span>${order.total.toFixed(2)}</span>
             </div>

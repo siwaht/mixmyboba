@@ -21,13 +21,17 @@ interface CartState {
   totalItems: () => number
   totalPrice: () => number
   itemCount: number
+  lastUpdated: number
 }
+
+const CART_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
       itemCount: 0,
+      lastUpdated: Date.now(),
 
       addItem: (item) => {
         const existing = get().items.find(i => i.productId === item.productId)
@@ -41,12 +45,12 @@ export const useCartStore = create<CartState>()(
         } else {
           newItems = [...get().items, { ...item, quantity: 1 }]
         }
-        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0) })
+        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0), lastUpdated: Date.now() })
       },
 
       removeItem: (productId) => {
         const newItems = get().items.filter(i => i.productId !== productId)
-        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0) })
+        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0), lastUpdated: Date.now() })
       },
 
       updateQuantity: (productId, quantity) => {
@@ -57,10 +61,10 @@ export const useCartStore = create<CartState>()(
         const newItems = get().items.map(i =>
           i.productId === productId ? { ...i, quantity } : i
         )
-        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0) })
+        set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0), lastUpdated: Date.now() })
       },
 
-      clearCart: () => set({ items: [], itemCount: 0 }),
+      clearCart: () => set({ items: [], itemCount: 0, lastUpdated: Date.now() }),
 
       totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
 
@@ -70,9 +74,18 @@ export const useCartStore = create<CartState>()(
     { 
       name: 'mixmyboba-cart',
       onRehydrateStorage: () => (state) => {
-        // Recalculate itemCount from persisted items after hydration
-        if (state && state.items) {
-          state.itemCount = state.items.reduce((sum: number, i: CartItem) => sum + i.quantity, 0)
+        if (state) {
+          // Clear cart if it's older than 7 days
+          if (state.lastUpdated && Date.now() - state.lastUpdated > CART_EXPIRY_MS) {
+            state.items = []
+            state.itemCount = 0
+            state.lastUpdated = Date.now()
+            return
+          }
+          // Recalculate itemCount from persisted items after hydration
+          if (state.items) {
+            state.itemCount = state.items.reduce((sum: number, i: CartItem) => sum + i.quantity, 0)
+          }
         }
       },
     }

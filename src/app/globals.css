@@ -1962,6 +1962,9 @@ select.form-input { cursor: pointer; }
 .coupon-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; padding: 0.2rem; }
 .coupon-remove:hover { color: var(--error); }
 .coupon-error { font-size: 0.78rem; color: var(--error); margin-top: 0.35rem; }
+.coupon-error-alert { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--error); margin-top: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; background: rgba(239, 68, 68, 0.06); border: 1px solid rgba(239, 68, 68, 0.15); }
+.coupon-error-highlight { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.3); font-weight: 500; }
+.coupon-error-icon { flex-shrink: 0; }
 .checkout-totals { padding-top: 0.75rem; margin-top: 0.75rem; border-top: 1px solid var(--border-color); }
 .checkout-subtotal-row, .checkout-discount-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); padding: 0.3rem 0; }
 .checkout-discount-row { color: var(--success); }

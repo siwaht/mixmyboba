@@ -29,6 +29,10 @@ export default function AddToCartButton({ product, variants = [], disabled }: Pr
   const outOfStock = disabled || (selectedVariant && selectedVariant.stock <= 0)
 
   const handleAdd = () => {
+    if (variants.length > 0 && !selectedVariant) {
+      showToast('Please select a size first')
+      return
+    }
     for (let i = 0; i < qty; i++) {
       addItem({
         productId: selectedVariant ? `${product.id}__${selectedVariant.id}` : product.id,

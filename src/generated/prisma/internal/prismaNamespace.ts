@@ -1147,6 +1147,7 @@ export const OrderScalarFieldEnum = {
   paymentRef: 'paymentRef',
   shippingAddress: 'shippingAddress',
   subtotal: 'subtotal',
+  shipping: 'shipping',
   total: 'total',
   discount: 'discount',
   couponCode: 'couponCode',

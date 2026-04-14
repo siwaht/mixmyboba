@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const { email, shippingAddress, phone, paymentMethod, items, notes, couponCode } = parsed.data
+  const { email, shippingAddress, phone, paymentMethod, items, notes, couponCode, shipping: clientShipping } = parsed.data
 
   // Validate products exist and are active
   // Deduplicate product IDs since multiple variants of the same product share one ID
@@ -128,7 +128,8 @@ export async function POST(req: NextRequest) {
           shippingAddress: shippingAddress.trim(),
           paymentMethod: paymentMethod || 'crypto',
           subtotal,
-          total: subtotal - discount,
+          shipping: subtotal >= 50 ? 0 : 5.99,
+          total: subtotal - discount + (subtotal >= 50 ? 0 : 5.99),
           discount,
           couponCode: appliedCoupon,
           notes: notes?.trim() || null,
