@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { getCachedJson } from '@/lib/settings-cache'
 
 export const metadata: Metadata = {
-  title: 'Our Story — From Boba Lovers, For Boba Lovers',
-  description: 'Learn about Mix My Boba — how two boba-obsessed friends created premium instant boba tea mixes so everyone can enjoy boba shop taste at home, every single day.',
+  title: 'Our Story — We Built the Boba We Couldn\'t Find',
+  description: 'Learn about Mix My Boba — why we created craft-quality boba tea mixes with whole-leaf tea, date sweetener, and functional adaptogens you can make at home.',
 }
 
 interface AboutSection {
@@ -20,14 +20,14 @@ export default async function AboutPage() {
   const about = (pc.about ?? {}) as Record<string, unknown>
 
   const pageTitle = (about.pageTitle as string) || 'Our Story'
-  const pageSubtitle = (about.pageSubtitle as string) || 'From boba lovers, for boba lovers.'
+  const pageSubtitle = (about.pageSubtitle as string) || 'We built the boba we couldn\'t find anywhere else.'
 
   const defaultSections: AboutSection[] = [
-    { icon: '🧋', title: 'How It Started', content: 'We were spending $8-10 a day on boba runs. Every. Single. Day. We loved the ritual — the creamy milk tea, the chewy pearls, the moment of pure joy in every sip. But our wallets? Not so much. We knew there had to be a better way to get that boba shop experience without the boba shop price tag. So we set out to create it ourselves.' },
-    { icon: '🍵', title: 'What Makes Us Different', content: "Real whole tea leaves, finely milled — not artificial tea flavoring\nNaturally sweetened with no refined sugar or artificial ingredients\nEach bag has 20+ servings — that's less than $2 a cup\nReady in 60 seconds — scoop, mix, done\nWorks hot or iced, with any milk, at any sweetness level\nPlant-based friendly options for every flavor", isList: true },
-    { icon: '💜', title: 'Our Mission', content: 'We believe everyone deserves a daily boba moment — not just people who live near a boba shop or can afford $10 drinks every day. Mix My Boba is about making that joy accessible, affordable, and customizable. Your drink, your way, every single day.' },
-    { icon: '🌱', title: 'Our Ingredients Promise', content: "We source premium tea leaves and use only clean, recognizable ingredients. No artificial colors, no artificial flavors, no mystery powders. Every ingredient is something you can pronounce and feel good about putting in your body. We're transparent about what goes into every bag because we drink this stuff every day too." },
-    { icon: '✉️', title: 'Get in Touch', content: 'Questions, wholesale inquiries, or just want to share your boba creations with us?', contactEmail: 'hello@mixmyboba.com', contactNote: 'We respond within 24 hours. Follow us @mixmyboba for recipes and inspo!' },
+    { icon: '🧋', title: 'The Problem We Kept Running Into', content: 'We\'re lifelong boba drinkers. But every instant mix we tried was the same story — artificial flavors, mystery creamers, and enough sugar to make your teeth hurt. The good stuff only existed at boba shops, and at $8-10 a pop, that daily habit adds up fast. We wanted something we could make at home that didn\'t feel like a downgrade.' },
+    { icon: '🍵', title: 'So We Made It Ourselves', content: "Stone-milled whole tea leaves — not tea-flavored powder\nOrganic date sweetener instead of refined sugar or artificial alternatives\n20+ servings per bag, working out to under $2 each\nReady in under a minute — no blender, no brewing, no fuss\nWorks hot, iced, with any milk, at any sweetness level\nEvery flavor includes targeted adaptogens and vitamins", isList: true },
+    { icon: '💜', title: 'What Drives Us', content: 'Boba shouldn\'t be a luxury or a guilty pleasure. It should be an everyday thing — affordable, customizable, and made with ingredients you\'d actually choose to put in your body. That\'s the standard we hold ourselves to with every flavor we develop.' },
+    { icon: '🌱', title: 'Our Ingredient Standards', content: "We source single-origin tea leaves and vet every supplier. No artificial colors, no synthetic flavors, no preservatives, no fillers. Every ingredient on our label is something you recognize. We publish full ingredient breakdowns on every product page because transparency isn't optional — it's the baseline." },
+    { icon: '✉️', title: 'Say Hi', content: 'Questions, wholesale inquiries, or just want to show us your boba creations?', contactEmail: 'hello@mixmyboba.com', contactNote: 'We reply within 24 hours. Tag us @mixmyboba — we love seeing what you make.' },
   ]
   const sections = (Array.isArray(about.sections) && about.sections.length) ? about.sections as AboutSection[] : defaultSections
 

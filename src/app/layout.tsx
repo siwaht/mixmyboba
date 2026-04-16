@@ -24,22 +24,22 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL || 'https://mixmyboba.com'),
   title: {
-    default: 'Mix My Boba — Premium Bubble Tea Mixes | Make Boba at Home',
+    default: 'Mix My Boba — Craft Boba Tea Mixes | Make Boba at Home',
     template: '%s | Mix My Boba',
   },
-  description: 'Premium superfood boba tea mixes made with real tea and natural ingredients. Classic milk tea, taro, matcha, brown sugar — just add water and your favorite milk. Ready in 60 seconds. Shop now at mixmyboba.com.',
+  description: 'Craft-quality boba tea mixes made with whole-leaf tea, organic date sweetener, and functional adaptogens. Classic milk tea, taro, matcha, brown sugar — just add water and milk. Ready in under a minute.',
   keywords: ['boba tea', 'bubble tea', 'milk tea mix', 'instant boba', 'boba at home', 'taro milk tea', 'matcha latte', 'brown sugar boba', 'premix boba', 'tea latte powder', 'boba kit'],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     siteName: 'Mix My Boba',
-    title: 'Mix My Boba — Premium Bubble Tea Mixes',
-    description: 'Boba shop taste at home. Premium instant mixes with real tea, natural sweeteners, and zero artificial flavors. Ready in 60 seconds.',
+    title: 'Mix My Boba — Craft Boba Tea Mixes',
+    description: 'Boba shop taste at home. Craft-quality mixes with whole-leaf tea, date sweetener, and zero artificial flavors. Ready in under a minute.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mix My Boba — Premium Bubble Tea Mixes',
-    description: 'Boba shop taste at home. Premium instant mixes made with real tea. Ready in 60 seconds.',
+    title: 'Mix My Boba — Craft Boba Tea Mixes',
+    description: 'Boba shop taste at home. Whole-leaf tea mixes with adaptogens and prebiotics. Ready in under a minute.',
   },
   robots: { index: true, follow: true },
   alternates: {

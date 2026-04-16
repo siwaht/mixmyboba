@@ -1,63 +1,63 @@
 {
   "hero": {
-    "title": "Your daily boba ritual,",
-    "titleHighlight": "made ridiculously easy.",
-    "subtitle": "Premium instant boba mixes with real tea leaves, zero artificial anything. Just scoop, mix, sip. Boba shop taste in 60 seconds flat.",
+    "title": "Your kitchen is the new boba shop.",
+    "titleHighlight": "Premium mixes. Zero compromise.",
+    "subtitle": "Craft-quality boba tea mixes built from whole-leaf tea, plant-based creamers, and ingredients that actually do something — adaptogens, prebiotics, and real vitamins. No fillers, no fake stuff. Just tear, stir, sip.",
     "ctaPrimary": {
-      "text": "Shop Flavors",
+      "text": "Explore Flavors",
       "href": "#store"
     },
     "ctaSecondary": {
-      "text": "Our Story",
+      "text": "How We're Different",
       "href": "/about"
     }
   },
   "trustBadges": [
     {
       "icon": "🍵",
-      "label": "Real Tea Leaves"
+      "label": "Whole-Leaf Tea"
     },
     {
       "icon": "🌱",
-      "label": "Natural Ingredients"
+      "label": "Clean Label"
     },
     {
       "icon": "⚡",
-      "label": "Ready in 60s"
+      "label": "Under 60s Prep"
     },
     {
       "icon": "💰",
-      "label": "Under $2/Cup"
+      "label": "~$1.50/Cup"
     },
     {
       "icon": "🧋",
-      "label": "20+ Servings"
+      "label": "20+ Cups/Bag"
     }
   ],
   "marqueeItems": [
-    "Real Tea Leaves",
-    "No Artificial Flavors",
-    "Ready in 60 Seconds",
-    "Naturally Sweetened",
-    "Boba Shop Taste",
-    "Plant-Based Friendly",
-    "Under $2 a Cup"
+    "Whole-Leaf Tea",
+    "Date-Sweetened",
+    "Adaptogen Stacks",
+    "Prebiotic Fiber",
+    "Vitamin-Fortified",
+    "No Artificial Anything",
+    "Plant-Based Creamer"
   ],
   "statsBar": [
     {
       "value": "20+",
-      "label": "Servings Per Bag"
+      "label": "Cups Per Bag"
     },
     {
-      "value": "<$2",
+      "value": "~$1.50",
       "label": "Per Cup"
     },
     {
-      "value": "60s",
+      "value": "<60s",
       "label": "Prep Time"
     },
     {
-      "value": "5★",
+      "value": "4.8★",
       "label": "Avg Rating"
     }
   ],

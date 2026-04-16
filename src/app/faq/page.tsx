@@ -18,29 +18,29 @@ export default async function FAQPage() {
     {
       category: 'Product & Preparation',
       items: [
-        { q: 'How do I prepare Mix My Boba?', a: 'Add 1-2 tablespoons of your chosen flavor to a cup, pour in 6-8oz of hot water and your milk of choice (dairy, oat, almond — whatever you love), then stir or froth until smooth. Works hot or poured over ice. Ready in under 60 seconds!' },
-        { q: 'What flavors are available?', a: 'We offer a growing lineup including Classic Milk Tea, Taro, Matcha, Brown Sugar, Thai Tea, Honeydew, and seasonal limited editions. Each is made with real tea leaves and natural ingredients.' },
-        { q: 'How many servings are in each bag?', a: 'Each bag contains approximately 20+ servings, which works out to less than $2 per cup. Compare that to $7-10 at a boba shop!' },
-        { q: 'Is it really as good as boba shop boba?', a: 'We use the same quality tea leaves and ingredients that premium boba shops use. The difference is you get to customize it exactly how you like — your milk, your sweetness, your way. Most customers say it tastes even better because they can dial it in perfectly.' },
-        { q: 'Can I add tapioca pearls?', a: 'Absolutely! Our mixes pair perfectly with store-bought tapioca pearls, popping boba, or jelly toppings. We recommend quick-cook tapioca pearls for the easiest experience.' },
+        { q: 'How do I make it?', a: 'Add 1-2 tablespoons to a mug, pour in a few ounces of hot water and stir until dissolved, then top with your preferred milk — dairy, oat, almond, coconut, whatever you like. Works great hot or poured over ice. The whole thing takes about 45 seconds.' },
+        { q: 'What flavors do you have?', a: 'Currently eight: Classic Milk Tea, Taro, Matcha, Brown Sugar, Thai Tea, Honeydew, Passion Fruit, and Strawberry. Each one has a different adaptogen stack tailored to its flavor profile. We rotate seasonal limited editions too.' },
+        { q: 'How many cups do I get per bag?', a: 'Around 20-25 depending on how strong you like it. That puts each cup at roughly $1.25-$1.50 — a fraction of what you\'d pay at a boba shop.' },
+        { q: 'Does it actually taste like real boba?', a: 'We use the same grade of tea leaves that quality boba shops use, and the flavor profiles are developed to match. The difference is you control the milk, sweetness, and toppings. Most of our repeat customers say they prefer it because they can dial it in exactly how they want.' },
+        { q: 'Can I add boba pearls or toppings?', a: 'Definitely. Quick-cook tapioca pearls, popping boba, coconut jelly, grass jelly — all pair well. We recommend the 5-minute quick-cook pearls for the easiest experience.' },
       ],
     },
     {
       category: 'Ingredients & Dietary',
       items: [
-        { q: 'What are the ingredients?', a: 'Each flavor varies, but our core ingredients include finely milled whole tea leaves, natural sweeteners, and natural flavoring. No artificial colors, no artificial flavors, no preservatives. Full ingredient lists are on every product page.' },
-        { q: 'Is Mix My Boba vegan/plant-based friendly?', a: 'Our mixes are plant-based friendly — they contain no dairy. Just use your favorite plant milk (oat, almond, coconut, soy) and you have a fully vegan boba!' },
-        { q: 'Does it contain caffeine?', a: 'Most of our flavors contain natural caffeine from real tea leaves — roughly 30-50mg per serving, similar to a cup of green tea. Our caffeine-free options are clearly labeled.' },
-        { q: 'Is it gluten-free?', a: 'Yes, all Mix My Boba mixes are gluten-free. However, they are produced in a facility that also processes products containing gluten.' },
+        { q: 'What\'s in it?', a: 'The base is stone-milled whole tea leaves, organic date powder, coconut cream powder, and natural flavor extracts. Each flavor adds its own functional ingredients — adaptogens, vitamins, prebiotic fiber. Full ingredient lists are on every product page. No artificial anything.' },
+        { q: 'Is it vegan?', a: 'The powder itself contains no dairy or animal products. Use any plant milk and you\'re fully vegan. We use coconut cream and oat milk powder as the creamer base.' },
+        { q: 'How much caffeine?', a: 'Varies by flavor — roughly 25-50mg per serving from the tea leaves themselves. That\'s about half a cup of coffee. Our caffeine-free options are clearly marked on the product page.' },
+        { q: 'Is it gluten-free?', a: 'Yes, all flavors are gluten-free. They are produced in a shared facility, so we can\'t guarantee zero cross-contact for people with severe allergies.' },
       ],
     },
     {
       category: 'Shipping & Orders',
       items: [
-        { q: 'How fast do you ship?', a: 'Orders placed before 2pm EST ship same day. Standard shipping takes 3-5 business days. Expedited options are available at checkout. Free shipping on orders over $50!' },
-        { q: 'Do you ship internationally?', a: 'Currently we ship within the United States. International shipping is coming soon — sign up for our newsletter to be the first to know!' },
-        { q: 'What is your return policy?', a: 'We offer a 30-day happiness guarantee. If you are not completely satisfied with your order, reach out to us at hello@mixmyboba.com and we will make it right — no questions asked.' },
-        { q: 'Do you offer subscriptions?', a: 'Yes! Subscribe and save on every order. Choose your delivery frequency, swap flavors anytime, and cancel whenever you want. No commitment, no hassle. Subscribers save up to 20% on every order.' },
+        { q: 'How quickly do orders ship?', a: 'Orders placed before 2pm EST on weekdays ship the same day. Standard delivery is 3-5 business days. Expedited options are available at checkout. Orders over $50 ship free.' },
+        { q: 'Do you ship outside the US?', a: 'Not yet, but it\'s in the works. Drop your email in our newsletter and we\'ll let you know the moment international shipping goes live.' },
+        { q: 'What if I don\'t like it?', a: 'We have a 30-day no-questions-asked guarantee. If you\'re not happy, email hello@mixmyboba.com and we\'ll sort it out — refund, replacement, or exchange. We\'d rather lose a sale than have you stuck with something you don\'t enjoy.' },
+        { q: 'Do you have a subscription option?', a: 'Yes — subscribers save up to 20% on every order. Pick your flavors, set your delivery cadence, and swap or cancel anytime. No contracts, no hoops.' },
       ],
     },
   ]

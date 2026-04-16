@@ -22,166 +22,166 @@
     ]
   },
   "homepage": {
-    "heroBadge": "Now Shipping Worldwide ✨",
-    "heroTitle": "Sip the magic.",
-    "heroHighlight": "Boba, but make it easy.",
-    "heroSubtitle": "Functional milk tea mixes with real tea leaves, date-sweetened, and loaded with adaptogens & vitamins. No junk, no crash, no bloat — boba shop vibes in 60 seconds flat. 🧋",
+    "heroBadge": "Now Shipping Nationwide 🚀",
+    "heroTitle": "Your kitchen is the new boba shop.",
+    "heroHighlight": "Premium mixes. Zero compromise.",
+    "heroSubtitle": "Craft-quality boba tea mixes built from whole-leaf tea, plant-based creamers, and ingredients that actually do something — adaptogens, prebiotics, and real vitamins. No fillers, no fake stuff. Just tear, stir, sip. 🧋",
     "heroPrimaryCta": {
-      "text": "Shop Flavors",
+      "text": "Explore Flavors",
       "href": "#store"
     },
     "heroSecondaryCta": {
-      "text": "Our Story",
+      "text": "How We're Different",
       "href": "/about"
     },
     "marquee2": [
-      "🧋 Craveable Taste",
-      "🌸 Zero Junk",
-      "🍵 Functional Superfoods",
-      "💚 Gut Friendly",
-      "⚡ Clean Energy",
-      "🧠 Focus & Clarity",
-      "🧘 No Crash"
+      "🍵 Whole-Leaf Tea",
+      "🌿 Plant-Powered",
+      "🧬 Adaptogen-Loaded",
+      "🫶 Prebiotic Fiber",
+      "⚡ Sustained Focus",
+      "🍯 Date-Sweetened",
+      "🧪 Vitamin-Fortified"
     ],
     "featureCards": [
       {
         "icon": "Coffee",
-        "title": "Real Tea, Real Superfoods 🍵",
-        "description": "Finely milled whole tea leaves with functional adaptogens — lion's mane, ashwagandha, reishi, maca. Every sip delivers boba shop taste plus ingredients that actually support your body."
+        "title": "Whole-Leaf Tea, Not Dust 🍵",
+        "description": "We start with premium whole tea leaves, stone-milled to preserve flavor and antioxidants. Then we add targeted adaptogens — ashwagandha, lion's mane, reishi, maca — matched to each flavor's purpose. This isn't flavored powder. It's real tea with real function."
       },
       {
         "icon": "Leaf",
-        "title": "Date-Sweetened, Zero Junk 🌿",
-        "description": "Sweetened with organic dates — not industrial sugar, HFCS, or artificial sweeteners. No toxic non-dairy creamer, no preservatives, no cheap tea dust. Just clean ingredients you can pronounce."
+        "title": "Sweetened by Dates, Not Labs 🌿",
+        "description": "Every bag is sweetened with organic Medjool date powder — a whole food that brings natural caramel sweetness plus fiber, potassium, and iron. No sucralose, no stevia, no high-fructose corn syrup. You taste the difference immediately."
       },
       {
         "icon": "Heart",
-        "title": "Gut Happy, No Crash 💚",
-        "description": "Prebiotic chicory fiber in every scoop feeds your good gut bacteria. Vitamins D3, B12, C, zinc, and magnesium for daily support. Smooth energy with zero bloating and no afternoon crash."
+        "title": "Built for Your Gut 💚",
+        "description": "Each scoop packs chicory root prebiotic fiber to nourish your microbiome, plus D3, B12, vitamin C, zinc, and magnesium. Smooth energy that lasts — no spike, no crash, no bloat. Nutrition that works quietly in the background."
       }
     ],
     "comparison": {
-      "title": "Not Your Average Premix 🚫",
-      "subtitle": "Most instant boba is loaded with junk. We flipped the script.",
-      "themLabel": "Typical Premix",
+      "title": "Read the Label. Ours Wins. 🔍",
+      "subtitle": "Most instant boba is candy in disguise. Here's what separates us.",
+      "themLabel": "Generic Instant Boba",
       "themItems": [
-        "Refined white sugar & HFCS",
-        "Hydrogenated non-dairy creamer",
-        "Artificial flavors & colors",
-        "Cheap tea dust (fannings)",
-        "Preservatives (BHA, TBHQ)",
-        "Sugar crash & bloating",
-        "Zero nutritional value"
+        "High-fructose corn syrup & white sugar",
+        "Hydrogenated vegetable oil creamer",
+        "Synthetic flavors & FD&C dyes",
+        "Tea fannings (leftover dust)",
+        "BHA, TBHQ & sodium benzoate",
+        "Blood sugar spike → crash cycle",
+        "Empty calories, zero nutrition"
       ],
       "usLabel": "Mix My Boba",
       "usItems": [
-        "Organic date powder sweetener",
-        "Coconut cream & oat milk powder",
-        "Real fruit & natural extracts",
-        "Whole-leaf finely milled tea",
-        "Adaptogens & functional mushrooms",
-        "Prebiotic fiber for gut health",
-        "Vitamins D3, B12, C, zinc & more"
+        "Organic Medjool date powder",
+        "Coconut cream & oat milk base",
+        "Real fruit powders & botanical extracts",
+        "Stone-milled whole-leaf tea",
+        "Targeted adaptogens per flavor",
+        "Chicory root prebiotic fiber",
+        "D3, B12, C, zinc, magnesium in every scoop"
       ]
     },
     "storeSection": {
-      "title": "Find Your Flavor",
-      "subtitle": "Classic milk tea, taro, matcha, brown sugar, and more — each with its own functional superpower. Date-sweetened, adaptogen-infused, gut-friendly."
+      "title": "Pick Your Flavor",
+      "subtitle": "Eight flavors, each with its own adaptogen stack and purpose. Taro for calm, matcha for focus, brown sugar for energy — all date-sweetened and gut-friendly."
     },
     "processSection": {
-      "title": "60 Seconds to Boba Bliss ✨",
-      "subtitle": "No boba shop needed. No blender. No mess. Just good vibes.",
+      "title": "From Bag to Boba in Under a Minute ⏱️",
+      "subtitle": "No equipment. No barista skills. No cleanup drama.",
       "steps": [
         {
           "num": "01",
-          "title": "Scoop",
-          "description": "Grab 1-2 tablespoons of your fave flavor. That's it. You're already halfway there."
+          "title": "Measure",
+          "description": "One to two tablespoons into your favorite mug or tumbler. Each bag gives you 20+ servings."
         },
         {
           "num": "02",
-          "title": "Mix",
-          "description": "Pour hot water + your milk of choice. Stir or froth until it's smooth and dreamy."
+          "title": "Pour & Stir",
+          "description": "Add hot water first to dissolve, then your milk of choice — oat, almond, dairy, whatever you're into."
         },
         {
           "num": "03",
-          "title": "Customize",
-          "description": "Adjust sweetness, add ice, throw in tapioca pearls. Make it 100% you."
+          "title": "Make It Yours",
+          "description": "Go hot or pour over ice. Add tapioca pearls, jelly, or extra sweetener. Your call, every time."
         },
         {
           "num": "04",
-          "title": "Sip & Vibe",
-          "description": "Boba shop quality from your kitchen. Every. Single. Day. You deserve this."
+          "title": "Enjoy Daily",
+          "description": "At under $2 a cup, this replaces the $8 boba run without sacrificing taste or quality."
         }
       ]
     },
     "vibeSection": {
-      "title": "Why People Are Obsessed 🧋",
-      "subtitle": "Boba that tastes incredible AND supports your body? That's the whole point.",
+      "title": "The Numbers Behind Every Scoop 📊",
+      "subtitle": "We formulated these mixes with a nutritionist. Here's what's actually inside.",
       "cards": [
         {
-          "emoji": "🌿",
+          "emoji": "🍯",
           "stat": "0g",
-          "title": "Zero Refined Sugar",
-          "description": "Sweetened with organic dates — not industrial sugar, HFCS, or artificial sweeteners. Real sweetness with fiber, iron, and potassium built in. No blood sugar rollercoaster."
+          "title": "Added Refined Sugar",
+          "description": "Sweetened exclusively with organic date powder — a whole food with natural fiber, iron, and potassium. No blood sugar rollercoaster, no artificial sweetener aftertaste."
         },
         {
-          "emoji": "💚",
+          "emoji": "🦠",
           "stat": "4g+",
-          "title": "Prebiotic Fiber",
-          "description": "Every scoop has chicory root fiber that feeds your good gut bacteria. No bloating, no discomfort — just smooth digestion and a happy microbiome."
+          "title": "Prebiotic Fiber Per Scoop",
+          "description": "Chicory root inulin feeds beneficial gut bacteria and supports smooth digestion. Most people notice less bloating within the first week of daily use."
         },
         {
-          "emoji": "🧠",
+          "emoji": "🧬",
           "stat": "5+",
-          "title": "Functional Adaptogens",
-          "description": "Lion's mane for focus, ashwagandha for calm, reishi for immunity, maca for energy, tulsi for stress. Each flavor has its own functional superpower."
+          "title": "Adaptogens Per Flavor",
+          "description": "Each flavor has a purpose-built stack: ashwagandha for stress, lion's mane for cognition, reishi for immune support, maca for stamina, tulsi for calm. Not random — intentional."
         }
       ]
     },
     "ctaSection": {
-      "title": "Need Bulk or Custom Orders? 📦",
-      "description": "Looking for custom flavors or large-quantity orders? We offer flexible bulk options for businesses, events, and gifting. Let's chat!",
+      "title": "Wholesale & Custom Orders 🤝",
+      "description": "Running a café, planning an event, or building gift boxes? We do custom flavors and bulk pricing. Reach out and we'll put something together.",
       "primaryCta": {
-        "text": "Get in Touch",
+        "text": "Contact Us",
         "href": "/faq"
       },
       "secondaryCta": {
-        "text": "Browse Products",
+        "text": "Shop All Flavors",
         "href": "/#store"
       }
     }
   },
   "about": {
     "pageTitle": "Our Story",
-    "pageSubtitle": "From boba lovers, for boba lovers.",
+    "pageSubtitle": "We built the boba we couldn't find anywhere else.",
     "sections": [
       {
         "icon": "🧋",
-        "title": "How It Started",
-        "content": "We were spending $8-10 a day on boba runs. Every. Single. Day. We loved the ritual — the creamy milk tea, the chewy pearls, the moment of pure joy in every sip. But our wallets? Not so much. We knew there had to be a better way to get that boba shop experience without the boba shop price tag. So we set out to create it ourselves."
+        "title": "The Problem We Kept Running Into",
+        "content": "We're lifelong boba drinkers. But every instant mix we tried was the same story — artificial flavors, mystery creamers, and enough sugar to make your teeth hurt. The good stuff only existed at boba shops, and at $8-10 a pop, that daily habit adds up fast. We wanted something we could make at home that didn't feel like a downgrade."
       },
       {
         "icon": "🍵",
-        "title": "What Makes Us Different",
-        "content": "Real whole tea leaves, finely milled — not artificial tea flavoring\nNaturally sweetened with no refined sugar or artificial ingredients\nEach bag has 20+ servings — that's less than $2 a cup\nReady in 60 seconds — scoop, mix, done\nWorks hot or iced, with any milk, at any sweetness level\nPlant-based friendly options for every flavor",
+        "title": "So We Made It Ourselves",
+        "content": "Stone-milled whole tea leaves — not tea-flavored powder\nOrganic date sweetener instead of refined sugar or artificial alternatives\n20+ servings per bag, working out to under $2 each\nReady in under a minute — no blender, no brewing, no fuss\nWorks hot, iced, with any milk, at any sweetness level\nEvery flavor includes targeted adaptogens and vitamins",
         "isList": true
       },
       {
         "icon": "💜",
-        "title": "Our Mission",
-        "content": "We believe everyone deserves a daily boba moment — not just people who live near a boba shop or can afford $10 drinks every day. Mix My Boba is about making that joy accessible, affordable, and customizable. Your drink, your way, every single day."
+        "title": "What Drives Us",
+        "content": "Boba shouldn't be a luxury or a guilty pleasure. It should be an everyday thing — affordable, customizable, and made with ingredients you'd actually choose to put in your body. That's the standard we hold ourselves to with every flavor we develop."
       },
       {
         "icon": "🌱",
-        "title": "Our Ingredients Promise",
-        "content": "We source premium tea leaves and use only clean, recognizable ingredients. No artificial colors, no artificial flavors, no mystery powders. Every ingredient is something you can pronounce and feel good about putting in your body. We're transparent about what goes into every bag because we drink this stuff every day too."
+        "title": "Our Ingredient Standards",
+        "content": "We source single-origin tea leaves and vet every supplier. No artificial colors, no synthetic flavors, no preservatives, no fillers. Every ingredient on our label is something you recognize. We publish full ingredient breakdowns on every product page because transparency isn't optional — it's the baseline."
       },
       {
         "icon": "✉️",
-        "title": "Get in Touch",
-        "content": "Questions, wholesale inquiries, or just want to share your boba creations with us?",
+        "title": "Say Hi",
+        "content": "Questions, wholesale inquiries, or just want to show us your boba creations?",
         "contactEmail": "hello@mixmyboba.com",
-        "contactNote": "We respond within 24 hours. Follow us @mixmyboba for recipes and inspo!"
+        "contactNote": "We reply within 24 hours. Tag us @mixmyboba — we love seeing what you make."
       }
     ]
   },
@@ -190,24 +190,24 @@
       "category": "Product & Preparation",
       "items": [
         {
-          "q": "How do I prepare Mix My Boba?",
-          "a": "Add 1-2 tablespoons of your chosen flavor to a cup, pour in 6-8oz of hot water and your milk of choice (dairy, oat, almond — whatever you love), then stir or froth until smooth. Works hot or poured over ice. Ready in under 60 seconds!"
+          "q": "How do I make it?",
+          "a": "Add 1-2 tablespoons to a mug, pour in a few ounces of hot water and stir until dissolved, then top with your preferred milk — dairy, oat, almond, coconut, whatever you like. Works great hot or poured over ice. The whole thing takes about 45 seconds."
         },
         {
-          "q": "What flavors are available?",
-          "a": "We offer a growing lineup including Classic Milk Tea, Taro, Matcha, Brown Sugar, Thai Tea, Honeydew, and seasonal limited editions. Each is made with real tea leaves and natural ingredients."
+          "q": "What flavors do you have?",
+          "a": "Currently eight: Classic Milk Tea, Taro, Matcha, Brown Sugar, Thai Tea, Honeydew, Passion Fruit, and Strawberry. Each one has a different adaptogen stack tailored to its flavor profile. We rotate seasonal limited editions too."
         },
         {
-          "q": "How many servings are in each bag?",
-          "a": "Each bag contains approximately 20+ servings, which works out to less than $2 per cup. Compare that to $7-10 at a boba shop!"
+          "q": "How many cups do I get per bag?",
+          "a": "Around 20-25 depending on how strong you like it. That puts each cup at roughly $1.25-$1.50 — a fraction of what you'd pay at a boba shop."
         },
         {
-          "q": "Is it really as good as boba shop boba?",
-          "a": "We use the same quality tea leaves and ingredients that premium boba shops use. The difference is you get to customize it exactly how you like — your milk, your sweetness, your way. Most customers say it tastes even better because they can dial it in perfectly."
+          "q": "Does it actually taste like real boba?",
+          "a": "We use the same grade of tea leaves that quality boba shops use, and the flavor profiles are developed to match. The difference is you control the milk, sweetness, and toppings. Most of our repeat customers say they prefer it because they can dial it in exactly how they want."
         },
         {
-          "q": "Can I add tapioca pearls?",
-          "a": "Absolutely! Our mixes pair perfectly with store-bought tapioca pearls, popping boba, or jelly toppings. We recommend quick-cook tapioca pearls for the easiest experience."
+          "q": "Can I add boba pearls or toppings?",
+          "a": "Definitely. Quick-cook tapioca pearls, popping boba, coconut jelly, grass jelly — all pair well. We recommend the 5-minute quick-cook pearls for the easiest experience."
         }
       ]
     },
@@ -215,20 +215,20 @@
       "category": "Ingredients & Dietary",
       "items": [
         {
-          "q": "What are the ingredients?",
-          "a": "Each flavor varies, but our core ingredients include finely milled whole tea leaves, natural sweeteners, and natural flavoring. No artificial colors, no artificial flavors, no preservatives. Full ingredient lists are on every product page."
+          "q": "What's in it?",
+          "a": "The base is stone-milled whole tea leaves, organic date powder, coconut cream powder, and natural flavor extracts. Each flavor adds its own functional ingredients — adaptogens, vitamins, prebiotic fiber. Full ingredient lists are on every product page. No artificial anything."
         },
         {
-          "q": "Is Mix My Boba vegan/plant-based friendly?",
-          "a": "Our mixes are plant-based friendly — they contain no dairy. Just use your favorite plant milk (oat, almond, coconut, soy) and you have a fully vegan boba!"
+          "q": "Is it vegan?",
+          "a": "The powder itself contains no dairy or animal products. Use any plant milk and you're fully vegan. We use coconut cream and oat milk powder as the creamer base."
         },
         {
-          "q": "Does it contain caffeine?",
-          "a": "Most of our flavors contain natural caffeine from real tea leaves — roughly 30-50mg per serving, similar to a cup of green tea. Our caffeine-free options are clearly labeled."
+          "q": "How much caffeine?",
+          "a": "Varies by flavor — roughly 25-50mg per serving from the tea leaves themselves. That's about half a cup of coffee. Our caffeine-free options are clearly marked on the product page."
         },
         {
           "q": "Is it gluten-free?",
-          "a": "Yes, all Mix My Boba mixes are gluten-free. However, they are produced in a facility that also processes products containing gluten."
+          "a": "Yes, all flavors are gluten-free. They are produced in a shared facility, so we can't guarantee zero cross-contact for people with severe allergies."
         }
       ]
     },
@@ -236,20 +236,20 @@
       "category": "Shipping & Orders",
       "items": [
         {
-          "q": "How fast do you ship?",
-          "a": "Orders placed before 2pm EST ship same day. Standard shipping takes 3-5 business days. Expedited options are available at checkout. Free shipping on orders over $50!"
+          "q": "How quickly do orders ship?",
+          "a": "Orders placed before 2pm EST on weekdays ship the same day. Standard delivery is 3-5 business days. Expedited options are available at checkout. Orders over $50 ship free."
         },
         {
-          "q": "Do you ship internationally?",
-          "a": "Currently we ship within the United States. International shipping is coming soon — sign up for our newsletter to be the first to know!"
+          "q": "Do you ship outside the US?",
+          "a": "Not yet, but it's in the works. Drop your email in our newsletter and we'll let you know the moment international shipping goes live."
         },
         {
-          "q": "What is your return policy?",
-          "a": "We offer a 30-day happiness guarantee. If you are not completely satisfied with your order, reach out to us at hello@mixmyboba.com and we will make it right — no questions asked."
+          "q": "What if I don't like it?",
+          "a": "We have a 30-day no-questions-asked guarantee. If you're not happy, email hello@mixmyboba.com and we'll sort it out — refund, replacement, or exchange. We'd rather lose a sale than have you stuck with something you don't enjoy."
         },
         {
-          "q": "Do you offer subscriptions?",
-          "a": "Yes! Subscribe and save on every order. Choose your delivery frequency, swap flavors anytime, and cancel whenever you want. No commitment, no hassle. Subscribers save up to 20% on every order."
+          "q": "Do you have a subscription option?",
+          "a": "Yes — subscribers save up to 20% on every order. Pick your flavors, set your delivery cadence, and swap or cancel anytime. No contracts, no hoops."
         }
       ]
     }
@@ -265,7 +265,7 @@
       "id": "ingredients",
       "icon": "🌱",
       "title": "Our Ingredients Promise",
-      "content": "Every Mix My Boba flavor is made with real, finely milled whole tea leaves — not artificial tea flavoring. We use natural sweeteners and natural flavoring only. Zero artificial colors, zero artificial preservatives, zero mystery ingredients. Our mixes are plant-based friendly (no dairy in the powder). Full ingredient lists are available on every product page. We believe in full transparency — if you have questions about any ingredient, reach out to us at hello@mixmyboba.com."
+      "content": "Every Mix My Boba flavor is made with real, stone-milled whole tea leaves — not artificial tea flavoring. We use organic date powder as our sweetener and coconut cream as our creamer base. Zero artificial colors, zero synthetic preservatives, zero mystery ingredients. Our mixes are plant-based friendly (no dairy in the powder). Full ingredient lists are available on every product page. We believe in full transparency — if you have questions about any ingredient, reach out to us at hello@mixmyboba.com."
     },
     {
       "id": "terms",
@@ -293,7 +293,7 @@
     }
   ],
   "footer": {
-    "brandDescription": "Premium instant boba tea mixes made with real tea and natural ingredients. Your daily boba ritual, ready in 60 seconds. No boba shop needed.",
+    "brandDescription": "Craft-quality boba tea mixes made with whole-leaf tea, date sweetener, and functional adaptogens. Your daily boba ritual — no boba shop required.",
     "sections": [
       {
         "title": "Flavors",
@@ -362,8 +362,8 @@
     ]
   },
   "seo": {
-    "siteTitle": "Mix My Boba — Premium Bubble Tea Mixes | Make Boba at Home",
-    "siteDescription": "Premium superfood boba tea mixes made with real tea and natural ingredients. Classic milk tea, taro, matcha, brown sugar — just add water and your favorite milk. Ready in 60 seconds.",
+    "siteTitle": "Mix My Boba — Craft Boba Tea Mixes | Make Boba at Home",
+    "siteDescription": "Craft-quality boba tea mixes made with whole-leaf tea, organic date sweetener, and functional adaptogens. Classic milk tea, taro, matcha, brown sugar — just add water and milk. Ready in under a minute.",
     "siteKeywords": "boba tea, bubble tea, milk tea mix, instant boba, boba at home, taro milk tea, matcha latte, brown sugar boba, premix boba, tea latte powder, boba kit"
   }
 }

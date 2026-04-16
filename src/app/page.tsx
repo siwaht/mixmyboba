@@ -16,13 +16,13 @@ export default async function Home() {
     },
   })
 
-  const defaultMarquee = ['Real Tea Leaves', 'Date-Sweetened', 'Adaptogen-Infused', 'Prebiotic Fiber', 'Vitamin-Fortified', 'No Artificial Anything', 'Under $2 a Cup']
-  const defaultMarquee2 = ['🧋 Craveable Taste', '🌸 Zero Junk', '🍵 Functional Superfoods', '💚 Gut Friendly', '⚡ Clean Energy', '🧠 Focus & Clarity', '🧘 No Crash']
+  const defaultMarquee = ['Whole-Leaf Tea', 'Date-Sweetened', 'Adaptogen Stacks', 'Prebiotic Fiber', 'Vitamin-Fortified', 'No Artificial Anything', 'Plant-Based Creamer']
+  const defaultMarquee2 = ['🍵 Whole-Leaf Tea', '🌿 Plant-Powered', '🧬 Adaptogen-Loaded', '🫶 Prebiotic Fiber', '⚡ Sustained Focus', '🍯 Date-Sweetened', '🧪 Vitamin-Fortified']
   const defaultStats = [
-    { value: '20+', label: 'Servings Per Bag' },
-    { value: '<$2', label: 'Per Cup' },
-    { value: '60s', label: 'Prep Time' },
-    { value: '5★', label: 'Avg Rating' },
+    { value: '20+', label: 'Cups Per Bag' },
+    { value: '~$1.50', label: 'Per Cup' },
+    { value: '<60s', label: 'Prep Time' },
+    { value: '4.8★', label: 'Avg Rating' },
   ]
 
   const settings = await getCachedJson<Record<string, unknown>>('site-settings.json', {})
@@ -33,62 +33,62 @@ export default async function Home() {
   const marquee2 = (Array.isArray(hp.marquee2) && hp.marquee2.length) ? hp.marquee2 as string[] : defaultMarquee2
   const statsBar = (Array.isArray(settings.statsBar) && settings.statsBar.length) ? settings.statsBar : defaultStats
 
-  const heroBadge = (hp.heroBadge as string) || 'Free US Shipping on $50+ ✨'
-  const heroTitle = (hp.heroTitle as string) || 'Sip the magic.'
-  const heroHighlight = (hp.heroHighlight as string) || 'Boba, but make it easy.'
-  const heroSubtitle = (hp.heroSubtitle as string) || 'Functional milk tea mixes with real tea leaves, date-sweetened, and loaded with adaptogens & vitamins. No junk, no crash, no bloat — boba shop vibes in 60 seconds flat. 🧋'
-  const heroPrimaryCta = (hp.heroPrimaryCta as { text: string; href: string }) || { text: 'Shop Flavors', href: '#store' }
-  const heroSecondaryCta = (hp.heroSecondaryCta as { text: string; href: string }) || { text: 'Our Story', href: '/about' }
+  const heroBadge = (hp.heroBadge as string) || 'Now Shipping Nationwide 🚀'
+  const heroTitle = (hp.heroTitle as string) || 'Your kitchen is the new boba shop.'
+  const heroHighlight = (hp.heroHighlight as string) || 'Premium mixes. Zero compromise.'
+  const heroSubtitle = (hp.heroSubtitle as string) || 'Craft-quality boba tea mixes built from whole-leaf tea, plant-based creamers, and ingredients that actually do something — adaptogens, prebiotics, and real vitamins. No fillers, no fake stuff. Just tear, stir, sip. 🧋'
+  const heroPrimaryCta = (hp.heroPrimaryCta as { text: string; href: string }) || { text: 'Explore Flavors', href: '#store' }
+  const heroSecondaryCta = (hp.heroSecondaryCta as { text: string; href: string }) || { text: 'How We\'re Different', href: '/about' }
 
   const defaultFeatureCards = [
-    { icon: 'Coffee', title: 'Real Tea, Real Superfoods 🍵', description: "Finely milled whole tea leaves with functional adaptogens — lion's mane, ashwagandha, reishi, maca. Every sip delivers boba shop taste plus ingredients that actually support your body." },
-    { icon: 'Leaf', title: 'Date-Sweetened, Zero Junk 🌿', description: 'Sweetened with organic dates — not industrial sugar, HFCS, or artificial sweeteners. No toxic non-dairy creamer, no preservatives, no cheap tea dust. Just clean ingredients you can pronounce.' },
-    { icon: 'Heart', title: 'Gut Happy, No Crash 💚', description: 'Prebiotic chicory fiber in every scoop feeds your good gut bacteria. Vitamins D3, B12, C, zinc, and magnesium for daily support. Smooth energy with zero bloating and no afternoon crash.' },
+    { icon: 'Coffee', title: 'Whole-Leaf Tea, Not Dust 🍵', description: "We start with premium whole tea leaves, stone-milled to preserve flavor and antioxidants. Then we add targeted adaptogens — ashwagandha, lion's mane, reishi, maca — matched to each flavor's purpose. This isn't flavored powder. It's real tea with real function." },
+    { icon: 'Leaf', title: 'Sweetened by Dates, Not Labs 🌿', description: 'Every bag is sweetened with organic Medjool date powder — a whole food that brings natural caramel sweetness plus fiber, potassium, and iron. No sucralose, no stevia, no high-fructose corn syrup. You taste the difference immediately.' },
+    { icon: 'Heart', title: 'Built for Your Gut 💚', description: 'Each scoop packs chicory root prebiotic fiber to nourish your microbiome, plus D3, B12, vitamin C, zinc, and magnesium. Smooth energy that lasts — no spike, no crash, no bloat. Nutrition that works quietly in the background.' },
   ]
   const featureCards = (Array.isArray(hp.featureCards) && hp.featureCards.length) ? hp.featureCards as typeof defaultFeatureCards : defaultFeatureCards
 
   const comp = (hp.comparison ?? {}) as Record<string, unknown>
-  const compTitle = (comp.title as string) || 'Not Your Average Premix 🚫'
-  const compSubtitle = (comp.subtitle as string) || 'Most instant boba is loaded with junk. We flipped the script.'
-  const compThemLabel = (comp.themLabel as string) || 'Typical Premix'
+  const compTitle = (comp.title as string) || 'Read the Label. Ours Wins. 🔍'
+  const compSubtitle = (comp.subtitle as string) || "Most instant boba is candy in disguise. Here's what separates us."
+  const compThemLabel = (comp.themLabel as string) || 'Generic Instant Boba'
   const compThemItems = (Array.isArray(comp.themItems) ? comp.themItems : [
-    'Refined white sugar & HFCS', 'Hydrogenated non-dairy creamer', 'Artificial flavors & colors',
-    'Cheap tea dust (fannings)', 'Preservatives (BHA, TBHQ)', 'Sugar crash & bloating', 'Zero nutritional value',
+    'High-fructose corn syrup & white sugar', 'Hydrogenated vegetable oil creamer', 'Synthetic flavors & FD&C dyes',
+    'Tea fannings (leftover dust)', 'BHA, TBHQ & sodium benzoate', 'Blood sugar spike → crash cycle', 'Empty calories, zero nutrition',
   ]) as string[]
   const compUsLabel = (comp.usLabel as string) || 'Mix My Boba'
   const compUsItems = (Array.isArray(comp.usItems) ? comp.usItems : [
-    'Organic date powder sweetener', 'Coconut cream & oat milk powder', 'Real fruit & natural extracts',
-    'Whole-leaf finely milled tea', 'Adaptogens & functional mushrooms', 'Prebiotic fiber for gut health', 'Vitamins D3, B12, C, zinc & more',
+    'Organic Medjool date powder', 'Coconut cream & oat milk base', 'Real fruit powders & botanical extracts',
+    'Stone-milled whole-leaf tea', 'Targeted adaptogens per flavor', 'Chicory root prebiotic fiber', 'D3, B12, C, zinc, magnesium in every scoop',
   ]) as string[]
 
   const store = (hp.storeSection ?? {}) as Record<string, unknown>
-  const storeTitle = (store.title as string) || 'Find Your Flavor'
-  const storeSubtitle = (store.subtitle as string) || 'Classic milk tea, taro, matcha, brown sugar, and more — each with its own functional superpower. Date-sweetened, adaptogen-infused, gut-friendly.'
+  const storeTitle = (store.title as string) || 'Pick Your Flavor'
+  const storeSubtitle = (store.subtitle as string) || 'Eight flavors, each with its own adaptogen stack and purpose. Taro for calm, matcha for focus, brown sugar for energy — all date-sweetened and gut-friendly.'
 
   const proc = (hp.processSection ?? {}) as Record<string, unknown>
-  const procTitle = (proc.title as string) || '60 Seconds to Boba Bliss ✨'
-  const procSubtitle = (proc.subtitle as string) || 'No boba shop needed. No blender. No mess. Just good vibes.'
+  const procTitle = (proc.title as string) || 'From Bag to Boba in Under a Minute ⏱️'
+  const procSubtitle = (proc.subtitle as string) || 'No equipment. No barista skills. No cleanup drama.'
   const defaultSteps = [
-    { num: '01', title: 'Scoop', description: "Grab 1-2 tablespoons of your fave flavor. That's it. You're already halfway there." },
-    { num: '02', title: 'Mix', description: "Pour hot water + your milk of choice. Stir or froth until it's smooth and dreamy." },
-    { num: '03', title: 'Customize', description: 'Adjust sweetness, add ice, throw in tapioca pearls. Make it 100% you.' },
-    { num: '04', title: 'Sip & Vibe', description: 'Boba shop quality from your kitchen. Every. Single. Day. You deserve this.' },
+    { num: '01', title: 'Measure', description: "One to two tablespoons into your favorite mug or tumbler. Each bag gives you 20+ servings." },
+    { num: '02', title: 'Pour & Stir', description: "Add hot water first to dissolve, then your milk of choice — oat, almond, dairy, whatever you're into." },
+    { num: '03', title: 'Make It Yours', description: 'Go hot or pour over ice. Add tapioca pearls, jelly, or extra sweetener. Your call, every time.' },
+    { num: '04', title: 'Enjoy Daily', description: 'At under $2 a cup, this replaces the $8 boba run without sacrificing taste or quality.' },
   ]
   const procSteps = (Array.isArray(proc.steps) && proc.steps.length) ? proc.steps as typeof defaultSteps : defaultSteps
 
   const vibe = (hp.vibeSection ?? {}) as Record<string, unknown>
-  const vibeTitle = (vibe.title as string) || 'Why People Are Obsessed 🧋'
-  const vibeSubtitle = (vibe.subtitle as string) || "Boba that tastes incredible AND supports your body? That's the whole point."
+  const vibeTitle = (vibe.title as string) || 'The Numbers Behind Every Scoop 📊'
+  const vibeSubtitle = (vibe.subtitle as string) || "We formulated these mixes with a nutritionist. Here's what's actually inside."
   const defaultVibeCards = [
-    { emoji: '🌿', stat: '0g', title: 'Zero Refined Sugar', description: 'Sweetened with organic dates — not industrial sugar, HFCS, or artificial sweeteners. Real sweetness with fiber, iron, and potassium built in. No blood sugar rollercoaster.' },
-    { emoji: '💚', stat: '4g+', title: 'Prebiotic Fiber', description: 'Every scoop has chicory root fiber that feeds your good gut bacteria. No bloating, no discomfort — just smooth digestion and a happy microbiome.' },
-    { emoji: '🧠', stat: '5+', title: 'Functional Adaptogens', description: "Lion's mane for focus, ashwagandha for calm, reishi for immunity, maca for energy, tulsi for stress. Each flavor has its own functional superpower." },
+    { emoji: '🍯', stat: '0g', title: 'Added Refined Sugar', description: 'Sweetened exclusively with organic date powder — a whole food with natural fiber, iron, and potassium. No blood sugar rollercoaster, no artificial sweetener aftertaste.' },
+    { emoji: '🦠', stat: '4g+', title: 'Prebiotic Fiber Per Scoop', description: 'Chicory root inulin feeds beneficial gut bacteria and supports smooth digestion. Most people notice less bloating within the first week of daily use.' },
+    { emoji: '🧬', stat: '5+', title: 'Adaptogens Per Flavor', description: "Each flavor has a purpose-built stack: ashwagandha for stress, lion's mane for cognition, reishi for immune support, maca for stamina, tulsi for calm. Not random — intentional." },
   ]
   const vibeCards = (Array.isArray(vibe.cards) && vibe.cards.length) ? vibe.cards as typeof defaultVibeCards : defaultVibeCards
 
   const cta = (hp.ctaSection ?? {}) as Record<string, unknown>
-  const ctaTitle = (cta.title as string) || 'Need Bulk or Custom Orders? 📦'
-  const ctaDesc = (cta.description as string) || "Looking for custom flavors or large-quantity orders? We offer flexible bulk options for businesses, events, and gifting. Let's chat!"
+  const ctaTitle = (cta.title as string) || 'Wholesale & Custom Orders 🤝'
+  const ctaDesc = (cta.description as string) || "Running a café, planning an event, or building gift boxes? We do custom flavors and bulk pricing. Reach out and we'll put something together."
   const ctaPrimary = (cta.primaryCta as { text: string; href: string }) || { text: 'Get in Touch', href: '/contact' }
   const ctaSecondary = (cta.secondaryCta as { text: string; href: string }) || { text: 'Browse Products', href: '/#store' }
 
@@ -112,7 +112,7 @@ export default async function Home() {
     description: heroSubtitle,
     url: 'https://mixmyboba.com',
     sameAs: [],
-    hasOfferCatalog: { '@type': 'OfferCatalog', name: 'Boba Tea Mixes' },
+    hasOfferCatalog: { '@type': 'OfferCatalog', name: 'Craft Boba Tea Mixes' },
   }
 
   return (
@@ -179,7 +179,7 @@ export default async function Home() {
       {/* ── Why Section ── */}
       <section className="features-section" aria-labelledby="features-heading">
         <div className="container">
-          <h2 id="features-heading" className="sr-only">Why Mix My Boba</h2>
+          <h2 id="features-heading" className="sr-only">What Sets Us Apart</h2>
           <div className="features-grid">
             {featureCards.map((card, i) => {
               const Icon = iconMap[card.icon] || Coffee

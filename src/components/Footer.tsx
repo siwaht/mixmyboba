@@ -8,7 +8,7 @@ interface FooterSection { title: string; links: FooterLink[]; comingSoon?: strin
 interface FooterData { brandDescription: string; sections: FooterSection[] }
 
 const defaultFooter: FooterData = {
-  brandDescription: 'Premium instant boba tea mixes made with real tea and natural ingredients. Your daily boba ritual, ready in 60 seconds. No boba shop needed.',
+  brandDescription: 'Craft-quality boba tea mixes made with whole-leaf tea, date sweetener, and functional adaptogens. Your daily boba ritual — no boba shop required.',
   sections: [
     { title: 'Flavors', links: [{ label: 'Classic Milk Tea', href: '/?category=Classic#store' }, { label: 'Matcha', href: '/?category=Matcha#store' }, { label: 'Brown Sugar', href: '/?category=Brown+Sugar#store' }, { label: 'Fruity', href: '/?category=Fruity#store' }], comingSoon: 'Toppings — Coming Soon' },
     { title: 'Help', links: [{ label: 'How to Prepare', href: '/compliance#how' }, { label: 'Ingredients', href: '/compliance#ingredients' }, { label: 'FAQ', href: '/faq' }, { label: 'Our Story', href: '/about' }] },
