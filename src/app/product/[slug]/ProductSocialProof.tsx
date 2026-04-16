@@ -85,7 +85,7 @@ export default function ProductSocialProof({ productId, productSlug, stock, prod
                 <button
                   className="btn btn-secondary fbt-add"
                   onClick={() => {
-                    addItem({ productId: p.id, slug: p.slug, name: p.name, price: p.price, imageUrl: p.imageUrl })
+                    addItem({ productId: p.id, slug: p.slug, name: p.name, price: +(p.price * 0.80).toFixed(2), originalPrice: p.price, imageUrl: p.imageUrl, purchaseType: 'onetime' as const })
                     showToast(`${p.name} added to cart`)
                   }}
                 >

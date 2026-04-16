@@ -59,7 +59,17 @@ export default function CartDrawer({ open, onClose }: Props) {
                   <Image src={item.imageUrl} alt="" className="cart-item-img" width={52} height={52} loading="lazy" />
                   <div className="cart-item-info">
                     <h4>{item.name}</h4>
-                    <p className="cart-item-price">${(item.price * item.quantity).toFixed(2)}</p>
+                    {item.purchaseType && (
+                      <span className={`cart-purchase-badge ${item.purchaseType === 'subscribe' ? 'cart-badge-subscribe' : 'cart-badge-onetime'}`}>
+                        {item.purchaseType === 'subscribe' ? '🔄 Subscribe' : '🛒 One-time'}
+                      </span>
+                    )}
+                    <p className="cart-item-price">
+                      {item.originalPrice && item.originalPrice > item.price && (
+                        <span className="cart-item-original-price">${(item.originalPrice * item.quantity).toFixed(2)}</span>
+                      )}
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </p>
                     <div className="cart-qty-controls">
                       <button onClick={() => updateQuantity(item.productId, item.quantity - 1)} aria-label={`Decrease ${item.name} quantity`}>−</button>
                       <span aria-label={`Quantity: ${item.quantity}`}>{item.quantity}</span>

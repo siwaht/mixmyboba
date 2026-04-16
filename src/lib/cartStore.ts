@@ -3,13 +3,17 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+export type PurchaseType = 'subscribe' | 'onetime'
+
 export interface CartItem {
   productId: string
   slug: string
   name: string
   price: number
+  originalPrice: number
   imageUrl: string
   quantity: number
+  purchaseType: PurchaseType
 }
 
 interface CartState {
@@ -17,6 +21,7 @@ interface CartState {
   addItem: (item: Omit<CartItem, 'quantity'>) => void
   removeItem: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
+  updatePurchaseType: (productId: string, purchaseType: PurchaseType, originalPrice: number) => void
   clearCart: () => void
   totalItems: () => number
   totalPrice: () => number
@@ -39,7 +44,7 @@ export const useCartStore = create<CartState>()(
         if (existing) {
           newItems = get().items.map(i =>
             i.productId === item.productId
-              ? { ...i, quantity: i.quantity + 1 }
+              ? { ...i, quantity: i.quantity + 1, purchaseType: item.purchaseType, price: item.price, originalPrice: item.originalPrice }
               : i
           )
         } else {
@@ -62,6 +67,15 @@ export const useCartStore = create<CartState>()(
           i.productId === productId ? { ...i, quantity } : i
         )
         set({ items: newItems, itemCount: newItems.reduce((sum, i) => sum + i.quantity, 0), lastUpdated: Date.now() })
+      },
+
+      updatePurchaseType: (productId, purchaseType, originalPrice) => {
+        const discount = purchaseType === 'subscribe' ? 0.40 : 0.20
+        const newPrice = +(originalPrice * (1 - discount)).toFixed(2)
+        const newItems = get().items.map(i =>
+          i.productId === productId ? { ...i, purchaseType, price: newPrice, originalPrice } : i
+        )
+        set({ items: newItems, lastUpdated: Date.now() })
       },
 
       clearCart: () => set({ items: [], itemCount: 0, lastUpdated: Date.now() }),

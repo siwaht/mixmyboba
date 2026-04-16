@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useCartStore } from '@/lib/cartStore'
 import { useToast } from '@/components/Toast'
+import type { PurchaseType } from '@/lib/cartStore'
 
 interface Variant {
   id: string
@@ -17,6 +18,11 @@ interface Props {
   disabled?: boolean
 }
 
+const DISCOUNTS: Record<PurchaseType, { label: string; pct: number; badge: string }> = {
+  subscribe: { label: 'Subscribe and Save', pct: 40, badge: 'Save 40%' },
+  onetime:   { label: 'One-time purchase',  pct: 20, badge: 'Save 20%' },
+}
+
 export default function AddToCartButton({ product, variants = [], disabled }: Props) {
   const addItem = useCartStore(s => s.addItem)
   const showToast = useToast(s => s.show)
@@ -24,8 +30,11 @@ export default function AddToCartButton({ product, variants = [], disabled }: Pr
     variants.length > 0 ? variants[0] : null
   )
   const [qty, setQty] = useState(1)
+  const [purchaseType, setPurchaseType] = useState<PurchaseType>('subscribe')
 
-  const currentPrice = selectedVariant?.price ?? product.price
+  const basePrice = selectedVariant?.price ?? product.price
+  const discount = DISCOUNTS[purchaseType].pct / 100
+  const currentPrice = +(basePrice * (1 - discount)).toFixed(2)
   const outOfStock = disabled || (selectedVariant && selectedVariant.stock <= 0)
 
   const handleAdd = () => {
@@ -39,7 +48,9 @@ export default function AddToCartButton({ product, variants = [], disabled }: Pr
         slug: product.slug,
         name: selectedVariant ? `${product.name} (${selectedVariant.label})` : product.name,
         price: currentPrice,
+        originalPrice: basePrice,
         imageUrl: product.imageUrl,
+        purchaseType,
       })
     }
     showToast(`${product.name}${selectedVariant ? ` (${selectedVariant.label})` : ''} × ${qty} added`)
@@ -48,6 +59,28 @@ export default function AddToCartButton({ product, variants = [], disabled }: Pr
 
   return (
     <div className="add-to-cart-section">
+      {/* Purchase type selector */}
+      <div className="purchase-type-selector" role="radiogroup" aria-label="Purchase option">
+        {(Object.entries(DISCOUNTS) as [PurchaseType, typeof DISCOUNTS[PurchaseType]][]).map(([type, info]) => (
+          <label
+            key={type}
+            className={`purchase-type-option ${purchaseType === type ? 'active' : ''}`}
+            onClick={() => setPurchaseType(type)}
+          >
+            <input
+              type="radio"
+              name="purchaseType"
+              value={type}
+              checked={purchaseType === type}
+              onChange={() => setPurchaseType(type)}
+              className="purchase-type-radio"
+            />
+            <span className="purchase-type-label">{info.label}</span>
+            <span className="purchase-type-badge">{info.badge}</span>
+          </label>
+        ))}
+      </div>
+
       {variants.length > 1 && (
         <div className="variant-selector">
           <label className="variant-label">Size</label>
@@ -67,6 +100,12 @@ export default function AddToCartButton({ product, variants = [], disabled }: Pr
           </div>
         </div>
       )}
+
+      {/* Price display with original + discounted */}
+      <div className="purchase-price-display">
+        <span className="purchase-price-original">${basePrice.toFixed(2)}</span>
+        <span className="purchase-price-current">${currentPrice.toFixed(2)}</span>
+      </div>
 
       <div className="qty-and-cart">
         <div className="qty-selector">
