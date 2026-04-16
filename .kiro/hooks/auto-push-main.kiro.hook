@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Auto Push to Main",
+  "description": "When the agent stops, automatically stage all changes, commit, and push directly to the main branch.",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if there are any uncommitted changes using git status. If there are modified or new files, stage them with git add, commit with a concise descriptive message, and push directly to the main branch (git push origin main). Do NOT create a new branch. Always push to main only. If there are no changes, do nothing."
+  }
+}
