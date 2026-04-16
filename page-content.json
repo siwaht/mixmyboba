@@ -23,9 +23,9 @@
   },
   "homepage": {
     "heroBadge": "Now Shipping Nationwide 🚀",
-    "heroTitle": "Your kitchen is the new boba shop.",
-    "heroHighlight": "Premium mixes. Zero compromise.",
-    "heroSubtitle": "Craft-quality boba tea mixes built from whole-leaf tea, plant-based creamers, and ingredients that actually do something — adaptogens, prebiotics, and real vitamins. No fillers, no fake stuff. Just tear, stir, sip. 🧋",
+    "heroTitle": "Your boba era starts here.",
+    "heroHighlight": "Mix it. Shake it. Own it.",
+    "heroSubtitle": "Whole-leaf tea, date-sweetened, adaptogen-stacked — craft boba that's actually good for you. Tear, stir, sip. No barista, no BS. 🧋",
     "heroPrimaryCta": {
       "text": "Explore Flavors",
       "href": "#store"
@@ -35,34 +35,34 @@
       "href": "/about"
     },
     "marquee2": [
-      "🍵 Whole-Leaf Tea",
-      "🌿 Plant-Powered",
-      "🧬 Adaptogen-Loaded",
-      "🫶 Prebiotic Fiber",
-      "⚡ Sustained Focus",
-      "🍯 Date-Sweetened",
-      "🧪 Vitamin-Fortified"
+      "🍵 Real Leaves, Real Taste",
+      "🌿 Plant-Powered Goodness",
+      "🧬 Adaptogens On Board",
+      "🫶 Gut-Friendly Fiber",
+      "⚡ Focus Without the Crash",
+      "🍯 Dates Over Fakes",
+      "🧪 Vitamins In Every Sip"
     ],
     "featureCards": [
       {
         "icon": "Coffee",
-        "title": "Whole-Leaf Tea, Not Dust 🍵",
-        "description": "We start with premium whole tea leaves, stone-milled to preserve flavor and antioxidants. Then we add targeted adaptogens — ashwagandha, lion's mane, reishi, maca — matched to each flavor's purpose. This isn't flavored powder. It's real tea with real function."
+        "title": "Real Leaves, No Grief 🍵",
+        "description": "Premium whole tea leaves, stone-milled for max flavor and antioxidants. Paired with adaptogens — ashwagandha, lion's mane, reishi, maca — matched to each flavor's vibe. Not dust in a bag. Tea with a plan."
       },
       {
         "icon": "Leaf",
-        "title": "Sweetened by Dates, Not Labs 🌿",
-        "description": "Every bag is sweetened with organic Medjool date powder — a whole food that brings natural caramel sweetness plus fiber, potassium, and iron. No sucralose, no stevia, no high-fructose corn syrup. You taste the difference immediately."
+        "title": "Dates Over Fakes 🌿",
+        "description": "Sweetened with organic Medjool date powder — a whole food bringing natural caramel sweetness plus fiber, potassium, and iron. No sucralose, no stevia, no syrup from a lab. You taste the difference, first sip."
       },
       {
         "icon": "Heart",
-        "title": "Built for Your Gut 💚",
-        "description": "Each scoop packs chicory root prebiotic fiber to nourish your microbiome, plus D3, B12, vitamin C, zinc, and magnesium. Smooth energy that lasts — no spike, no crash, no bloat. Nutrition that works quietly in the background."
+        "title": "Feed Your Gut, Fill Your Cup 💚",
+        "description": "Chicory root prebiotic fiber to nourish your microbiome, plus D3, B12, vitamin C, zinc, and magnesium. Smooth energy that lasts — no spike, no crash, no bloat. Quiet nutrition that just works."
       }
     ],
     "comparison": {
       "title": "Read the Label. Ours Wins. 🔍",
-      "subtitle": "Most instant boba is candy in disguise. Here's what separates us.",
+      "subtitle": "Most instant boba is candy in disguise. Here's the real deal vs. the raw deal.",
       "themLabel": "Generic Instant Boba",
       "themItems": [
         "High-fructose corn syrup & white sugar",
@@ -85,64 +85,64 @@
       ]
     },
     "storeSection": {
-      "title": "Pick Your Flavor",
-      "subtitle": "Eight flavors, each with its own adaptogen stack and purpose. Taro for calm, matcha for focus, brown sugar for energy — all date-sweetened and gut-friendly."
+      "title": "Pick Your Flavor, Find Your Fix",
+      "subtitle": "Eight flavors, each with its own adaptogen stack. Taro for calm, matcha for focus, brown sugar for energy — all date-sweetened and gut-friendly."
     },
     "processSection": {
-      "title": "From Bag to Boba in Under a Minute ⏱️",
-      "subtitle": "No equipment. No barista skills. No cleanup drama.",
+      "title": "Bag to Boba, Beat the Clock ⏱️",
+      "subtitle": "No gear to fear. No barista career. Just boba — right here.",
       "steps": [
         {
           "num": "01",
-          "title": "Measure",
-          "description": "One to two tablespoons into your favorite mug or tumbler. Each bag gives you 20+ servings."
+          "title": "Scoop It",
+          "description": "One to two tablespoons into your favorite mug or tumbler. Each bag gives you 20+ servings — that's weeks of sips."
         },
         {
           "num": "02",
           "title": "Pour & Stir",
-          "description": "Add hot water first to dissolve, then your milk of choice — oat, almond, dairy, whatever you're into."
+          "description": "Hot water first to dissolve, then your milk of choice — oat, almond, dairy, whatever fits your vibe."
         },
         {
           "num": "03",
           "title": "Make It Yours",
-          "description": "Go hot or pour over ice. Add tapioca pearls, jelly, or extra sweetener. Your call, every time."
+          "description": "Go hot or pour over ice. Add tapioca pearls, jelly, or extra sweetener. Your cup, your rules, every time."
         },
         {
           "num": "04",
-          "title": "Enjoy Daily",
-          "description": "At under $2 a cup, this replaces the $8 boba run without sacrificing taste or quality."
+          "title": "Sip & Save",
+          "description": "Under $2 a cup. That $8 boba run? Consider it retired. Same taste, way less waste."
         }
       ]
     },
     "vibeSection": {
-      "title": "The Numbers Behind Every Scoop 📊",
-      "subtitle": "We formulated these mixes with a nutritionist. Here's what's actually inside.",
+      "title": "The Proof Is in the Scoop 📊",
+      "subtitle": "Formulated with a nutritionist. No fluff, just stuff that works.",
       "cards": [
         {
           "emoji": "🍯",
           "stat": "0g",
           "title": "Added Refined Sugar",
-          "description": "Sweetened exclusively with organic date powder — a whole food with natural fiber, iron, and potassium. No blood sugar rollercoaster, no artificial sweetener aftertaste."
+          "description": "Sweetened with organic date powder — a whole food with natural fiber, iron, and potassium. No blood sugar rollercoaster, no fake sweetener aftertaste."
         },
         {
           "emoji": "🦠",
           "stat": "4g+",
           "title": "Prebiotic Fiber Per Scoop",
-          "description": "Chicory root inulin feeds beneficial gut bacteria and supports smooth digestion. Most people notice less bloating within the first week of daily use."
+          "description": "Chicory root inulin feeds your good gut bacteria and supports smooth digestion. Less bloating, more vibing — most people notice within a week."
         },
         {
           "emoji": "🧬",
           "stat": "5+",
           "title": "Adaptogens Per Flavor",
-          "description": "Each flavor has a purpose-built stack: ashwagandha for stress, lion's mane for cognition, reishi for immune support, maca for stamina, tulsi for calm. Not random — intentional."
+          "description": "Each flavor has a purpose-built stack: ashwagandha for stress, lion's mane for focus, reishi for immunity, maca for stamina, tulsi for calm. Not random — intentional."
         }
       ]
     },
     "ctaSection": {
-      "title": "Wholesale & Custom Orders 🤝",
-      "description": "Running a café, planning an event, or building gift boxes? We do custom flavors and bulk pricing. Reach out and we'll put something together.",
+      "title": "Big Orders? Let's Talk Shop 🤝",
+      "description": "Cafés, events, gift boxes — we do custom flavors and bulk pricing. Slide into our inbox and we'll make it happen.",
       "primaryCta": {
-        "text": "Contact Us",
+        "text": "Hit Us Up",
         "href": "/faq"
       },
       "secondaryCta": {
@@ -293,7 +293,7 @@
     }
   ],
   "footer": {
-    "brandDescription": "Craft-quality boba tea mixes made with whole-leaf tea, date sweetener, and functional adaptogens. Your daily boba ritual — no boba shop required.",
+    "brandDescription": "Whole-leaf tea, date-sweetened, adaptogen-stacked. Craft boba that hits different — no boba shop required. Your era, your cup.",
     "sections": [
       {
         "title": "Flavors",
