@@ -295,7 +295,14 @@ export default function CheckoutPage() {
               <div className="checkout-items-list">
                 {items.map(item => (
                   <div key={item.productId} className="checkout-item">
-                    <span className="checkout-item-name">{item.name} <span className="checkout-item-qty">× {item.quantity}</span></span>
+                    <span className="checkout-item-name">
+                      {item.name} <span className="checkout-item-qty">× {item.quantity}</span>
+                      {item.purchaseType && (
+                        <span className={`cart-purchase-badge ${item.purchaseType === 'subscribe' ? 'cart-badge-subscribe' : 'cart-badge-onetime'}`}>
+                          {item.purchaseType === 'subscribe' ? '🔄 Subscribe' : '🛒 One-time'}
+                        </span>
+                      )}
+                    </span>
                     <span>${(item.price * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}

@@ -135,7 +135,7 @@ export default function ComparePage() {
                         className="btn btn-primary"
                         style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
                         onClick={() => {
-                          addItem({ productId: p.id, slug: p.slug, name: p.name, price: p.startingPrice, imageUrl: p.imageUrl })
+                          addItem({ productId: p.id, slug: p.slug, name: p.name, price: +(p.startingPrice * 0.80).toFixed(2), originalPrice: p.startingPrice, imageUrl: p.imageUrl, purchaseType: 'onetime' as const })
                           showToast(`${p.name} added to cart`)
                         }}
                       >

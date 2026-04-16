@@ -158,8 +158,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             <div className="product-detail-price">
               {product.variants.length > 1
-                ? `From $${product.variants[0].price.toFixed(2)}`
-                : `$${product.price.toFixed(2)}`}
+                ? <>From <span className="detail-price-original">${product.variants[0].price.toFixed(2)}</span> <span className="detail-price-discounted">${(product.variants[0].price * 0.60).toFixed(2)}</span></>
+                : <><span className="detail-price-original">${product.price.toFixed(2)}</span> <span className="detail-price-discounted">${(product.price * 0.60).toFixed(2)}</span></>}
+              <span className="detail-price-save">Save up to 40%</span>
             </div>
             <p className="product-detail-desc">{product.description}</p>
 
