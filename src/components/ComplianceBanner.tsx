@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 
 interface AnnouncementSettings {
@@ -9,22 +9,31 @@ interface AnnouncementSettings {
   announcementLinkText?: string
 }
 
+function useClientMounted() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+}
+
+function getInitialDismissed() {
+  if (typeof window === 'undefined') return false
+  return sessionStorage.getItem('banner-dismissed') === '1'
+}
+
 export default function ComplianceBanner() {
-  const [dismissed, setDismissed] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [dismissed, setDismissed] = useState(getInitialDismissed)
+  const mounted = useClientMounted()
   const [settings, setSettings] = useState<AnnouncementSettings | null>(null)
 
   useEffect(() => {
-    setMounted(true)
-    if (sessionStorage.getItem('banner-dismissed') === '1') {
-      setDismissed(true)
-      return
-    }
+    if (dismissed) return
     fetch('/api/settings')
       .then(r => r.json())
       .then((data: AnnouncementSettings) => setSettings(data))
       .catch(() => {})
-  }, [])
+  }, [dismissed])
 
   if (!mounted || dismissed) return null
   if (!settings || !settings.announcement) return null

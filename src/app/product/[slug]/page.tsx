@@ -30,6 +30,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const product = await prisma.product.findUnique({ where: { slug } })
   if (!product) return {}
+  const baseUrl = process.env.SITE_URL || 'https://mixmyboba.com'
+  const productUrl = `${baseUrl}/product/${slug}`
+  const imageUrl = product.imageUrl.startsWith('http') ? product.imageUrl : `${baseUrl}${product.imageUrl}`
 
   return {
     title: `${product.name} — Functional Boba Tea Mix`,
@@ -37,17 +40,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: `${product.name} | Mix My Boba`,
       description: product.description,
-      images: [{ url: product.imageUrl, width: 600, height: 600, alt: product.name }],
+      url: productUrl,
+      images: [{ url: imageUrl, width: 1200, height: 630, alt: `${product.name} boba tea mix` }],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title: `${product.name} — Premium Mix`,
       description: product.description.slice(0, 200),
-      images: [product.imageUrl],
+      images: [imageUrl],
     },
     alternates: {
-      canonical: `${process.env.SITE_URL || 'https://mixmyboba.com'}/product/${slug}`,
+      canonical: productUrl,
     },
   }
 }
@@ -84,13 +88,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const tagDefs = product.tag ? await getTagDefs() : []
   const tagInfo = product.tag ? tagDefs.find(t => t.slug === product.tag) : null
   const ingredientData = await getProductIngredients(slug)
+  const baseUrl = process.env.SITE_URL || 'https://mixmyboba.com'
+  const productUrl = `${baseUrl}/product/${slug}`
+  const imageUrl = product.imageUrl.startsWith('http') ? product.imageUrl : `${baseUrl}${product.imageUrl}`
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
     description: product.description,
-    image: product.imageUrl,
+    image: imageUrl,
+    url: productUrl,
+    brand: { '@type': 'Brand', name: 'Mix My Boba' },
+    category: product.category,
     ...(avgRating && {
       aggregateRating: {
         '@type': 'AggregateRating',
@@ -104,19 +114,21 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           price: v.price,
           priceCurrency: 'USD',
           name: v.label,
+          url: productUrl,
           availability: v.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
         }))
       : {
           '@type': 'Offer',
           price: product.price,
           priceCurrency: 'USD',
+          url: productUrl,
           availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
         },
   }
 
   return (
     <section className="product-detail">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
       <div className="container">
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link href="/">Home</Link>

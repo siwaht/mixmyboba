@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 
 interface ProductTag {
   slug: string
@@ -378,7 +379,7 @@ export default function ProductsTab({ products, showForm, setShowForm, form, set
                   </td>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <img src={p.imageUrl} alt="" style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover' }} />
+                      <Image src={p.imageUrl} alt="" width={36} height={36} style={{ borderRadius: 6, objectFit: 'cover' }} />
                       <span>{p.name}</span>
                     </div>
                   </td>

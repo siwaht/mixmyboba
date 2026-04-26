@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { ShoppingCart, X } from 'lucide-react'
 import { useCartStore } from '@/lib/cartStore'
@@ -9,11 +9,19 @@ import ThemeToggle from './ThemeToggle'
 
 interface NavLink { label: string; href: string }
 
+function useClientMounted() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+}
+
 export default function Navbar() {
   const [cartOpen, setCartOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const mounted = useClientMounted()
   const itemCount = useCartStore(s => s.itemCount)
   const [navLinks, setNavLinks] = useState<NavLink[]>([
     { label: 'Shop', href: '/#store' },
@@ -25,16 +33,11 @@ export default function Navbar() {
   const [logoText, setLogoText] = useState('mix my boba')
 
   useEffect(() => {
-    setMounted(true)
     const onScroll = () => setScrolled(window.scrollY > 20)
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
 
     // Auto-open cart drawer if redirected from /cart
-    if (sessionStorage.getItem('open-cart')) {
-      sessionStorage.removeItem('open-cart')
-      setCartOpen(true)
-    }
-
     fetch('/api/page-content')
       .then(r => r.json())
       .then(data => {
@@ -47,6 +50,13 @@ export default function Navbar() {
       .catch(() => {})
 
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('open-cart')) return
+    sessionStorage.removeItem('open-cart')
+    const id = window.setTimeout(() => setCartOpen(true), 0)
+    return () => window.clearTimeout(id)
   }, [])
 
   useEffect(() => {
@@ -76,7 +86,7 @@ export default function Navbar() {
             <Link href="/" className="logo" aria-label="Homepage" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <span className="logo-emoji">{logoEmoji}</span> <span>{logoText.split(' ').slice(0, -1).join(' ')}</span> {logoText.split(' ').slice(-1)[0]}
             </Link>
-            <div className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
+            <div id="mobile-nav" className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
               {menuOpen && (
                 <button
                   className="mobile-menu-close"

@@ -1,11 +1,19 @@
 import { Suspense } from 'react'
+import type { Metadata } from 'next'
 import ProductGrid from '@/components/ProductGrid'
 import { prisma } from '@/lib/db'
 import { getCachedJson } from '@/lib/settings-cache'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Shop All Flavors',
   description: 'Browse our full collection of functional boba tea mixes — date-sweetened, adaptogen-infused, and gut-friendly.',
+  alternates: { canonical: '/shop' },
+  openGraph: {
+    title: 'Shop Functional Boba Tea Mixes | Mix My Boba',
+    description: 'Shop whole-leaf, date-sweetened boba tea mixes for classic milk tea, taro, matcha, brown sugar, and fruity flavors.',
+    url: '/shop',
+    images: [{ url: '/products/classic-milk-tea.jpg', width: 1200, height: 630, alt: 'Mix My Boba flavors' }],
+  },
 }
 
 export default async function ShopPage() {
