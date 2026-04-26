@@ -36,7 +36,13 @@ export default function ComparePage() {
 
   // Load comparison when IDs change
   useEffect(() => {
-    if (selectedIds.length < 2) return
+    if (selectedIds.length < 2) {
+      const id = window.setTimeout(() => {
+        setProducts([])
+        setLoading(false)
+      }, 0)
+      return () => window.clearTimeout(id)
+    }
     const id = window.setTimeout(() => {
       setLoading(true)
       fetch(`/api/compare?ids=${selectedIds.join(',')}`)

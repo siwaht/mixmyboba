@@ -26,10 +26,15 @@ export default function ProductSocialProof({ productId, productSlug, stock, prod
   const showToast = useToast(s => s.show)
 
   useEffect(() => {
+    const refreshViewers = () => setViewers(getViewerCount(productId))
+    const initial = window.setTimeout(refreshViewers, 0)
     const interval = setInterval(() => {
-      setViewers(getViewerCount(productId))
+      refreshViewers()
     }, 30000) // Update every 30s
-    return () => clearInterval(interval)
+    return () => {
+      window.clearTimeout(initial)
+      clearInterval(interval)
+    }
   }, [productId])
 
   useEffect(() => {
