@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { create } from 'zustand'
 
 interface ToastState {
@@ -18,11 +18,17 @@ export const useToast = create<ToastState>((set) => ({
   },
 }))
 
+function useClientMounted() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+}
+
 export default function Toast() {
   const { message, visible } = useToast()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => setMounted(true), [])
+  const mounted = useClientMounted()
   if (!mounted) return null
 
   return (

@@ -28,18 +28,33 @@ export const metadata: Metadata = {
     template: '%s | Mix My Boba',
   },
   description: 'Craft-quality boba tea mixes made with whole-leaf tea, organic date sweetener, and functional adaptogens. Classic milk tea, taro, matcha, brown sugar — just add water and milk. Ready in under a minute.',
+  applicationName: 'Mix My Boba',
+  authors: [{ name: 'Mix My Boba' }],
+  creator: 'Mix My Boba',
+  publisher: 'Mix My Boba',
   keywords: ['boba tea', 'bubble tea', 'milk tea mix', 'instant boba', 'boba at home', 'taro milk tea', 'matcha latte', 'brown sugar boba', 'premix boba', 'tea latte powder', 'boba kit'],
+  category: 'food and drink',
   openGraph: {
     type: 'website',
     locale: 'en_US',
+    url: '/',
     siteName: 'Mix My Boba',
     title: 'Mix My Boba — Craft Boba Tea Mixes',
     description: 'Boba shop taste at home. Craft-quality mixes with whole-leaf tea, date sweetener, and zero artificial flavors. Ready in under a minute.',
+    images: [
+      {
+        url: '/products/classic-milk-tea.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Mix My Boba craft boba tea mixes',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mix My Boba — Craft Boba Tea Mixes',
     description: 'Boba shop taste at home. Whole-leaf tea mixes with adaptogens and prebiotics. Ready in under a minute.',
+    images: ['/products/classic-milk-tea.jpg'],
   },
   robots: { index: true, follow: true },
   alternates: {

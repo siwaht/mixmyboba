@@ -1,19 +1,28 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useSyncExternalStore } from 'react'
+
+function useClientMounted() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+}
+
+function getInitialTheme() {
+  if (typeof window === 'undefined') return 'light'
+  const stored = localStorage.getItem('theme') as 'dark' | 'light' | null
+  return stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+}
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('light')
-  const [mounted, setMounted] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>(getInitialTheme)
+  const mounted = useClientMounted()
 
   useEffect(() => {
-    setMounted(true)
-    const stored = localStorage.getItem('theme') as 'dark' | 'light' | null
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const initial = stored || (prefersDark ? 'dark' : 'light')
-    setTheme(initial)
-    document.documentElement.setAttribute('data-theme', initial)
-  }, [])
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
 
   const toggle = useCallback(() => {
     setTheme(prev => {

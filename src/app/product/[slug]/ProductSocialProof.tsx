@@ -20,17 +20,21 @@ function getViewerCount(productId: string): number {
 }
 
 export default function ProductSocialProof({ productId, productSlug, stock, productName }: { productId: string; productSlug: string; stock: number; productName: string }) {
-  const [viewers, setViewers] = useState(0)
+  const [viewers, setViewers] = useState(() => getViewerCount(productId))
   const [related, setRelated] = useState<RelatedProduct[]>([])
   const addItem = useCartStore(s => s.addItem)
   const showToast = useToast(s => s.show)
 
   useEffect(() => {
-    setViewers(getViewerCount(productId))
+    const refreshViewers = () => setViewers(getViewerCount(productId))
+    const initial = window.setTimeout(refreshViewers, 0)
     const interval = setInterval(() => {
-      setViewers(getViewerCount(productId))
+      refreshViewers()
     }, 30000) // Update every 30s
-    return () => clearInterval(interval)
+    return () => {
+      window.clearTimeout(initial)
+      clearInterval(interval)
+    }
   }, [productId])
 
   useEffect(() => {

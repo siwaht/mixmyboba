@@ -83,7 +83,10 @@ export default function WebhooksTab() {
     } catch { /* ignore */ }
   }, [])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    const id = window.setTimeout(load, 0)
+    return () => window.clearTimeout(id)
+  }, [load])
 
   const save = async (newSettings?: WebhookSettings) => {
     const toSave = newSettings || settings
@@ -125,7 +128,7 @@ export default function WebhooksTab() {
   const addEndpoint = () => {
     if (!settings || !endpointForm.url) return
     const newEndpoint: WebhookEndpoint = {
-      id: editingEndpoint || `ep_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      id: editingEndpoint || `ep_${crypto.randomUUID()}`,
       url: endpointForm.url.trim(),
       label: endpointForm.label.trim() || new URL(endpointForm.url.trim()).hostname,
       events: endpointForm.events,
@@ -565,7 +568,7 @@ export default function WebhooksTab() {
           <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
             <h3 className="admin-card-title">⚡ Global Event Toggles</h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
-              Enable or disable specific event types globally. Disabled events won't be sent to any endpoint, regardless of endpoint configuration.
+              Enable or disable specific event types globally. Disabled events won&apos;t be sent to any endpoint, regardless of endpoint configuration.
             </p>
             {Object.entries(EVENT_CATEGORIES).map(([category, events]) => (
               <div key={category} style={{ marginBottom: '1.25rem' }}>

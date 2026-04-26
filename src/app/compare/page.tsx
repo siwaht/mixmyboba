@@ -13,10 +13,16 @@ interface CompareProduct {
   avgRating: number | null; reviewCount: number
 }
 
+function getSelectedIdsFromUrl() {
+  if (typeof window === 'undefined') return []
+  const params = new URLSearchParams(window.location.search)
+  return params.get('ids')?.split(',').filter(Boolean) || []
+}
+
 export default function ComparePage() {
   const [products, setProducts] = useState<CompareProduct[]>([])
   const [allProducts, setAllProducts] = useState<{ id: string; name: string; category: string }[]>([])
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [selectedIds, setSelectedIds] = useState<string[]>(getSelectedIdsFromUrl)
   const [loading, setLoading] = useState(false)
   const addItem = useCartStore(s => s.addItem)
   const showToast = useToast(s => s.show)
@@ -30,20 +36,22 @@ export default function ComparePage() {
 
   // Load comparison when IDs change
   useEffect(() => {
-    if (selectedIds.length < 2) { setProducts([]); return }
-    setLoading(true)
-    fetch(`/api/compare?ids=${selectedIds.join(',')}`)
-      .then(r => r.json())
-      .then(setProducts)
-      .finally(() => setLoading(false))
+    if (selectedIds.length < 2) {
+      const id = window.setTimeout(() => {
+        setProducts([])
+        setLoading(false)
+      }, 0)
+      return () => window.clearTimeout(id)
+    }
+    const id = window.setTimeout(() => {
+      setLoading(true)
+      fetch(`/api/compare?ids=${selectedIds.join(',')}`)
+        .then(r => r.json())
+        .then(setProducts)
+        .finally(() => setLoading(false))
+    }, 0)
+    return () => window.clearTimeout(id)
   }, [selectedIds])
-
-  // Check URL params on mount
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const ids = params.get('ids')
-    if (ids) setSelectedIds(ids.split(',').filter(Boolean))
-  }, [])
 
   const toggleProduct = (id: string) => {
     setSelectedIds(prev =>

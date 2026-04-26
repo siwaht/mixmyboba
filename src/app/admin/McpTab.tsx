@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 interface McpTool {
   name: string
@@ -83,12 +83,7 @@ export default function McpTab() {
   const [testResult, setTestResult] = useState<{ tool: string; status: string; data: string } | null>(null)
   const [testLoading, setTestLoading] = useState(false)
 
-  // Check connection on mount
-  useEffect(() => {
-    checkConnection()
-  }, [])
-
-  const checkConnection = async () => {
+  const checkConnection = useCallback(async () => {
     setConnectionStatus('checking')
     try {
       const res = await fetch('/api/admin/stats')
@@ -101,7 +96,12 @@ export default function McpTab() {
     } catch {
       setConnectionStatus('disconnected')
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    const id = window.setTimeout(checkConnection, 0)
+    return () => window.clearTimeout(id)
+  }, [checkConnection])
 
   const generateToken = async (e: React.FormEvent) => {
     e.preventDefault()

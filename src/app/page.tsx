@@ -105,19 +105,46 @@ export default async function Home() {
     reviews: p.reviews,
   }))
 
+  const baseUrl = process.env.SITE_URL || 'https://mixmyboba.com'
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Store',
+    '@type': 'OnlineStore',
     name: 'Mix My Boba',
     description: heroSubtitle,
-    url: 'https://mixmyboba.com',
+    url: baseUrl,
+    logo: `${baseUrl}/products/classic-milk-tea.jpg`,
+    image: `${baseUrl}/products/classic-milk-tea.jpg`,
+    slogan: 'Your kitchen is the new boba shop.',
+    areaServed: 'US',
+    knowsAbout: ['instant boba tea mix', 'bubble tea at home', 'functional tea latte mixes', 'date-sweetened milk tea'],
     sameAs: [],
-    hasOfferCatalog: { '@type': 'OfferCatalog', name: 'Craft Boba Tea Mixes' },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${baseUrl}/shop?search={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Craft Boba Tea Mixes',
+      itemListElement: initialProducts.slice(0, 8).map(product => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Product',
+          name: product.name,
+          image: product.imageUrl.startsWith('http') ? product.imageUrl : `${baseUrl}${product.imageUrl}`,
+          description: product.description,
+          url: `${baseUrl}/product/${product.slug}`,
+        },
+        price: product.startingPrice,
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+      })),
+    },
   }
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
 
       {/* ── Hero ── */}
       <section className="hero" aria-labelledby="hero-heading">

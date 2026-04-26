@@ -4,6 +4,7 @@ import { getCachedJson } from '@/lib/settings-cache'
 export const metadata: Metadata = {
   title: 'FAQ — Boba Tea Mixes, Preparation, Shipping & More',
   description: 'Frequently asked questions about Mix My Boba instant boba tea mixes — how to prepare, ingredients, shipping, subscriptions, and more.',
+  alternates: { canonical: '/faq' },
 }
 
 interface FaqCategory {
@@ -60,7 +61,7 @@ export default async function FAQPage() {
 
   return (
     <section className="content-page">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }} />
       <div className="container" style={{ maxWidth: 780 }}>
         <div className="content-page-header">
           <h1>Frequently Asked Questions</h1>
