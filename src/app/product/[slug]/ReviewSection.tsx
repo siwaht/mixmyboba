@@ -124,7 +124,7 @@ export default function ReviewSection({ productId, reviews: initialReviews, avgR
           )}
         </div>
         {isLoggedIn === false ? (
-          <a href="/login" className="btn btn-secondary">Sign in to Review</a>
+          <a href="/account" className="btn btn-secondary">Sign in to Review</a>
         ) : (
           <button className="btn btn-secondary" onClick={() => setShowForm(!showForm)} disabled={isLoggedIn === null}>
             {showForm ? 'Cancel' : 'Write a Review'}

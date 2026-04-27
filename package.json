@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --webpack -p 5000 -H 0.0.0.0",
-    "build": "prisma generate && prisma migrate deploy && npx tsx prisma/seed.ts && next build",
+    "build": "prisma generate && prisma migrate deploy && npx tsx prisma/seed.ts && next build --webpack",
     "start": "next start -p 5000 -H 0.0.0.0",
     "lint": "eslint"
   },

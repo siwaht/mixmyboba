@@ -99,7 +99,7 @@ export default function CheckoutPage() {
   const subtotal = totalPrice()
   const discount = appliedCoupon?.discount || 0
   const shipping = subtotal >= 50 ? 0 : 5.99
-  const total = subtotal + shipping - discount
+  const total = Math.max(0, subtotal + shipping - discount)
 
   const applyCoupon = async () => {
     setCouponError('')
@@ -207,10 +207,16 @@ export default function CheckoutPage() {
           shipping,
           items: items.map(i => {
             const [baseId, ...rest] = i.productId.split('__')
+            // Extract variant label from name — format is "Product Name (Variant Label)"
+            let variantLabel: string | undefined
+            if (rest.length > 0) {
+              const match = i.name.match(/^.+?\((.+)\)$/)
+              variantLabel = match ? match[1] : undefined
+            }
             return {
               productId: baseId,
               quantity: i.quantity,
-              variantLabel: rest.length > 0 ? i.name.replace(/^.*\((.+)\)$/, '$1') : undefined,
+              variantLabel,
             }
           }),
         }),

@@ -58,10 +58,32 @@ export async function POST(req: NextRequest) {
   }
 
   // Calculate totals using current DB prices (not client-submitted prices)
+  // When a variantLabel is provided, look up the variant's price from the DB
+  const variantsByProduct = new Map<string, Array<{ label: string; price: number }>>()
+  if (items.some((i: { variantLabel?: string }) => i.variantLabel)) {
+    const variants = await prisma.productVariant.findMany({
+      where: { productId: { in: productIds }, active: true },
+      select: { productId: true, label: true, price: true },
+    })
+    for (const v of variants) {
+      const list = variantsByProduct.get(v.productId) || []
+      list.push({ label: v.label, price: v.price })
+      variantsByProduct.set(v.productId, list)
+    }
+  }
+
   let subtotal = 0
   const orderItems = (items as Array<{ productId: string; quantity: number; variantLabel?: string }>).map(item => {
     const product = productMap.get(item.productId)!
-    const price = product.price
+    let price = product.price
+    // Use variant-specific price if a variant label was provided
+    if (item.variantLabel) {
+      const variants = variantsByProduct.get(item.productId)
+      const matchedVariant = variants?.find(v => v.label === item.variantLabel)
+      if (matchedVariant) {
+        price = matchedVariant.price
+      }
+    }
     subtotal += price * item.quantity
     return {
       productId: item.productId,
@@ -130,7 +152,7 @@ export async function POST(req: NextRequest) {
           paymentMethod: paymentMethod || 'crypto',
           subtotal,
           shipping: subtotal >= 50 ? 0 : 5.99,
-          total: subtotal - discount + (subtotal >= 50 ? 0 : 5.99),
+          total: Math.max(0, subtotal - discount + (subtotal >= 50 ? 0 : 5.99)),
           discount,
           couponCode: appliedCoupon,
           notes: notes?.trim() || null,
