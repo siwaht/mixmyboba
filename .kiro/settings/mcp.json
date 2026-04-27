@@ -9,7 +9,7 @@
         "CELLULA_BASE_URL": "http://localhost:5000",
         "CELLULA_ADMIN_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbW55amVxOHkwMDAwandvMWFhNXc0emc4Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc2MjM4MjA0LCJleHAiOjE3NzY4NDMwMDR9.TFNdwXP-I1rtfvujdyuycOmM8h6OrlX7MrhA4MLKy-c"
       },
-      "disabled": false,
+      "disabled": true,
       "autoApprove": [
         "*"
       ],
