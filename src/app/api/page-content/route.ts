@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { readFileSync, existsSync } from 'fs'
 import { join } from 'path'
-import { DEFAULT_PAGE_CONTENT } from '@/app/api/admin/page-content/route'
+import { DEFAULT_PAGE_CONTENT } from '@/lib/default-page-content'
 
 const CONTENT_PATH = join(process.cwd(), 'page-content.json')
 

@@ -1,20 +1,10 @@
 import Link from 'next/link'
 import { Shield } from 'lucide-react'
 import { getCachedJson } from '@/lib/settings-cache'
+import { DEFAULT_PAGE_CONTENT, type FooterData } from '@/lib/default-page-content'
 import FooterLogoLink from './FooterLogoLink'
 
-interface FooterLink { label: string; href: string }
-interface FooterSection { title: string; links: FooterLink[]; comingSoon?: string }
-interface FooterData { brandDescription: string; sections: FooterSection[] }
-
-const defaultFooter: FooterData = {
-  brandDescription: 'Craft-quality boba tea mixes made with whole-leaf tea, date sweetener, and functional adaptogens. Your daily boba ritual — no boba shop required.',
-  sections: [
-    { title: 'Flavors', links: [{ label: 'Classic Milk Tea', href: '/?category=Classic#store' }, { label: 'Matcha', href: '/?category=Matcha#store' }, { label: 'Brown Sugar', href: '/?category=Brown+Sugar#store' }, { label: 'Fruity', href: '/?category=Fruity#store' }], comingSoon: 'Toppings — Coming Soon' },
-    { title: 'Help', links: [{ label: 'How to Prepare', href: '/compliance#how' }, { label: 'Ingredients', href: '/compliance#ingredients' }, { label: 'FAQ', href: '/faq' }, { label: 'Our Story', href: '/about' }] },
-    { title: 'Legal', links: [{ label: 'Terms of Service', href: '/compliance#terms' }, { label: 'Privacy Policy', href: '/compliance#privacy' }, { label: 'Return Policy', href: '/compliance#returns' }, { label: 'Shipping Info', href: '/compliance#shipping' }] },
-  ],
-}
+const defaultFooter: FooterData = DEFAULT_PAGE_CONTENT.footer
 
 export default async function Footer() {
   const pc = await getCachedJson<Record<string, unknown>>('page-content.json', {})
