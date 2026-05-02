@@ -37,7 +37,6 @@ export default function Navbar() {
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
 
-    // Auto-open cart drawer if redirected from /cart
     fetch('/api/page-content')
       .then(r => r.json())
       .then(data => {
@@ -50,13 +49,6 @@ export default function Navbar() {
       .catch(() => {})
 
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => {
-    if (!sessionStorage.getItem('open-cart')) return
-    sessionStorage.removeItem('open-cart')
-    const id = window.setTimeout(() => setCartOpen(true), 0)
-    return () => window.clearTimeout(id)
   }, [])
 
   useEffect(() => {

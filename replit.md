@@ -52,3 +52,5 @@ Categories: Classic, Matcha, Brown Sugar, Fruity
 - Toast notifications: custom store (`src/components/Toast.tsx`)
 - Product images served from `/public/products/` as local JPGs
 - Admin dashboard at `/admin`
+- **Cart UX**: Two surfaces share the same Zustand store — (1) `CartDrawer` slides out when the cart icon is clicked, (2) `/cart` is a full standalone page (sticky order-summary sidebar). Auth lives on `/account` with login/register tabs (no separate `/login` or `/signup` routes).
+- **Page content defaults**: Shared via `src/lib/default-page-content.ts` and consumed by both `/api/admin/page-content` and `/api/page-content` plus `Footer.tsx`.

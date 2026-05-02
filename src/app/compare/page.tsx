@@ -29,9 +29,12 @@ export default function ComparePage() {
 
   // Load product list for selector
   useEffect(() => {
-    fetch('/api/products').then(r => r.json()).then((data: CompareProduct[]) => {
-      setAllProducts(data.map(p => ({ id: p.id, name: p.name, category: p.category })))
-    })
+    fetch('/api/products')
+      .then(r => r.json())
+      .then((data: CompareProduct[]) => {
+        setAllProducts(Array.isArray(data) ? data.map(p => ({ id: p.id, name: p.name, category: p.category })) : [])
+      })
+      .catch(() => {})
   }, [])
 
   // Load comparison when IDs change
