@@ -70,7 +70,7 @@ export function SwissGrid() {
             ].map(p => (
               <div key={p.id} className="flex flex-col group cursor-pointer">
                 <div className="aspect-[4/5] bg-zinc-200 mb-4 overflow-hidden relative">
-                  <img src={`/__mockup/images/vial-${p.id.toLowerCase()}.png`} alt={p.id} className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x500/e4e4e7/18181b?text=VIAL' }} />
+                  <img src={`/images/vial-${p.id.toLowerCase()}.png`} alt={p.id} className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x500/e4e4e7/18181b?text=VIAL' }} />
                 </div>
                 <div className="flex justify-between items-baseline mb-1">
                   <h3 className="text-2xl font-bold tracking-tight uppercase">{p.id}</h3>

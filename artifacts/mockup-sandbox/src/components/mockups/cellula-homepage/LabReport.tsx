@@ -67,7 +67,7 @@ export function LabReport() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-black font-mono selection:bg-primary selection:text-white pb-20">
+    <div className="min-h-screen bg-white text-black font-mono selection:bg-emerald-600 selection:text-white pb-20">
       {/* Top Protocol Bar */}
       <div className="border-b border-black/10 bg-black text-white text-[10px] md:text-xs uppercase tracking-widest py-1.5 px-4 flex justify-between items-center">
         <span>SYS.STAT: ONLINE</span>
@@ -89,10 +89,10 @@ export function LabReport() {
           </div>
 
           <div className="hidden md:flex items-center gap-8 text-sm uppercase tracking-wider font-semibold">
-            <a href="#" className="hover:text-primary transition-colors">Catalog</a>
-            <a href="#" className="hover:text-primary transition-colors">Analytics (COA)</a>
-            <a href="#" className="hover:text-primary transition-colors">Protocols</a>
-            <a href="#" className="hover:text-primary transition-colors">Support</a>
+            <a href="#" className="hover:text-emerald-600 transition-colors">Catalog</a>
+            <a href="#" className="hover:text-emerald-600 transition-colors">Analytics (COA)</a>
+            <a href="#" className="hover:text-emerald-600 transition-colors">Protocols</a>
+            <a href="#" className="hover:text-emerald-600 transition-colors">Support</a>
           </div>
 
           <div className="flex items-center gap-4">
@@ -101,7 +101,7 @@ export function LabReport() {
             </Button>
             <button className="relative w-8 h-8 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors">
               <ShoppingCart className="w-4 h-4" />
-              <span className="absolute -top-2 -right-2 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-emerald-600 text-white text-[10px] w-4 h-4 flex items-center justify-center">
                 0
               </span>
             </button>
@@ -116,8 +116,8 @@ export function LabReport() {
         {/* Hero Section - Pure Typographic */}
         <div className="mb-24 md:mb-32 max-w-4xl">
           <div className="flex items-center gap-4 mb-6">
-            <div className="h-[1px] w-12 bg-primary"></div>
-            <span className="text-primary text-xs uppercase tracking-widest font-bold">Document Ref: NL-09-2024</span>
+            <div className="h-[1px] w-12 bg-emerald-600"></div>
+            <span className="text-emerald-600 text-xs uppercase tracking-widest font-bold">Document Ref: NL-09-2024</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tighter leading-[0.9] mb-8">
@@ -131,7 +131,7 @@ export function LabReport() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="rounded-none bg-primary hover:bg-primary/90 text-white h-12 px-8 uppercase tracking-wider text-sm">
+            <Button className="rounded-none bg-emerald-600 hover:bg-emerald-700 text-white h-12 px-8 uppercase tracking-wider text-sm">
               Access Catalog <ChevronRight className="w-4 h-4 ml-2" />
             </Button>
             <Button variant="outline" className="rounded-none border-black hover:bg-black hover:text-white h-12 px-8 uppercase tracking-wider text-sm">
@@ -192,9 +192,9 @@ export function LabReport() {
               <h3 className="text-sm font-bold uppercase tracking-wider mb-2">Mass Spectrometry</h3>
               <p className="text-sm text-gray-600 leading-relaxed">Molecular weight verification to guarantee exact sequence synthesis matches theoretical parameters with zero deviation.</p>
             </div>
-            <div className="border-t-[3px] border-primary pt-4">
-              <ShieldCheck className="w-6 h-6 mb-4 text-primary" />
-              <h3 className="text-sm font-bold uppercase tracking-wider mb-2 text-primary">Public COA Database</h3>
+            <div className="border-t-[3px] border-emerald-600 pt-4">
+              <ShieldCheck className="w-6 h-6 mb-4 text-emerald-600" />
+              <h3 className="text-sm font-bold uppercase tracking-wider mb-2 text-emerald-600">Public COA Database</h3>
               <p className="text-sm text-gray-600 leading-relaxed">Cryptographically signed Certificates of Analysis available for every batch number before purchase authorization.</p>
             </div>
           </div>
@@ -243,7 +243,7 @@ export function LabReport() {
                       </span>
                     </td>
                     <td className="px-4 py-4 border-r border-black/10">
-                      <span className={`text-xs font-bold ${product.status === 'IN STOCK' ? 'text-primary' : 'text-amber-500'}`}>
+                      <span className={`text-xs font-bold ${product.status === 'IN STOCK' ? 'text-emerald-600' : 'text-amber-500'}`}>
                         {product.status}
                       </span>
                     </td>
@@ -271,7 +271,7 @@ export function LabReport() {
                     <h3 className="text-xl font-bold mt-1">{product.name}</h3>
                   </div>
                   <div className="text-right">
-                    <span className={`text-[10px] font-bold uppercase px-2 py-1 ${product.status === 'IN STOCK' ? 'bg-primary/10 text-primary' : 'bg-amber-100 text-amber-600'}`}>
+                    <span className={`text-[10px] font-bold uppercase px-2 py-1 ${product.status === 'IN STOCK' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>
                       {product.status}
                     </span>
                     <div className="font-bold text-lg mt-1">{product.price}</div>
@@ -333,9 +333,9 @@ export function LabReport() {
                 </div>
                 
                 <div className="flex gap-4">
-                  <div className="w-8 h-8 shrink-0 bg-primary text-white flex items-center justify-center font-bold text-sm">03</div>
+                  <div className="w-8 h-8 shrink-0 bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">03</div>
                   <div>
-                    <h4 className="font-bold uppercase tracking-wider mb-1 text-primary">Public Documentation</h4>
+                    <h4 className="font-bold uppercase tracking-wider mb-1 text-emerald-600">Public Documentation</h4>
                     <p className="text-sm text-gray-600">Results are cryptographically verified and posted to our database. Vials are only cleared for distribution if purity exceeds 99%.</p>
                   </div>
                 </div>
@@ -346,7 +346,7 @@ export function LabReport() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-black text-white border-t-4 border-primary pt-16 pb-8 px-4 md:px-8">
+      <footer className="bg-black text-white border-t-4 border-emerald-600 pt-16 pb-8 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2">

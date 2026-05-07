@@ -1,5 +1,5 @@
 import React from "react";
-import { ShoppingCart, Menu, ArrowRight, CheckCircle2, Shield, Beaker, FileText, ChevronRight } from "lucide-react";
+import { ShoppingCart, Menu, ArrowRight, Shield, Beaker, FileText, ChevronRight } from "lucide-react";
 
 export function QuietDark() {
   return (
