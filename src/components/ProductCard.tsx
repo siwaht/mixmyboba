@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useCartStore } from '@/lib/cartStore'
+import { discountedPrice, discountPct } from '@/lib/pricing'
 import { useToast } from './Toast'
 import { useProductTags } from '@/lib/useProductTags'
 
@@ -38,34 +39,25 @@ export default function ProductCard({ product }: { product: Product }) {
   const cartItem = items.find(i => i.productId === defaultVariantId)
   const qty = cartItem?.quantity || 0
 
-  const handleAdd = () => {
+  // Quick-add from the card is always a one-time purchase.
+  const addToCart = (notify: boolean) => {
     const basePrice = product.startingPrice || product.price
-    const discountedPrice = +(basePrice * 0.80).toFixed(2) // 20% off for one-time from card
     addItem({
       productId: defaultVariantId,
       slug: product.slug,
       name: defaultVariant ? `${product.name} (${defaultVariant.label})` : product.name,
-      price: discountedPrice,
+      price: discountedPrice(basePrice, 'onetime'),
       originalPrice: basePrice,
       imageUrl: product.imageUrl,
       purchaseType: 'onetime',
     })
-    showToast(`${product.name}${defaultVariant ? ` (${defaultVariant.label})` : ''} added to cart`)
+    if (notify) {
+      showToast(`${product.name}${defaultVariant ? ` (${defaultVariant.label})` : ''} added to cart`)
+    }
   }
 
-  const handleIncrement = () => {
-    const basePrice = product.startingPrice || product.price
-    const discountedPrice = +(basePrice * 0.80).toFixed(2)
-    addItem({
-      productId: defaultVariantId,
-      slug: product.slug,
-      name: defaultVariant ? `${product.name} (${defaultVariant.label})` : product.name,
-      price: discountedPrice,
-      originalPrice: basePrice,
-      imageUrl: product.imageUrl,
-      purchaseType: 'onetime',
-    })
-  }
+  const handleAdd = () => addToCart(true)
+  const handleIncrement = () => addToCart(false)
 
   const handleDecrement = () => {
     if (qty <= 1) {
@@ -76,7 +68,7 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   const displayPrice = product.startingPrice || product.price
-  const discountedDisplayPrice = +(displayPrice * 0.80).toFixed(2)
+  const discountedDisplayPrice = discountedPrice(displayPrice, 'onetime')
   const hasVariants = product.variants && product.variants.length > 1
   const tagInfo = product.tag ? getTag(product.tag) : null
 
@@ -126,7 +118,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <span className="product-price-original">${displayPrice.toFixed(2)}</span>
           {' '}
           <span className="product-price-discounted">${discountedDisplayPrice.toFixed(2)}</span>
-          <span className="product-price-save-badge">Save 20%</span>
+          <span className="product-price-save-badge">Save {discountPct('onetime')}%</span>
         </div>
         <p className="product-desc">{product.description}</p>
         <div className="product-meta">

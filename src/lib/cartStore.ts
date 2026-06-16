@@ -2,8 +2,9 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { discountedPrice, type PurchaseType } from './pricing'
 
-export type PurchaseType = 'subscribe' | 'onetime'
+export type { PurchaseType }
 
 export interface CartItem {
   productId: string
@@ -70,8 +71,7 @@ export const useCartStore = create<CartState>()(
       },
 
       updatePurchaseType: (productId, purchaseType, originalPrice) => {
-        const discount = purchaseType === 'subscribe' ? 0.40 : 0.20
-        const newPrice = +(originalPrice * (1 - discount)).toFixed(2)
+        const newPrice = discountedPrice(originalPrice, purchaseType)
         const newItems = get().items.map(i =>
           i.productId === productId ? { ...i, purchaseType, price: newPrice, originalPrice } : i
         )

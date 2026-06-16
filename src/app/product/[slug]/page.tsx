@@ -8,6 +8,7 @@ import ReviewSection from './ReviewSection'
 import ProductSocialProof from './ProductSocialProof'
 import { getCachedJson } from '@/lib/settings-cache'
 import { getProductIngredients } from '@/lib/product-ingredients'
+import { discountedPrice, discountPct } from '@/lib/pricing'
 
 type TagDef = { slug: string; label: string; emoji: string; color: string }
 
@@ -170,9 +171,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             <div className="product-detail-price">
               {product.variants.length > 1
-                ? <>From <span className="detail-price-original">${product.variants[0].price.toFixed(2)}</span> <span className="detail-price-discounted">${(product.variants[0].price * 0.60).toFixed(2)}</span></>
-                : <><span className="detail-price-original">${product.price.toFixed(2)}</span> <span className="detail-price-discounted">${(product.price * 0.60).toFixed(2)}</span></>}
-              <span className="detail-price-save">Save up to 40%</span>
+                ? <>From <span className="detail-price-original">${product.variants[0].price.toFixed(2)}</span> <span className="detail-price-discounted">${discountedPrice(product.variants[0].price, 'subscribe').toFixed(2)}</span></>
+                : <><span className="detail-price-original">${product.price.toFixed(2)}</span> <span className="detail-price-discounted">${discountedPrice(product.price, 'subscribe').toFixed(2)}</span></>}
+              <span className="detail-price-save">Save up to {discountPct('subscribe')}%</span>
             </div>
             <p className="product-detail-desc">{product.description}</p>
 

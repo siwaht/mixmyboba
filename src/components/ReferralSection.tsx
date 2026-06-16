@@ -13,35 +13,58 @@ export default function ReferralSection() {
     fetch('/api/referral').then(r => r.ok ? r.json() : null).then(setData).catch(() => {})
   }, [])
 
+  const copyText = async (text: string) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text)
+      } else {
+        // Fallback for non-secure contexts / older browsers
+        const ta = document.createElement('textarea')
+        ta.value = text
+        ta.style.position = 'fixed'
+        ta.style.opacity = '0'
+        document.body.appendChild(ta)
+        ta.focus()
+        ta.select()
+        document.execCommand('copy')
+        document.body.removeChild(ta)
+      }
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Clipboard blocked — leave UI unchanged rather than throwing
+    }
+  }
+
   const copyCode = () => {
     if (!data) return
-    navigator.clipboard.writeText(data.referralCode)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    copyText(data.referralCode)
   }
 
   const copyLink = () => {
     if (!data) return
-    navigator.clipboard.writeText(`${window.location.origin}/account?ref=${data.referralCode}`)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    copyText(`${window.location.origin}/account?ref=${data.referralCode}`)
   }
 
   const applyReferral = async () => {
     setApplyMsg('')
     setApplyError('')
     if (!refInput.trim()) return
-    const res = await fetch('/api/referral', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: refInput.trim() }),
-    })
-    const d = await res.json()
-    if (res.ok) {
-      setApplyMsg(`${d.message} Your coupon: ${d.couponCode}`)
-      setRefInput('')
-    } else {
-      setApplyError(d.error)
+    try {
+      const res = await fetch('/api/referral', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: refInput.trim() }),
+      })
+      const d = await res.json()
+      if (res.ok) {
+        setApplyMsg(`${d.message} Your coupon: ${d.couponCode}`)
+        setRefInput('')
+      } else {
+        setApplyError(d.error || 'That referral code could not be applied.')
+      }
+    } catch {
+      setApplyError('Something went wrong. Please try again.')
     }
   }
 
@@ -59,7 +82,7 @@ export default function ReferralSection() {
           <span className="referral-code-label">Your Code</span>
           <code className="referral-code-value">{data.referralCode}</code>
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <button className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }} onClick={copyCode}>
             {copied ? '✓ Copied' : '📋 Copy Code'}
           </button>
@@ -79,13 +102,13 @@ export default function ReferralSection() {
       {/* Apply someone else's code */}
       <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
         <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Have a referral code from a friend?</p>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <input
             className="form-input"
             value={refInput}
             onChange={e => setRefInput(e.target.value)}
             placeholder="Enter referral code"
-            style={{ flex: 1, fontSize: '0.85rem' }}
+            style={{ flex: '1 1 12rem', minWidth: 0, fontSize: '0.85rem' }}
           />
           <button className="btn btn-primary" style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }} onClick={applyReferral}>
             Apply

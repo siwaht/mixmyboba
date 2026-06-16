@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useCartStore } from '@/lib/cartStore'
 import { useToast } from '@/components/Toast'
-import type { PurchaseType } from '@/lib/cartStore'
+import { DISCOUNTS, discountedPrice, type PurchaseType } from '@/lib/pricing'
 
 interface Variant {
   id: string
@@ -18,11 +18,6 @@ interface Props {
   disabled?: boolean
 }
 
-const DISCOUNTS: Record<PurchaseType, { label: string; pct: number; badge: string }> = {
-  subscribe: { label: 'Subscribe and Save', pct: 40, badge: 'Save 40%' },
-  onetime:   { label: 'One-time purchase',  pct: 20, badge: 'Save 20%' },
-}
-
 export default function AddToCartButton({ product, variants = [], disabled }: Props) {
   const addItem = useCartStore(s => s.addItem)
   const showToast = useToast(s => s.show)
@@ -33,8 +28,7 @@ export default function AddToCartButton({ product, variants = [], disabled }: Pr
   const [purchaseType, setPurchaseType] = useState<PurchaseType>('subscribe')
 
   const basePrice = selectedVariant?.price ?? product.price
-  const discount = DISCOUNTS[purchaseType].pct / 100
-  const currentPrice = +(basePrice * (1 - discount)).toFixed(2)
+  const currentPrice = discountedPrice(basePrice, purchaseType)
   const outOfStock = disabled || (selectedVariant && selectedVariant.stock <= 0)
 
   const handleAdd = () => {

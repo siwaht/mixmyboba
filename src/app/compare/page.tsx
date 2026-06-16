@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCartStore } from '@/lib/cartStore'
+import { discountedPrice } from '@/lib/pricing'
 import { useToast } from '@/components/Toast'
 
 interface CompareProduct {
@@ -146,7 +147,7 @@ export default function ComparePage() {
                         className="btn btn-primary"
                         style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
                         onClick={() => {
-                          addItem({ productId: p.id, slug: p.slug, name: p.name, price: +(p.startingPrice * 0.80).toFixed(2), originalPrice: p.startingPrice, imageUrl: p.imageUrl, purchaseType: 'onetime' as const })
+                          addItem({ productId: p.id, slug: p.slug, name: p.name, price: discountedPrice(p.startingPrice, 'onetime'), originalPrice: p.startingPrice, imageUrl: p.imageUrl, purchaseType: 'onetime' as const })
                           showToast(`${p.name} added to cart`)
                         }}
                       >

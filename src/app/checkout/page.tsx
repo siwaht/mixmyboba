@@ -101,6 +101,16 @@ export default function CheckoutPage() {
   const shipping = subtotal >= 50 ? 0 : 5.99
   const total = Math.max(0, subtotal + shipping - discount)
 
+  // Track the subtotal a coupon was validated against so a stale discount is never shown.
+  const couponSubtotalRef = useRef<number | null>(null)
+  useEffect(() => {
+    if (appliedCoupon && couponSubtotalRef.current !== null && Math.abs(subtotal - couponSubtotalRef.current) > 0.001) {
+      setAppliedCoupon(null)
+      couponSubtotalRef.current = null
+      setCouponError('Your cart changed — please re-apply your coupon.')
+    }
+  }, [subtotal, appliedCoupon])
+
   const applyCoupon = async () => {
     setCouponError('')
     setCouponLoading(true)
@@ -114,8 +124,10 @@ export default function CheckoutPage() {
       if (!res.ok) {
         setCouponError(data.error)
         setAppliedCoupon(null)
+        couponSubtotalRef.current = null
       } else {
         setAppliedCoupon(data)
+        couponSubtotalRef.current = subtotal
         setCouponError('')
       }
     } catch {
@@ -127,6 +139,7 @@ export default function CheckoutPage() {
 
   const removeCoupon = () => {
     setAppliedCoupon(null)
+    couponSubtotalRef.current = null
     setCouponCode('')
     setCouponError('')
   }

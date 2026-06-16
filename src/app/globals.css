@@ -1412,33 +1412,40 @@ img { max-width: 100%; display: block; }
   margin-top: 0.5rem;
 }
 .cart-qty-controls button {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   cursor: pointer;
   border-radius: 50%;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
 }
 .cart-qty-controls button:hover { border-color: var(--accent-primary); background: var(--accent-subtle); }
-.cart-qty-controls span { font-size: 0.85rem; min-width: 20px; text-align: center; font-weight: 600; }
+.cart-qty-controls span { font-size: 0.9rem; min-width: 24px; text-align: center; font-weight: 600; }
 
 .cart-remove-btn {
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 0.75rem;
-  padding: 0.4rem;
-  transition: color var(--transition-fast);
+  font-size: 0.8rem;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color var(--transition-fast), background var(--transition-fast);
   flex-shrink: 0;
+  align-self: flex-start;
 }
-.cart-remove-btn:hover { color: var(--error); }
+.cart-remove-btn:hover { color: var(--error); background: var(--accent-subtle); }
 
 .cart-footer {
   padding: 1.25rem 1.5rem;
@@ -2847,4 +2854,19 @@ select.form-input { cursor: pointer; }
   .process-steps { grid-template-columns: 1fr; }
   .comparison-section h2 { font-size: 1.4rem; }
   .checkout-form, .checkout-summary { padding: 1rem; }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Stop the decorative marquees from scrolling for motion-sensitive users */
+  .trust-marquee-track { animation: none !important; transform: none !important; }
 }
