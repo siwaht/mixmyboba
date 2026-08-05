@@ -24,6 +24,28 @@ export function verifyToken(token: string) {
   }
 }
 
+/**
+ * Cookie options for the auth-token cookie.
+ *
+ * Over HTTPS (Replit preview, production) the app may be embedded in a
+ * cross-site iframe, where browsers reject cookies unless they are
+ * SameSite=None + Secure (+ Partitioned for Chrome's third-party cookie
+ * blocking). Over plain HTTP localhost we fall back to SameSite=Lax.
+ */
+export function authCookieOptions(request: { headers: { get(name: string): string | null }; nextUrl: { protocol: string } }) {
+  const isHttps =
+    request.headers.get('x-forwarded-proto') === 'https' ||
+    request.nextUrl.protocol === 'https:'
+  return {
+    httpOnly: true,
+    secure: isHttps || process.env.NODE_ENV === 'production',
+    sameSite: (isHttps ? 'none' : 'lax') as 'none' | 'lax',
+    ...(isHttps ? { partitioned: true } : {}),
+    maxAge: 60 * 60 * 24 * 7,
+    path: '/',
+  }
+}
+
 export async function getCurrentUser(request?: { headers: { get(name: string): string | null } }) {
   let token: string | undefined
 
