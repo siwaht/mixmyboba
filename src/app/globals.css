@@ -1039,7 +1039,7 @@ img { max-width: 100%; display: block; }
   transform: translateY(0);
 }
 
-.purity-badge {
+.servings-badge {
   position: absolute;
   top: 0.85rem;
   right: 0.85rem;
@@ -1056,7 +1056,7 @@ img { max-width: 100%; display: block; }
   z-index: 3;
   letter-spacing: 0.03em;
 }
-[data-theme="dark"] .purity-badge {
+[data-theme="dark"] .servings-badge {
   background: rgba(26, 21, 32, 0.85);
 }
 

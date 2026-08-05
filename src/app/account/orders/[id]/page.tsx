@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 
 interface OrderItem {
   id: string
   quantity: number
   price: number
+  basePrice: number
   variantLabel: string | null
+  purchaseType: string
   product: { name: string; slug: string; imageUrl: string }
 }
 
@@ -20,6 +22,7 @@ interface Order {
   shippingAddress: string
   subtotal: number
   shipping: number
+  tax: number
   total: number
   discount: number
   couponCode: string | null
@@ -33,12 +36,17 @@ const STATUS_STEPS = ['pending', 'paid', 'shipped', 'delivered']
 
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>()
+  const searchParams = useSearchParams()
+  // Guests reach this page straight from checkout with their email attached,
+  // since they have no account the order can be matched against.
+  const guestEmail = searchParams.get('email') || ''
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch(`/api/orders/${id}`)
+    const query = guestEmail ? `?email=${encodeURIComponent(guestEmail)}` : ''
+    fetch(`/api/orders/${id}${query}`)
       .then(r => {
         if (!r.ok) throw new Error(r.status === 403 ? 'You do not have permission to view this order.' : 'Order not found.')
         return r.json()
@@ -46,7 +54,7 @@ export default function OrderDetailPage() {
       .then(setOrder)
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
-  }, [id])
+  }, [id, guestEmail])
 
   if (loading) {
     return (
@@ -155,6 +163,11 @@ export default function OrderDetailPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
               <span>Shipping</span><span>{order.shipping > 0 ? `$${order.shipping.toFixed(2)}` : <span style={{ color: 'var(--success, #22c55e)' }}>Free</span>}</span>
             </div>
+            {order.tax > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
+                <span>Tax</span><span>${order.tax.toFixed(2)}</span>
+              </div>
+            )}
             <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600, fontSize: '1.05rem', paddingTop: '0.5rem', borderTop: '1px solid var(--border-color)' }}>
               <span>Total</span><span>${order.total.toFixed(2)}</span>
             </div>

@@ -5,7 +5,7 @@
     "links": [
       {
         "label": "Shop",
-        "href": "/#store"
+        "href": "/shop"
       },
       {
         "label": "Our Story",
@@ -18,6 +18,10 @@
       {
         "label": "Compare",
         "href": "/compare"
+      },
+      {
+        "label": "Contact",
+        "href": "/contact"
       }
     ]
   },
@@ -299,20 +303,24 @@
         "title": "Flavors",
         "links": [
           {
+            "label": "Shop All",
+            "href": "/shop"
+          },
+          {
             "label": "Classic Milk Tea",
-            "href": "/?category=Classic#store"
+            "href": "/shop?category=Classic"
           },
           {
             "label": "Matcha",
-            "href": "/?category=Matcha#store"
+            "href": "/shop?category=Matcha"
           },
           {
             "label": "Brown Sugar",
-            "href": "/?category=Brown+Sugar#store"
+            "href": "/shop?category=Brown+Sugar"
           },
           {
             "label": "Fruity",
-            "href": "/?category=Fruity#store"
+            "href": "/shop?category=Fruity"
           }
         ],
         "comingSoon": "Toppings — Coming Soon"
@@ -331,6 +339,10 @@
           {
             "label": "FAQ",
             "href": "/faq"
+          },
+          {
+            "label": "Contact Us",
+            "href": "/contact"
           },
           {
             "label": "Our Story",

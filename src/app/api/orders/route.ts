@@ -5,6 +5,7 @@ import { createOrderSchema } from '@/lib/validations'
 import { rateLimit, rateLimitCombo } from '@/lib/rate-limit'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
 import { emitWebhookEvent, getLowStockThreshold } from '@/lib/webhooks'
+import { buildQuote, type QuoteItemInput } from '@/lib/pricing-server'
 
 export async function POST(req: NextRequest) {
   // Rate limit: 5 orders per minute per IP
@@ -21,94 +22,45 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const { email, shippingAddress, phone, paymentMethod, items, notes, couponCode, shipping: clientShipping } = parsed.data
+  const { email, shippingAddress, phone, paymentMethod, items, notes, couponCode } = parsed.data
+  const normalisedEmail = email.trim().toLowerCase()
 
-  // Validate products exist and are active
-  // Deduplicate product IDs since multiple variants of the same product share one ID
-  const productIds = [...new Set(items.map((i: { productId: string }) => i.productId))]
-  const products = await prisma.product.findMany({
-    where: { id: { in: productIds }, active: true },
+  // Cash on delivery needs a contactable number for the courier.
+  if (paymentMethod === 'cod' && !phone?.trim()) {
+    return NextResponse.json(
+      { error: 'A phone number is required for cash on delivery orders' },
+      { status: 400 }
+    )
+  }
+
+  // Price the cart server-side. This is the same call the checkout page made to
+  // render its summary, so the customer is charged exactly what was displayed.
+  // `strictCoupon` makes an unusable code fail loudly rather than silently
+  // repricing the order at full price.
+  const quoted = await buildQuote({
+    items: items as QuoteItemInput[],
+    couponCode,
+    email: normalisedEmail,
+    strictCoupon: true,
   })
 
-  if (products.length !== productIds.length) {
-    return NextResponse.json({ error: 'One or more products not found or inactive' }, { status: 400 })
+  if (!quoted.ok) {
+    return NextResponse.json({ error: quoted.error }, { status: quoted.status })
   }
 
-  // Validate stock availability (aggregate quantities per product)
-  const productMap = new Map(products.map(p => [p.id, p]))
-  const aggregatedQty = new Map<string, number>()
-  for (const item of items as Array<{ productId: string; quantity: number }>) {
-    const product = productMap.get(item.productId)
-    if (!product) {
-      return NextResponse.json({ error: 'One or more products not found or inactive' }, { status: 400 })
-    }
-    if (item.quantity <= 0) {
-      return NextResponse.json({ error: `Invalid quantity for ${product.name}` }, { status: 400 })
-    }
-    aggregatedQty.set(item.productId, (aggregatedQty.get(item.productId) || 0) + item.quantity)
-  }
-  for (const [pid, totalQty] of aggregatedQty) {
-    const product = productMap.get(pid)!
-    if (product.stock < totalQty) {
-      return NextResponse.json(
-        { error: `Insufficient stock for ${product.name}. Available: ${product.stock}` },
-        { status: 400 }
-      )
-    }
-  }
+  const { lines, totals, coupon, stockIssues, productQuantities, variantQuantities } = quoted.quote
 
-  // Calculate totals using current DB prices (not client-submitted prices)
-  // When a variantLabel is provided, look up the variant's price from the DB
-  const variantsByProduct = new Map<string, Array<{ label: string; price: number }>>()
-  if (items.some((i: { variantLabel?: string }) => i.variantLabel)) {
-    const variants = await prisma.productVariant.findMany({
-      where: { productId: { in: productIds }, active: true },
-      select: { productId: true, label: true, price: true },
-    })
-    for (const v of variants) {
-      const list = variantsByProduct.get(v.productId) || []
-      list.push({ label: v.label, price: v.price })
-      variantsByProduct.set(v.productId, list)
-    }
-  }
-
-  let subtotal = 0
-  const orderItems = (items as Array<{ productId: string; quantity: number; variantLabel?: string }>).map(item => {
-    const product = productMap.get(item.productId)!
-    let price = product.price
-    // Use variant-specific price if a variant label was provided
-    if (item.variantLabel) {
-      const variants = variantsByProduct.get(item.productId)
-      const matchedVariant = variants?.find(v => v.label === item.variantLabel)
-      if (matchedVariant) {
-        price = matchedVariant.price
-      }
-    }
-    subtotal += price * item.quantity
-    return {
-      productId: item.productId,
-      quantity: item.quantity,
-      price,
-      variantLabel: item.variantLabel || null,
-    }
-  })
-
-  // Apply coupon if provided
-  let discount = 0
-  let appliedCoupon: string | null = null
-  if (couponCode) {
-    const coupon = await prisma.coupon.findUnique({ where: { code: couponCode.toUpperCase().trim() } })
-    if (coupon && coupon.active) {
-      const notExpired = !coupon.expiresAt || new Date() <= coupon.expiresAt
-      const hasUses = !coupon.maxUses || coupon.usedCount < coupon.maxUses
-      if (notExpired && hasUses && subtotal >= coupon.minOrder) {
-        discount = coupon.type === 'percent'
-          ? subtotal * (coupon.value / 100)
-          : Math.min(coupon.value, subtotal)
-        discount = Math.round(discount * 100) / 100
-        appliedCoupon = coupon.code
-      }
-    }
+  if (stockIssues.length > 0) {
+    const issue = stockIssues[0]
+    return NextResponse.json(
+      {
+        error:
+          issue.available > 0
+            ? `Only ${issue.available} left of ${issue.name}. Please reduce the quantity.`
+            : `${issue.name} just sold out.`,
+      },
+      { status: 409 }
+    )
   }
 
   const user = await getCurrentUser()
@@ -121,24 +73,34 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Create order and decrement stock in a transaction
   try {
     const order = await prisma.$transaction(async (tx) => {
-      // Decrement stock for each product (aggregate quantities per product)
-      for (const [pid, totalQty] of aggregatedQty) {
+      // Decrement product-level stock, guarding against a concurrent order that
+      // drained the shelf between the quote and this transaction.
+      for (const { productId, quantity } of productQuantities) {
         const updated = await tx.product.update({
-          where: { id: pid },
-          data: { stock: { decrement: totalQty } },
+          where: { id: productId },
+          data: { stock: { decrement: quantity } },
         })
         if (updated.stock < 0) {
           throw new Error(`Insufficient stock for ${updated.name}`)
         }
       }
 
-      // Increment coupon usage
-      if (appliedCoupon) {
+      // Decrement per-size stock as well, so variant inventory stays truthful.
+      for (const { variantId, quantity } of variantQuantities) {
+        const updated = await tx.productVariant.update({
+          where: { id: variantId },
+          data: { stock: { decrement: quantity } },
+        })
+        if (updated.stock < 0) {
+          throw new Error(`Insufficient stock for ${updated.label}`)
+        }
+      }
+
+      if (coupon) {
         await tx.coupon.update({
-          where: { code: appliedCoupon },
+          where: { code: coupon.code },
           data: { usedCount: { increment: 1 } },
         })
       }
@@ -146,17 +108,28 @@ export async function POST(req: NextRequest) {
       return tx.order.create({
         data: {
           userId: user?.id || null,
-          email: email.trim().toLowerCase(),
+          email: normalisedEmail,
           phone: phone?.trim() || null,
           shippingAddress: shippingAddress.trim(),
-          paymentMethod: paymentMethod || 'crypto',
-          subtotal,
-          shipping: subtotal >= 50 ? 0 : 5.99,
-          total: Math.max(0, subtotal - discount + (subtotal >= 50 ? 0 : 5.99)),
-          discount,
-          couponCode: appliedCoupon,
+          paymentMethod,
+          subtotal: totals.subtotal,
+          shipping: totals.shipping,
+          tax: totals.tax,
+          total: totals.total,
+          discount: totals.discount,
+          couponCode: coupon?.code ?? null,
           notes: notes?.trim() || null,
-          items: { create: orderItems },
+          items: {
+            create: lines.map(line => ({
+              productId: line.productId,
+              quantity: line.quantity,
+              price: line.unitPrice,
+              basePrice: line.basePrice,
+              variantId: line.variantId,
+              variantLabel: line.variantLabel,
+              purchaseType: line.purchaseType,
+            })),
+          },
         },
         include: { items: { include: { product: true } } },
       })
@@ -170,6 +143,7 @@ export async function POST(req: NextRequest) {
       subtotal: order.subtotal,
       discount: order.discount,
       shipping: order.shipping,
+      tax: order.tax,
       paymentMethod: order.paymentMethod,
       status: order.status,
       couponCode: order.couponCode,
@@ -178,7 +152,10 @@ export async function POST(req: NextRequest) {
         productName: i.product.name,
         quantity: i.quantity,
         price: i.price,
+        basePrice: i.basePrice,
+        variantId: i.variantId,
         variantLabel: i.variantLabel,
+        purchaseType: i.purchaseType,
       })),
       shippingAddress: order.shippingAddress,
       createdAt: order.createdAt.toISOString(),
@@ -186,9 +163,9 @@ export async function POST(req: NextRequest) {
 
     // 🔔 Webhook: check for low stock / out of stock after order
     const threshold = getLowStockThreshold()
-    for (const [pid] of aggregatedQty) {
+    for (const { productId } of productQuantities) {
       const product = await prisma.product.findUnique({
-        where: { id: pid },
+        where: { id: productId },
         select: { id: true, name: true, slug: true, stock: true, category: true },
       })
       if (product) {

@@ -15,7 +15,8 @@ interface Product {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  /** Servings per bag, e.g. "20+ Servings". */
+  servings: string
   tag?: string | null
   avgRating?: number | null
   reviewCount?: number
@@ -86,7 +87,9 @@ export default function ProductCard({ product }: { product: Product }) {
           placeholder="blur"
           blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlNGRmIi8+PC9zdmc+"
         />
-        <span className="purity-badge" aria-label={`${product.purity}`}>{product.purity}</span>
+        {product.servings && (
+          <span className="servings-badge" aria-label={`${product.servings} per bag`}>{product.servings}</span>
+        )}
         {tagInfo && (
           <span
             className="product-tag"

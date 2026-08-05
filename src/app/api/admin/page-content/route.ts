@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '@/lib/auth'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { join } from 'path'
@@ -43,3 +43,4 @@ export async function PUT(req: NextRequest) {
   writeFileSync(CONTENT_PATH, JSON.stringify(data, null, 2))
   return NextResponse.json(data)
 }
+

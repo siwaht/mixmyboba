@@ -13,12 +13,14 @@ import CouponsTab from './CouponsTab'
 import PagesTab from './PagesTab'
 import McpTab from './McpTab'
 import WebhooksTab from './WebhooksTab'
+import ReviewsTab from './ReviewsTab'
 
 // ─── Types ───
 interface Product {
   id: string; slug: string; name: string; price: number; description: string
-  imageUrl: string; category: string; purity: string; stock: number; active: boolean
+  imageUrl: string; category: string; servings: string; stock: number; active: boolean
   tag?: string | null
+  variants?: { id: string; label: string; price: number; stock: number; active: boolean }[]
 }
 
 interface OrderItem { product: { name: string }; quantity: number; price: number }
@@ -60,14 +62,15 @@ interface SiteSettings {
   announcementLinkText?: string
 }
 
-type Tab = 'dashboard' | 'products' | 'orders' | 'customers' | 'inventory' | 'payments' | 'coupons' | 'content' | 'pages' | 'webhooks' | 'mcp'
+type Tab = 'dashboard' | 'products' | 'orders' | 'customers' | 'inventory' | 'reviews' | 'payments' | 'coupons' | 'content' | 'pages' | 'webhooks' | 'mcp'
 
 const TABS: { key: Tab; label: string; icon: string }[] = [
   { key: 'dashboard', label: 'Dashboard', icon: '📊' },
   { key: 'orders', label: 'Orders', icon: '📦' },
-  { key: 'products', label: 'Products', icon: '🧪' },
+  { key: 'products', label: 'Products', icon: '🧋' },
   { key: 'customers', label: 'Customers', icon: '👥' },
   { key: 'inventory', label: 'Inventory', icon: '📋' },
+  { key: 'reviews', label: 'Reviews', icon: '⭐' },
   { key: 'payments', label: 'Payments', icon: '💳' },
   { key: 'coupons', label: 'Coupons', icon: '🏷️' },
   { key: 'content', label: 'Site Content', icon: '✏️' },
@@ -75,8 +78,6 @@ const TABS: { key: Tab; label: string; icon: string }[] = [
   { key: 'webhooks', label: 'Webhooks', icon: '🔔' },
   { key: 'mcp', label: 'MCP', icon: '🤖' },
 ]
-
-const STATUSES = ['pending', 'paid', 'shipped', 'delivered', 'cancelled']
 
 export default function AdminPage() {
   const [tab, setTab] = useState<Tab>('dashboard')
@@ -145,7 +146,7 @@ export default function AdminPage() {
   const [showProductForm, setShowProductForm] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [productForm, setProductForm] = useState({
-    slug: '', name: '', price: '', description: '', imageUrl: '', category: '', purity: '', stock: '100', tag: '',
+    slug: '', name: '', price: '', description: '', imageUrl: '', category: '', servings: '', stock: '100', tag: '',
   })
   const [productFormError, setProductFormError] = useState('')
 
@@ -223,7 +224,7 @@ export default function AdminPage() {
 
   // ─── Product CRUD ───
   const resetProductForm = () => {
-    setProductForm({ slug: '', name: '', price: '', description: '', imageUrl: '', category: '', purity: '', stock: '100', tag: '' })
+    setProductForm({ slug: '', name: '', price: '', description: '', imageUrl: '', category: '', servings: '', stock: '100', tag: '' })
     setEditingProduct(null)
     setShowProductForm(false)
     setProductFormError('')
@@ -233,7 +234,7 @@ export default function AdminPage() {
     setEditingProduct(p)
     setProductForm({
       slug: p.slug, name: p.name, price: String(p.price), description: p.description,
-      imageUrl: p.imageUrl, category: p.category, purity: p.purity, stock: String(p.stock),
+      imageUrl: p.imageUrl, category: p.category, servings: p.servings, stock: String(p.stock),
       tag: p.tag || '',
     })
     setShowProductForm(true)
@@ -242,36 +243,64 @@ export default function AdminPage() {
   const handleProductSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setProductFormError('')
-    const body = { ...productForm, price: parseFloat(productForm.price), stock: parseInt(productForm.stock), tag: productForm.tag || null }
 
-    if (editingProduct) {
-      const res = await fetch(`/api/admin/products/${editingProduct.id}`, {
-        method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
-      })
-      if (!res.ok) { setProductFormError('Failed to update'); return }
-      const updated = await res.json()
-      setProducts(prev => prev.map(p => p.id === updated.id ? updated : p))
-    } else {
-      const res = await fetch('/api/admin/products', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
-      })
-      if (!res.ok) { const d = await res.json(); setProductFormError(d.error || 'Failed'); return }
-      const product = await res.json()
-      setProducts(prev => [product, ...prev])
+    const price = parseFloat(productForm.price)
+    const stock = parseInt(productForm.stock, 10)
+    if (!Number.isFinite(price) || price <= 0) {
+      setProductFormError('Price must be a number greater than 0.')
+      return
     }
+    if (!Number.isInteger(stock) || stock < 0) {
+      setProductFormError('Stock must be a whole number of 0 or more.')
+      return
+    }
+
+    const body = { ...productForm, price, stock, tag: productForm.tag || null }
+    const url = editingProduct ? `/api/admin/products/${editingProduct.id}` : '/api/admin/products'
+    const method = editingProduct ? 'PATCH' : 'POST'
+
+    const res = await fetch(url, {
+      method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+    })
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}))
+      setProductFormError(d.error || `Failed to ${editingProduct ? 'update' : 'create'} product.`)
+      return
+    }
+
+    const saved = await res.json()
+    setProducts(prev =>
+      editingProduct ? prev.map(p => (p.id === saved.id ? saved : p)) : [saved, ...prev]
+    )
     resetProductForm()
   }
 
+  /** Reads `{ error }` out of a failed response, falling back to a default. */
+  const errorFrom = async (res: Response, fallback: string) => {
+    const data = await res.json().catch(() => ({}))
+    return (data as { error?: string }).error || fallback
+  }
+
   const toggleProductActive = async (id: string, active: boolean) => {
-    await fetch(`/api/admin/products/${id}`, {
+    const res = await fetch(`/api/admin/products/${id}`, {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active: !active }),
     })
-    setProducts(prev => prev.map(p => p.id === id ? { ...p, active: !active } : p))
+    if (!res.ok) {
+      setError(await errorFrom(res, 'Could not change the product status.'))
+      return
+    }
+    const updated = await res.json()
+    setProducts(prev => prev.map(p => (p.id === id ? updated : p)))
   }
 
   const deleteProduct = async (id: string) => {
-    if (!confirm('Delete this product permanently?')) return
-    await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+    if (!confirm('Delete this product permanently? Products that have already been ordered can only be deactivated.')) return
+    const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+    if (!res.ok) {
+      setError(await errorFrom(res, 'Could not delete the product.'))
+      return
+    }
+    setError('')
     setProducts(prev => prev.filter(p => p.id !== id))
   }
 
@@ -282,45 +311,79 @@ export default function AdminPage() {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }),
     })
     if (res.ok) {
+      setError('')
       setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o))
-      const s = await fetch('/api/admin/stats').then(r => r.json())
-      setStats(s)
+      // Cancelling returns stock and frees a coupon use, so the dashboard
+      // figures need refreshing rather than patching locally.
+      const statsRes = await fetch('/api/admin/stats')
+      if (statsRes.ok) setStats(await statsRes.json())
+    } else {
+      setError(await errorFrom(res, 'Could not update the order status.'))
     }
     setUpdatingOrder(null)
   }
 
   // ─── Customer actions ───
   const updateCustomerRole = async (id: string, role: string) => {
-    await fetch(`/api/admin/customers/${id}`, {
+    const res = await fetch(`/api/admin/customers/${id}`, {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ role }),
     })
+    if (!res.ok) {
+      setError(await errorFrom(res, 'Could not change the customer role.'))
+      return
+    }
+    setError('')
     setCustomers(prev => prev.map(c => c.id === id ? { ...c, role } : c))
   }
 
   // ─── Inventory actions ───
   const updateStock = async (id: string, stock: number) => {
-    await fetch(`/api/admin/products/${id}`, {
+    const res = await fetch(`/api/admin/products/${id}`, {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ stock }),
     })
+    if (!res.ok) {
+      setError(await errorFrom(res, 'Could not update stock.'))
+      return
+    }
+    setError('')
     setInventory(prev => prev.map(i => i.id === id ? { ...i, stock } : i))
+    setProducts(prev => prev.map(p => (p.id === id ? { ...p, stock } : p)))
     setEditingStock(null)
+  }
+
+  /** Reflects a completed bulk stock change in both inventory and product views. */
+  const applyBulkStock = (updates: { id: string; stock: number }[]) => {
+    const map = new Map(updates.map(u => [u.id, u.stock]))
+    setError('')
+    setInventory(prev => prev.map(i => (map.has(i.id) ? { ...i, stock: map.get(i.id)! } : i)))
+    setProducts(prev => prev.map(p => (map.has(p.id) ? { ...p, stock: map.get(p.id)! } : p)))
   }
 
   // ─── Settings actions ───
   const saveSettings = async () => {
     if (!settings) return
-    await fetch('/api/admin/settings', {
+    const res = await fetch('/api/admin/settings', {
       method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings),
     })
+    if (!res.ok) {
+      setError(await errorFrom(res, 'Could not save site content.'))
+      return
+    }
+    setError('')
     setSettingsSaved(true)
     setTimeout(() => setSettingsSaved(false), 2000)
   }
 
   const savePageContent = async () => {
     if (!pageContent) return
-    await fetch('/api/admin/page-content', {
+    const res = await fetch('/api/admin/page-content', {
       method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pageContent),
     })
+    if (!res.ok) {
+      setError(await errorFrom(res, 'Could not save page content.'))
+      return
+    }
+    setError('')
     setPagesSaved(true)
     setTimeout(() => setPagesSaved(false), 2000)
   }
@@ -453,6 +516,28 @@ export default function AdminPage() {
         </div>
 
         <div className="admin-content">
+          {error && (
+            <div
+              role="alert"
+              style={{
+                display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
+                padding: '0.75rem 1rem', marginBottom: '1rem', borderRadius: 8,
+                background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)',
+                color: 'var(--error, #ef4444)', fontSize: '0.85rem',
+              }}
+            >
+              <span aria-hidden="true">⚠️</span>
+              <span style={{ flex: 1 }}>{error}</span>
+              <button
+                onClick={() => setError('')}
+                aria-label="Dismiss error"
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '0.9rem' }}
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           {tabLoading && (
             <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem 0' }}>
               <div className="loading-spinner" aria-label="Loading tab data" />
@@ -513,6 +598,8 @@ export default function AdminPage() {
               editingStock={editingStock}
               setEditingStock={setEditingStock}
               onUpdateStock={updateStock}
+              onBulkUpdated={applyBulkStock}
+              onError={setError}
             />
           )}
 
@@ -520,6 +607,9 @@ export default function AdminPage() {
           {tab === 'payments' && <PaymentsTab stats={stats} orders={orders} loadOrders={() => {
             fetch('/api/admin/orders').then(r => r.json()).then(setOrders)
           }} />}
+
+          {/* ═══ REVIEWS ═══ */}
+          {tab === 'reviews' && <ReviewsTab />}
 
           {/* ═══ COUPONS ═══ */}
           {tab === 'coupons' && <CouponsTab />}

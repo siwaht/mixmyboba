@@ -1061,12 +1061,9 @@ export const ProductScalarFieldEnum = {
   description: 'description',
   imageUrl: 'imageUrl',
   category: 'category',
-  purity: 'purity',
+  servings: 'servings',
   stock: 'stock',
   active: 'active',
-  molecularWeight: 'molecularWeight',
-  sequence: 'sequence',
-  casNumber: 'casNumber',
   storageTemp: 'storageTemp',
   form: 'form',
   tag: 'tag',
@@ -1097,7 +1094,7 @@ export const COAScalarFieldEnum = {
   batchNumber: 'batchNumber',
   labName: 'labName',
   testDate: 'testDate',
-  purityResult: 'purityResult',
+  result: 'result',
   fileUrl: 'fileUrl',
   createdAt: 'createdAt'
 } as const
@@ -1148,8 +1145,10 @@ export const OrderScalarFieldEnum = {
   shippingAddress: 'shippingAddress',
   subtotal: 'subtotal',
   shipping: 'shipping',
+  tax: 'tax',
   total: 'total',
   discount: 'discount',
+  stockRestored: 'stockRestored',
   couponCode: 'couponCode',
   notes: 'notes',
   createdAt: 'createdAt',
@@ -1165,7 +1164,10 @@ export const OrderItemScalarFieldEnum = {
   productId: 'productId',
   quantity: 'quantity',
   price: 'price',
-  variantLabel: 'variantLabel'
+  basePrice: 'basePrice',
+  variantId: 'variantId',
+  variantLabel: 'variantLabel',
+  purchaseType: 'purchaseType'
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]

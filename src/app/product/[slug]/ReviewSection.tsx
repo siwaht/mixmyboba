@@ -27,7 +27,7 @@ function Stars({ rating, size = '1rem' }: { rating: number; size?: string }) {
   )
 }
 
-export default function ReviewSection({ productId, reviews: initialReviews, avgRating: initialAvgRating, reviewCount: initialReviewCount }: Props) {
+export default function ReviewSection({ productId, reviews: initialReviews, avgRating: initialAvgRating }: Props) {
   const [reviews, setReviews] = useState(initialReviews)
   const [showForm, setShowForm] = useState(false)
   const [rating, setRating] = useState(5)

@@ -1,88 +1,22 @@
 /**
- * Bug Condition Exploration Test — FIRSTSIP Per-Customer Usage Limit
+ * Per-customer coupon limits.
  *
- * This test mirrors the CURRENT validation logic from route.ts and encodes
- * the EXPECTED behavior: a coupon with maxUsesPerCustomer=1 should be
- * rejected when the customer has already used it.
+ * This file used to assert against a local copy of the route's validation
+ * logic, so it could pass while the shipped code was broken. It now imports the
+ * real `evaluateCoupon`, which is the same function used by both
+ * `/api/coupons/validate` (preview) and `/api/orders` (charge) — the second of
+ * which previously skipped the per-customer check entirely, letting a shopper
+ * bypass a one-per-customer cap by posting straight to the order endpoint.
  *
- * On UNFIXED code, the validation function has no concept of per-customer
- * limits, so it will accept the coupon — causing this test to FAIL.
- * That failure is SUCCESS for this task: it proves the bug exists.
- *
- * Validates: Requirements 1.1, 1.3, 2.1, 2.3
+ * Validates: Requirements 1.1, 1.3, 2.1, 2.3, 3.1, 3.2, 3.3, 3.4
  */
 import { describe, it, expect } from 'vitest'
 import fc from 'fast-check'
+import { evaluateCoupon, type CouponRule } from '@/lib/pricing'
 
-// ── Types mirroring the Coupon model ────────────────────────────────────────
+// ── Test data mirroring the seeded coupons ──
 
-interface Coupon {
-  code: string
-  type: 'percent' | 'fixed'
-  value: number
-  minOrder: number
-  maxUses: number | null
-  usedCount: number
-  active: boolean
-  expiresAt: Date | null
-  maxUsesPerCustomer?: number | null // exists in schema after fix; absent before
-}
-
-interface ValidationInput {
-  code: string
-  subtotal: number
-  email?: string
-}
-
-interface ValidationResult {
-  success: boolean
-  error?: string
-  discount?: number
-}
-
-// ── Mirror of the FIXED validation logic from route.ts ──────────────────────
-// This function replicates the fixed route logic including per-customer usage check.
-
-function validateCoupon(
-  coupon: Coupon | null,
-  input: ValidationInput,
-  customerPriorUses: number = 0,
-): ValidationResult {
-  if (!coupon || !coupon.active) {
-    return { success: false, error: 'Invalid coupon code' }
-  }
-
-  if (coupon.expiresAt && new Date() > coupon.expiresAt) {
-    return { success: false, error: 'Coupon has expired' }
-  }
-
-  if (coupon.maxUses && coupon.usedCount >= coupon.maxUses) {
-    return { success: false, error: 'Coupon usage limit reached' }
-  }
-
-  // Per-customer usage check (the fix)
-  if (coupon.maxUsesPerCustomer && customerPriorUses >= coupon.maxUsesPerCustomer) {
-    return { success: false, error: "You've already used this coupon" }
-  }
-
-  if (input.subtotal < coupon.minOrder) {
-    return { success: false, error: `Minimum order of ${coupon.minOrder.toFixed(2)} required` }
-  }
-
-  const discount =
-    coupon.type === 'percent'
-      ? input.subtotal * (coupon.value / 100)
-      : Math.min(coupon.value, input.subtotal)
-
-  return {
-    success: true,
-    discount: Math.round(discount * 100) / 100,
-  }
-}
-
-// ── Test Data ───────────────────────────────────────────────────────────────
-
-const FIRSTSIP_COUPON: Coupon = {
+const FIRSTSIP_COUPON: CouponRule = {
   code: 'FIRSTSIP',
   type: 'percent',
   value: 15,
@@ -91,73 +25,10 @@ const FIRSTSIP_COUPON: Coupon = {
   usedCount: 127,
   active: true,
   expiresAt: null,
-  maxUsesPerCustomer: 1, // intended: one use per customer
+  maxUsesPerCustomer: 1, // one use per customer
 }
 
-// ── Tests ───────────────────────────────────────────────────────────────────
-
-describe('Bug Condition: FIRSTSIP per-customer usage limit', () => {
-  it('should REJECT FIRSTSIP when customer has already used it (prior uses = 1, maxUsesPerCustomer = 1)', () => {
-    /**
-     * **Validates: Requirements 1.1, 2.1, 2.3**
-     *
-     * sarah.c@gmail.com already has an order with couponCode = "FIRSTSIP" in seed data.
-     * With maxUsesPerCustomer = 1, the validation should reject this coupon.
-     *
-     * On UNFIXED code: the validateCoupon function ignores customerPriorUses
-     * entirely, so it returns success: true — this assertion FAILS, proving the bug.
-     */
-    const result = validateCoupon(
-      FIRSTSIP_COUPON,
-      { code: 'FIRSTSIP', subtotal: 30, email: 'sarah.c@gmail.com' },
-      1, // sarah.c@gmail.com has 1 prior order with FIRSTSIP
-    )
-
-    // Expected behavior: coupon should be rejected
-    expect(result.success).toBe(false)
-    expect(result.error).toBeDefined()
-  })
-
-  it('should REJECT FIRSTSIP when customer has used it multiple times (prior uses = 3, maxUsesPerCustomer = 1)', () => {
-    /**
-     * **Validates: Requirements 1.1, 2.1**
-     *
-     * Even more egregious case: customer has used FIRSTSIP 3 times.
-     * Should definitely be rejected.
-     */
-    const result = validateCoupon(
-      FIRSTSIP_COUPON,
-      { code: 'FIRSTSIP', subtotal: 50, email: 'repeat.abuser@gmail.com' },
-      3,
-    )
-
-    expect(result.success).toBe(false)
-    expect(result.error).toBeDefined()
-  })
-
-  it('should ACCEPT FIRSTSIP for a first-time customer (prior uses = 0)', () => {
-    /**
-     * **Validates: Requirements 3.1**
-     *
-     * Baseline sanity check: a new customer with zero prior uses should be accepted.
-     * This test should PASS on both unfixed and fixed code.
-     */
-    const result = validateCoupon(
-      FIRSTSIP_COUPON,
-      { code: 'FIRSTSIP', subtotal: 30, email: 'brand.new@example.com' },
-      0,
-    )
-
-    expect(result.success).toBe(true)
-    expect(result.discount).toBe(4.5) // 15% of 30
-  })
-})
-
-
-// ── Preservation Test Data ──────────────────────────────────────────────────
-
-/** Coupons with maxUsesPerCustomer = null (no per-customer limit) */
-const BOBA20_COUPON: Coupon = {
+const BOBA20_COUPON: CouponRule = {
   code: 'BOBA20',
   type: 'percent',
   value: 20,
@@ -169,7 +40,7 @@ const BOBA20_COUPON: Coupon = {
   maxUsesPerCustomer: null,
 }
 
-const SAVE10_COUPON: Coupon = {
+const SAVE10_COUPON: CouponRule = {
   code: 'SAVE10',
   type: 'fixed',
   value: 10,
@@ -181,7 +52,7 @@ const SAVE10_COUPON: Coupon = {
   maxUsesPerCustomer: null,
 }
 
-const INACTIVE_COUPON: Coupon = {
+const INACTIVE_COUPON: CouponRule = {
   code: 'OLDCODE',
   type: 'percent',
   value: 10,
@@ -195,127 +66,133 @@ const INACTIVE_COUPON: Coupon = {
 
 const NULL_PER_CUSTOMER_COUPONS = [BOBA20_COUPON, SAVE10_COUPON]
 
-// ── Preservation Property Tests ─────────────────────────────────────────────
+// ── Per-customer cap ──
 
-/**
- * Preservation Property Tests — Existing Coupon Validation Unchanged
- *
- * These tests capture the CURRENT behavior of the validation logic on unfixed code.
- * They MUST PASS on unfixed code to establish the baseline, and MUST continue
- * to pass after the fix is applied.
- *
- * **Validates: Requirements 3.1, 3.2, 3.3, 3.4**
- */
-describe('Preservation: Existing Coupon Validation Unchanged', () => {
-  it('property: coupons with maxUsesPerCustomer=null accept any customer regardless of prior uses', () => {
+describe('FIRSTSIP per-customer usage limit', () => {
+  it('rejects the coupon when the customer has already redeemed it', () => {
     /**
-     * **Validates: Requirements 3.2, 3.4**
+     * **Validates: Requirements 1.1, 2.1, 2.3**
      *
-     * For coupons without a per-customer limit, any email should be accepted
-     * when other checks pass (active, not expired, global limit not reached, minOrder met).
+     * sarah.c@gmail.com already has a seeded order carrying couponCode
+     * "FIRSTSIP". With maxUsesPerCustomer = 1 the code must be refused.
      */
-    const emailArb = fc.emailAddress()
+    const result = evaluateCoupon(FIRSTSIP_COUPON, { subtotal: 30, priorCustomerUses: 1 })
+
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.reason).toBe('customer_limit_reached')
+      expect(result.error).toBeTruthy()
+    }
+  })
+
+  it('rejects the coupon after repeated redemptions', () => {
+    /** **Validates: Requirements 1.1, 2.1** */
+    const result = evaluateCoupon(FIRSTSIP_COUPON, { subtotal: 50, priorCustomerUses: 3 })
+    expect(result.ok).toBe(false)
+  })
+
+  it('accepts the coupon for a first-time customer', () => {
+    /** **Validates: Requirements 3.1** */
+    const result = evaluateCoupon(FIRSTSIP_COUPON, { subtotal: 30, priorCustomerUses: 0 })
+
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.discount).toBe(4.5) // 15% of 30
+  })
+
+  it('asks for an email before a capped coupon can be evaluated', () => {
+    /**
+     * **Validates: Requirements 1.3**
+     *
+     * Prior uses are counted by email, so a capped coupon cannot be honoured
+     * anonymously — the checkout surfaces this as a prompt to fill in the email.
+     */
+    const result = evaluateCoupon(FIRSTSIP_COUPON, { subtotal: 30, hasEmail: false })
+
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.reason).toBe('email_required')
+  })
+})
+
+// ── Preservation: everything else behaves as before ──
+
+describe('Preservation: existing coupon validation unchanged', () => {
+  it('property: coupons without a per-customer cap ignore prior uses', () => {
+    /** **Validates: Requirements 3.2, 3.4** */
     const couponArb = fc.constantFrom(...NULL_PER_CUSTOMER_COUPONS)
-    // Generate subtotals that meet the coupon's minOrder requirement
     const subtotalArb = fc.double({ min: 50, max: 500, noNaN: true })
+    const priorUsesArb = fc.integer({ min: 0, max: 50 })
 
     fc.assert(
-      fc.property(couponArb, emailArb, subtotalArb, (coupon, email, subtotal) => {
-        // Ensure subtotal meets this coupon's minOrder
-        if (subtotal < coupon.minOrder) return // skip — tested separately
-        const result = validateCoupon(coupon, { code: coupon.code, subtotal, email })
-        expect(result.success).toBe(true)
-        expect(result.discount).toBeDefined()
+      fc.property(couponArb, subtotalArb, priorUsesArb, (coupon, subtotal, priorCustomerUses) => {
+        if (subtotal < coupon.minOrder) return
+        const result = evaluateCoupon(coupon, { subtotal, priorCustomerUses })
+        expect(result.ok).toBe(true)
       }),
-      { numRuns: 200 },
+      { numRuns: 200 }
     )
   })
 
-  it('property: invalid coupon codes (null coupon) always return error', () => {
-    /**
-     * **Validates: Requirements 3.3**
-     *
-     * When the coupon lookup returns null (code not found), the validation
-     * should always return an error regardless of email or subtotal.
-     */
-    const subtotalArb = fc.double({ min: 0.01, max: 1000, noNaN: true })
-    const emailArb = fc.emailAddress()
-
+  it('property: an unknown code always fails with a 404', () => {
+    /** **Validates: Requirements 3.3** */
     fc.assert(
-      fc.property(subtotalArb, emailArb, (subtotal, email) => {
-        const result = validateCoupon(null, { code: 'INVALIDCODE', subtotal, email })
-        expect(result.success).toBe(false)
-        expect(result.error).toBe('Invalid coupon code')
+      fc.property(fc.double({ min: 0.01, max: 1000, noNaN: true }), subtotal => {
+        const result = evaluateCoupon(null, { subtotal })
+        expect(result.ok).toBe(false)
+        if (!result.ok) {
+          expect(result.error).toBe('Invalid coupon code')
+          expect(result.status).toBe(404)
+        }
       }),
-      { numRuns: 100 },
+      { numRuns: 100 }
     )
   })
 
-  it('property: inactive coupons always return error', () => {
-    /**
-     * **Validates: Requirements 3.3**
-     *
-     * Inactive coupons should always be rejected regardless of subtotal or email.
-     */
-    const subtotalArb = fc.double({ min: 0.01, max: 1000, noNaN: true })
-    const emailArb = fc.emailAddress()
-
+  it('property: inactive coupons always fail', () => {
+    /** **Validates: Requirements 3.3** */
     fc.assert(
-      fc.property(subtotalArb, emailArb, (subtotal, email) => {
-        const result = validateCoupon(INACTIVE_COUPON, { code: INACTIVE_COUPON.code, subtotal, email })
-        expect(result.success).toBe(false)
-        expect(result.error).toBe('Invalid coupon code')
+      fc.property(fc.double({ min: 0.01, max: 1000, noNaN: true }), subtotal => {
+        const result = evaluateCoupon(INACTIVE_COUPON, { subtotal })
+        expect(result.ok).toBe(false)
+        if (!result.ok) expect(result.error).toBe('Invalid coupon code')
       }),
-      { numRuns: 100 },
+      { numRuns: 100 }
     )
   })
 
-  it('property: subtotals below minOrder always return error', () => {
-    /**
-     * **Validates: Requirements 3.3**
-     *
-     * When the subtotal is below the coupon's minOrder threshold,
-     * the validation should reject regardless of email.
-     */
-    const emailArb = fc.emailAddress()
-    // BOBA20 has minOrder=50, generate subtotals strictly below that
-    const subtotalArb = fc.double({ min: 0.01, max: 49.99, noNaN: true })
-
+  it('property: subtotals below minOrder always fail', () => {
+    /** **Validates: Requirements 3.3** */
     fc.assert(
-      fc.property(subtotalArb, emailArb, (subtotal, email) => {
-        const result = validateCoupon(BOBA20_COUPON, { code: 'BOBA20', subtotal, email })
-        expect(result.success).toBe(false)
-        expect(result.error).toContain('Minimum order')
+      fc.property(fc.double({ min: 0.01, max: 49.99, noNaN: true }), subtotal => {
+        const result = evaluateCoupon(BOBA20_COUPON, { subtotal })
+        expect(result.ok).toBe(false)
+        if (!result.ok) {
+          expect(result.reason).toBe('min_order')
+          expect(result.error).toContain('Minimum order')
+        }
       }),
-      { numRuns: 100 },
+      { numRuns: 100 }
     )
   })
 
-  it('property: discount calculation — percent type = subtotal * (value/100), fixed type = min(value, subtotal)', () => {
-    /**
-     * **Validates: Requirements 3.3**
-     *
-     * The discount calculation must remain identical:
-     * - percent type: subtotal * (value / 100)
-     * - fixed type: min(value, subtotal)
-     */
+  it('property: percent discounts scale with subtotal, fixed discounts cap at it', () => {
+    /** **Validates: Requirements 3.3** */
     const couponArb = fc.constantFrom(...NULL_PER_CUSTOMER_COUPONS)
     const subtotalArb = fc.double({ min: 50, max: 500, noNaN: true })
 
     fc.assert(
       fc.property(couponArb, subtotalArb, (coupon, subtotal) => {
-        if (subtotal < coupon.minOrder) return // skip — tested separately
-        const result = validateCoupon(coupon, { code: coupon.code, subtotal })
-        expect(result.success).toBe(true)
+        if (subtotal < coupon.minOrder) return
+        const result = evaluateCoupon(coupon, { subtotal })
+        expect(result.ok).toBe(true)
 
-        const expectedDiscount =
+        const expected =
           coupon.type === 'percent'
             ? Math.round(subtotal * (coupon.value / 100) * 100) / 100
             : Math.round(Math.min(coupon.value, subtotal) * 100) / 100
 
-        expect(result.discount).toBe(expectedDiscount)
+        if (result.ok) expect(result.discount).toBeCloseTo(expected, 2)
       }),
-      { numRuns: 200 },
+      { numRuns: 200 }
     )
   })
 })

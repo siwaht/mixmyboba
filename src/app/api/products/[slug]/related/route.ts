@@ -25,7 +25,7 @@ export async function GET(
     // Fallback: return products from same category
     const related = await prisma.product.findMany({
       where: { category: product.category, id: { not: id }, active: true },
-      select: { id: true, slug: true, name: true, price: true, imageUrl: true, purity: true, category: true },
+      select: { id: true, slug: true, name: true, price: true, imageUrl: true, servings: true, category: true },
       take: 4,
     })
     return NextResponse.json(related)
@@ -46,7 +46,7 @@ export async function GET(
   const productIds = coProducts.map(p => p.productId)
   const products = await prisma.product.findMany({
     where: { id: { in: productIds }, active: true },
-    select: { id: true, slug: true, name: true, price: true, imageUrl: true, purity: true, category: true },
+    select: { id: true, slug: true, name: true, price: true, imageUrl: true, servings: true, category: true },
   })
 
   // Maintain the frequency order

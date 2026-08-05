@@ -44,12 +44,9 @@ export type ProductMinAggregateOutputType = {
   description: string | null
   imageUrl: string | null
   category: string | null
-  purity: string | null
+  servings: string | null
   stock: number | null
   active: boolean | null
-  molecularWeight: string | null
-  sequence: string | null
-  casNumber: string | null
   storageTemp: string | null
   form: string | null
   tag: string | null
@@ -67,12 +64,9 @@ export type ProductMaxAggregateOutputType = {
   description: string | null
   imageUrl: string | null
   category: string | null
-  purity: string | null
+  servings: string | null
   stock: number | null
   active: boolean | null
-  molecularWeight: string | null
-  sequence: string | null
-  casNumber: string | null
   storageTemp: string | null
   form: string | null
   tag: string | null
@@ -90,12 +84,9 @@ export type ProductCountAggregateOutputType = {
   description: number
   imageUrl: number
   category: number
-  purity: number
+  servings: number
   stock: number
   active: number
-  molecularWeight: number
-  sequence: number
-  casNumber: number
   storageTemp: number
   form: number
   tag: number
@@ -125,12 +116,9 @@ export type ProductMinAggregateInputType = {
   description?: true
   imageUrl?: true
   category?: true
-  purity?: true
+  servings?: true
   stock?: true
   active?: true
-  molecularWeight?: true
-  sequence?: true
-  casNumber?: true
   storageTemp?: true
   form?: true
   tag?: true
@@ -148,12 +136,9 @@ export type ProductMaxAggregateInputType = {
   description?: true
   imageUrl?: true
   category?: true
-  purity?: true
+  servings?: true
   stock?: true
   active?: true
-  molecularWeight?: true
-  sequence?: true
-  casNumber?: true
   storageTemp?: true
   form?: true
   tag?: true
@@ -171,12 +156,9 @@ export type ProductCountAggregateInputType = {
   description?: true
   imageUrl?: true
   category?: true
-  purity?: true
+  servings?: true
   stock?: true
   active?: true
-  molecularWeight?: true
-  sequence?: true
-  casNumber?: true
   storageTemp?: true
   form?: true
   tag?: true
@@ -281,12 +263,9 @@ export type ProductGroupByOutputType = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock: number
   active: boolean
-  molecularWeight: string | null
-  sequence: string | null
-  casNumber: string | null
   storageTemp: string
   form: string
   tag: string | null
@@ -327,12 +306,9 @@ export type ProductWhereInput = {
   description?: Prisma.StringFilter<"Product"> | string
   imageUrl?: Prisma.StringFilter<"Product"> | string
   category?: Prisma.StringFilter<"Product"> | string
-  purity?: Prisma.StringFilter<"Product"> | string
+  servings?: Prisma.StringFilter<"Product"> | string
   stock?: Prisma.IntFilter<"Product"> | number
   active?: Prisma.BoolFilter<"Product"> | boolean
-  molecularWeight?: Prisma.StringNullableFilter<"Product"> | string | null
-  sequence?: Prisma.StringNullableFilter<"Product"> | string | null
-  casNumber?: Prisma.StringNullableFilter<"Product"> | string | null
   storageTemp?: Prisma.StringFilter<"Product"> | string
   form?: Prisma.StringFilter<"Product"> | string
   tag?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -354,12 +330,9 @@ export type ProductOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   category?: Prisma.SortOrder
-  purity?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   active?: Prisma.SortOrder
-  molecularWeight?: Prisma.SortOrderInput | Prisma.SortOrder
-  sequence?: Prisma.SortOrderInput | Prisma.SortOrder
-  casNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   storageTemp?: Prisma.SortOrder
   form?: Prisma.SortOrder
   tag?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -384,12 +357,9 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"Product"> | string
   imageUrl?: Prisma.StringFilter<"Product"> | string
   category?: Prisma.StringFilter<"Product"> | string
-  purity?: Prisma.StringFilter<"Product"> | string
+  servings?: Prisma.StringFilter<"Product"> | string
   stock?: Prisma.IntFilter<"Product"> | number
   active?: Prisma.BoolFilter<"Product"> | boolean
-  molecularWeight?: Prisma.StringNullableFilter<"Product"> | string | null
-  sequence?: Prisma.StringNullableFilter<"Product"> | string | null
-  casNumber?: Prisma.StringNullableFilter<"Product"> | string | null
   storageTemp?: Prisma.StringFilter<"Product"> | string
   form?: Prisma.StringFilter<"Product"> | string
   tag?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -411,12 +381,9 @@ export type ProductOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   category?: Prisma.SortOrder
-  purity?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   active?: Prisma.SortOrder
-  molecularWeight?: Prisma.SortOrderInput | Prisma.SortOrder
-  sequence?: Prisma.SortOrderInput | Prisma.SortOrder
-  casNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   storageTemp?: Prisma.SortOrder
   form?: Prisma.SortOrder
   tag?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -442,12 +409,9 @@ export type ProductScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"Product"> | string
   imageUrl?: Prisma.StringWithAggregatesFilter<"Product"> | string
   category?: Prisma.StringWithAggregatesFilter<"Product"> | string
-  purity?: Prisma.StringWithAggregatesFilter<"Product"> | string
+  servings?: Prisma.StringWithAggregatesFilter<"Product"> | string
   stock?: Prisma.IntWithAggregatesFilter<"Product"> | number
   active?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
-  molecularWeight?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
-  sequence?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
-  casNumber?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   storageTemp?: Prisma.StringWithAggregatesFilter<"Product"> | string
   form?: Prisma.StringWithAggregatesFilter<"Product"> | string
   tag?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -465,12 +429,9 @@ export type ProductCreateInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -492,12 +453,9 @@ export type ProductUncheckedCreateInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -519,12 +477,9 @@ export type ProductUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -546,12 +501,9 @@ export type ProductUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -573,12 +525,9 @@ export type ProductCreateManyInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -596,12 +545,9 @@ export type ProductUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -619,12 +565,9 @@ export type ProductUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -642,12 +585,9 @@ export type ProductCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   category?: Prisma.SortOrder
-  purity?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   active?: Prisma.SortOrder
-  molecularWeight?: Prisma.SortOrder
-  sequence?: Prisma.SortOrder
-  casNumber?: Prisma.SortOrder
   storageTemp?: Prisma.SortOrder
   form?: Prisma.SortOrder
   tag?: Prisma.SortOrder
@@ -670,12 +610,9 @@ export type ProductMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   category?: Prisma.SortOrder
-  purity?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   active?: Prisma.SortOrder
-  molecularWeight?: Prisma.SortOrder
-  sequence?: Prisma.SortOrder
-  casNumber?: Prisma.SortOrder
   storageTemp?: Prisma.SortOrder
   form?: Prisma.SortOrder
   tag?: Prisma.SortOrder
@@ -693,12 +630,9 @@ export type ProductMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   category?: Prisma.SortOrder
-  purity?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   active?: Prisma.SortOrder
-  molecularWeight?: Prisma.SortOrder
-  sequence?: Prisma.SortOrder
-  casNumber?: Prisma.SortOrder
   storageTemp?: Prisma.SortOrder
   form?: Prisma.SortOrder
   tag?: Prisma.SortOrder
@@ -802,12 +736,9 @@ export type ProductCreateWithoutVariantsInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -828,12 +759,9 @@ export type ProductUncheckedCreateWithoutVariantsInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -870,12 +798,9 @@ export type ProductUpdateWithoutVariantsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -896,12 +821,9 @@ export type ProductUncheckedUpdateWithoutVariantsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -922,12 +844,9 @@ export type ProductCreateWithoutCoasInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -948,12 +867,9 @@ export type ProductUncheckedCreateWithoutCoasInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -990,12 +906,9 @@ export type ProductUpdateWithoutCoasInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1016,12 +929,9 @@ export type ProductUncheckedUpdateWithoutCoasInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1042,12 +952,9 @@ export type ProductCreateWithoutReviewsInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -1068,12 +975,9 @@ export type ProductUncheckedCreateWithoutReviewsInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -1110,12 +1014,9 @@ export type ProductUpdateWithoutReviewsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1136,12 +1037,9 @@ export type ProductUncheckedUpdateWithoutReviewsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1162,12 +1060,9 @@ export type ProductCreateWithoutOrderItemsInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -1188,12 +1083,9 @@ export type ProductUncheckedCreateWithoutOrderItemsInput = {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
   stock?: number
   active?: boolean
-  molecularWeight?: string | null
-  sequence?: string | null
-  casNumber?: string | null
   storageTemp?: string
   form?: string
   tag?: string | null
@@ -1230,12 +1122,9 @@ export type ProductUpdateWithoutOrderItemsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1256,12 +1145,9 @@ export type ProductUncheckedUpdateWithoutOrderItemsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
-  purity?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  molecularWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sequence?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  casNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageTemp?: Prisma.StringFieldUpdateOperationsInput | string
   form?: Prisma.StringFieldUpdateOperationsInput | string
   tag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1340,12 +1226,9 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   description?: boolean
   imageUrl?: boolean
   category?: boolean
-  purity?: boolean
+  servings?: boolean
   stock?: boolean
   active?: boolean
-  molecularWeight?: boolean
-  sequence?: boolean
-  casNumber?: boolean
   storageTemp?: boolean
   form?: boolean
   tag?: boolean
@@ -1368,12 +1251,9 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   imageUrl?: boolean
   category?: boolean
-  purity?: boolean
+  servings?: boolean
   stock?: boolean
   active?: boolean
-  molecularWeight?: boolean
-  sequence?: boolean
-  casNumber?: boolean
   storageTemp?: boolean
   form?: boolean
   tag?: boolean
@@ -1391,12 +1271,9 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   description?: boolean
   imageUrl?: boolean
   category?: boolean
-  purity?: boolean
+  servings?: boolean
   stock?: boolean
   active?: boolean
-  molecularWeight?: boolean
-  sequence?: boolean
-  casNumber?: boolean
   storageTemp?: boolean
   form?: boolean
   tag?: boolean
@@ -1414,12 +1291,9 @@ export type ProductSelectScalar = {
   description?: boolean
   imageUrl?: boolean
   category?: boolean
-  purity?: boolean
+  servings?: boolean
   stock?: boolean
   active?: boolean
-  molecularWeight?: boolean
-  sequence?: boolean
-  casNumber?: boolean
   storageTemp?: boolean
   form?: boolean
   tag?: boolean
@@ -1429,7 +1303,7 @@ export type ProductSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "price" | "description" | "imageUrl" | "category" | "purity" | "stock" | "active" | "molecularWeight" | "sequence" | "casNumber" | "storageTemp" | "form" | "tag" | "batchNumber" | "lotNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "price" | "description" | "imageUrl" | "category" | "servings" | "stock" | "active" | "storageTemp" | "form" | "tag" | "batchNumber" | "lotNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orderItems?: boolean | Prisma.Product$orderItemsArgs<ExtArgs>
   coas?: boolean | Prisma.Product$coasArgs<ExtArgs>
@@ -1456,12 +1330,12 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     description: string
     imageUrl: string
     category: string
-    purity: string
+    /**
+     * Servings per bag, e.g. "20+ Servings"
+     */
+    servings: string
     stock: number
     active: boolean
-    molecularWeight: string | null
-    sequence: string | null
-    casNumber: string | null
     storageTemp: string
     form: string
     tag: string | null
@@ -1903,12 +1777,9 @@ export interface ProductFieldRefs {
   readonly description: Prisma.FieldRef<"Product", 'String'>
   readonly imageUrl: Prisma.FieldRef<"Product", 'String'>
   readonly category: Prisma.FieldRef<"Product", 'String'>
-  readonly purity: Prisma.FieldRef<"Product", 'String'>
+  readonly servings: Prisma.FieldRef<"Product", 'String'>
   readonly stock: Prisma.FieldRef<"Product", 'Int'>
   readonly active: Prisma.FieldRef<"Product", 'Boolean'>
-  readonly molecularWeight: Prisma.FieldRef<"Product", 'String'>
-  readonly sequence: Prisma.FieldRef<"Product", 'String'>
-  readonly casNumber: Prisma.FieldRef<"Product", 'String'>
   readonly storageTemp: Prisma.FieldRef<"Product", 'String'>
   readonly form: Prisma.FieldRef<"Product", 'String'>
   readonly tag: Prisma.FieldRef<"Product", 'String'>

@@ -12,7 +12,12 @@ interface Product {
   description: string
   imageUrl: string
   category: string
-  purity: string
+  servings: string
+  tag?: string | null
+  avgRating?: number | null
+  reviewCount?: number
+  startingPrice?: number
+  variants?: { id: string; label: string; price: number }[]
 }
 
 interface Props {
@@ -44,6 +49,11 @@ export default function ProductGrid({ initialProducts }: Props) {
   const [category, setCategory] = useState(urlCategory)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(!initialProducts)
+  // Captured from an unfiltered product list so the filter row keeps showing
+  // every category even while a single category is selected.
+  const [categories, setCategories] = useState<string[]>(() =>
+    [...new Set((initialProducts || []).map(p => p.category))].sort()
+  )
 
   const fetchProducts = useCallback(() => {
     setLoading(true)
@@ -53,9 +63,27 @@ export default function ProductGrid({ initialProducts }: Props) {
     const qs = params.toString()
     fetch(`/api/products${qs ? `?${qs}` : ''}`)
       .then(r => r.json())
-      .then(data => { setProducts(data); setLoading(false) })
+      .then((data: Product[]) => {
+        setProducts(Array.isArray(data) ? data : [])
+        setLoading(false)
+      })
       .catch(() => setLoading(false))
   }, [category, search])
+
+  // Discover categories from the full catalogue once, so a category added in the
+  // admin panel shows up here without a code change.
+  useEffect(() => {
+    if (categories.length > 0) return
+    fetch('/api/products')
+      .then(r => r.json())
+      .then((data: Product[]) => {
+        if (Array.isArray(data)) {
+          setCategories([...new Set(data.map(p => p.category).filter(Boolean))].sort())
+        }
+      })
+      .catch(() => {})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     setCategory(urlCategory)
@@ -71,7 +99,7 @@ export default function ProductGrid({ initialProducts }: Props) {
     return () => clearTimeout(timer)
   }, [fetchProducts, search, category, initialProducts])
 
-  const categories = ['All', 'Classic', 'Matcha', 'Brown Sugar', 'Fruity']
+  const filterOptions = ['All', ...categories]
 
   return (
     <>
@@ -90,7 +118,7 @@ export default function ProductGrid({ initialProducts }: Props) {
       </div>
 
       <div className="category-filters" role="group" aria-label="Filter by category">
-        {categories.map(cat => (
+        {filterOptions.map(cat => (
           <button
             key={cat}
             className={`filter-btn ${(cat === 'All' && !category) || cat === category ? 'active' : ''}`}

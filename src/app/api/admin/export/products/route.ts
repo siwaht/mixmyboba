@@ -15,7 +15,7 @@ export async function GET() {
 
   const headers = [
     'id', 'slug', 'name', 'price', 'description', 'imageUrl', 'category',
-    'purity', 'stock', 'active', 'tag', 'molecularWeight', 'sequence', 'casNumber',
+    'servings', 'stock', 'active', 'tag',
     'storageTemp', 'form', 'batchNumber', 'lotNumber', 'createdAt',
   ]
 

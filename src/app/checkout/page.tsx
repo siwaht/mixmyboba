@@ -1,11 +1,43 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import { useCartStore } from '@/lib/cartStore'
+import { parseCartItemId } from '@/lib/pricing'
+
+interface QuoteLine {
+  cartItemId: string
+  productId: string
+  variantId: string | null
+  name: string
+  quantity: number
+  basePrice: number
+  unitPrice: number
+  lineTotal: number
+  purchaseType: 'subscribe' | 'onetime'
+}
+
+interface Quote {
+  lines: QuoteLine[]
+  totals: {
+    subtotal: number
+    baseSubtotal: number
+    promoDiscount: number
+    discount: number
+    shipping: number
+    tax: number
+    total: number
+    freeShippingThreshold: number
+    amountToFreeShipping: number
+  }
+  coupon: { code: string; type: string; value: number; discount: number } | null
+  couponError: string | null
+  stockIssues: { cartItemId: string; name: string; requested: number; available: number }[]
+  currency: string
+}
 
 export default function CheckoutPage() {
-  const { items, totalPrice, clearCart } = useCartStore()
+  const { items, clearCart } = useCartStore()
   const [email, setEmail] = useState('')
   const [address, setAddress] = useState('')
   const [phone, setPhone] = useState('')
@@ -13,17 +45,24 @@ export default function CheckoutPage() {
   const [notes, setNotes] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [orderId, setOrderId] = useState<string | null>(null)
+  // Captured from the created order so the confirmation screen states the amount
+  // actually charged, and can hand the email to the guest order lookup.
+  const [orderTotal, setOrderTotal] = useState<number | null>(null)
+  const [orderEmail, setOrderEmail] = useState('')
   const [error, setError] = useState('')
   const [availableMethods, setAvailableMethods] = useState<{ value: string; label: string }[]>([])
   const [methodsLoading, setMethodsLoading] = useState(true)
 
+  // Server-priced quote — the single source of truth for every amount shown here.
+  const [quote, setQuote] = useState<Quote | null>(null)
+  const [quoteLoading, setQuoteLoading] = useState(true)
+  const [quoteError, setQuoteError] = useState('')
+
   // Coupon state
   const [couponCode, setCouponCode] = useState('')
-  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number; type: string; value: number } | null>(null)
-  const [couponError, setCouponError] = useState('')
-  const [couponLoading, setCouponLoading] = useState(false)
+  const [activeCouponCode, setActiveCouponCode] = useState('')
 
-  // Age verification — use ref to prevent re-render resets
+  // Terms acceptance — use ref to prevent re-render resets
   const [termsAccepted, setTermsAccepted] = useState(false)
   const termsRef = useRef<HTMLInputElement>(null)
 
@@ -96,52 +135,79 @@ export default function CheckoutPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const subtotal = totalPrice()
-  const discount = appliedCoupon?.discount || 0
-  const shipping = subtotal >= 50 ? 0 : 5.99
-  const total = Math.max(0, subtotal + shipping - discount)
+  // The cart lines reduced to what the pricing endpoint needs. Serialised so the
+  // quote only refetches when the contents actually change, not on every render.
+  const quotePayloadItems = useMemo(
+    () =>
+      items.map(i => {
+        const { productId, variantId } = parseCartItemId(i.productId)
+        return { productId, variantId, quantity: i.quantity, purchaseType: i.purchaseType }
+      }),
+    [items]
+  )
+  const quoteKey = JSON.stringify(quotePayloadItems)
 
-  // Track the subtotal a coupon was validated against so a stale discount is never shown.
-  const couponSubtotalRef = useRef<number | null>(null)
+  // ─── Ask the server to price the cart ───
   useEffect(() => {
-    if (appliedCoupon && couponSubtotalRef.current !== null && Math.abs(subtotal - couponSubtotalRef.current) > 0.001) {
-      setAppliedCoupon(null)
-      couponSubtotalRef.current = null
-      setCouponError('Your cart changed — please re-apply your coupon.')
+    if (quotePayloadItems.length === 0) {
+      setQuote(null)
+      setQuoteLoading(false)
+      return
     }
-  }, [subtotal, appliedCoupon])
 
-  const applyCoupon = async () => {
-    setCouponError('')
-    setCouponLoading(true)
-    try {
-      const res = await fetch('/api/coupons/validate', {
+    let cancelled = false
+    setQuoteLoading(true)
+
+    // Debounced: email feeds per-customer coupon limits and changes as the user types.
+    const timer = setTimeout(() => {
+      fetch('/api/checkout/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: couponCode, subtotal, email }),
+        body: JSON.stringify({
+          items: quotePayloadItems,
+          couponCode: activeCouponCode || undefined,
+          email: email.trim() || undefined,
+        }),
       })
-      const data = await res.json()
-      if (!res.ok) {
-        setCouponError(data.error)
-        setAppliedCoupon(null)
-        couponSubtotalRef.current = null
-      } else {
-        setAppliedCoupon(data)
-        couponSubtotalRef.current = subtotal
-        setCouponError('')
-      }
-    } catch {
-      setCouponError('Failed to validate coupon')
-    } finally {
-      setCouponLoading(false)
+        .then(async res => {
+          const data = await res.json()
+          if (cancelled) return
+          if (!res.ok) {
+            setQuoteError(data.error || 'We could not price your cart. Please refresh.')
+            setQuote(null)
+            return
+          }
+          setQuoteError('')
+          setQuote(data as Quote)
+        })
+        .catch(() => {
+          if (!cancelled) setQuoteError('We could not price your cart. Please refresh.')
+        })
+        .finally(() => {
+          if (!cancelled) setQuoteLoading(false)
+        })
+    }, 300)
+
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
     }
+  // quoteKey stands in for quotePayloadItems (stable string identity)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quoteKey, activeCouponCode, email])
+
+  const totals = quote?.totals
+  const currencyFmt = (value: number) => `$${value.toFixed(2)}`
+
+  const applyCoupon = () => {
+    const code = couponCode.trim().toUpperCase()
+    if (!code) return
+    setActiveCouponCode(code)
   }
 
   const removeCoupon = () => {
-    setAppliedCoupon(null)
-    couponSubtotalRef.current = null
+    setActiveCouponCode('')
     setCouponCode('')
-    setCouponError('')
   }
 
   if (orderId) {
@@ -152,11 +218,17 @@ export default function CheckoutPage() {
           <h1>Order Confirmed</h1>
           <p className="success-order-id">Order <code>{orderId}</code></p>
           <p className="success-msg">
+            {orderTotal != null && <>You paid <strong>{currencyFmt(orderTotal)}</strong>. </>}
             Your order is being processed. Check your email for confirmation and tracking details.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href={`/account/orders/${orderId}`} className="btn btn-primary">View Order Details</Link>
-            <Link href="/" className="btn btn-secondary">Continue Shopping</Link>
+            <Link
+              href={`/account/orders/${orderId}?email=${encodeURIComponent(orderEmail)}`}
+              className="btn btn-primary"
+            >
+              View Order Details
+            </Link>
+            <Link href="/shop" className="btn btn-secondary">Continue Shopping</Link>
           </div>
         </div>
       </section>
@@ -170,7 +242,7 @@ export default function CheckoutPage() {
           <div className="empty-icon" aria-hidden="true">🧋</div>
           <h1>Your Cart is Empty</h1>
           <p>Looks like you haven&apos;t picked any flavors yet!</p>
-          <Link href="/#store" className="btn btn-primary">Browse Flavors</Link>
+          <Link href="/shop" className="btn btn-primary">Browse Flavors</Link>
         </div>
       </section>
     )
@@ -216,22 +288,10 @@ export default function CheckoutPage() {
           phone: currentPhone.trim() || undefined,
           paymentMethod,
           notes,
-          couponCode: appliedCoupon?.code || undefined,
-          shipping,
-          items: items.map(i => {
-            const [baseId, ...rest] = i.productId.split('__')
-            // Extract variant label from name — format is "Product Name (Variant Label)"
-            let variantLabel: string | undefined
-            if (rest.length > 0) {
-              const match = i.name.match(/^.+?\((.+)\)$/)
-              variantLabel = match ? match[1] : undefined
-            }
-            return {
-              productId: baseId,
-              quantity: i.quantity,
-              variantLabel,
-            }
-          }),
+          // Only send a code the server already confirmed applies, so submission
+          // can't fail on a code the customer never saw accepted.
+          couponCode: quote?.coupon?.code || undefined,
+          items: quotePayloadItems,
         }),
       })
       if (!res.ok) {
@@ -240,6 +300,8 @@ export default function CheckoutPage() {
       }
       const order = await res.json()
       setOrderId(order.id)
+      setOrderTotal(typeof order.total === 'number' ? order.total : null)
+      setOrderEmail(order.email || currentEmail.trim().toLowerCase())
       clearCart()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -247,6 +309,15 @@ export default function CheckoutPage() {
       setSubmitting(false)
     }
   }
+
+  const stockIssues = quote?.stockIssues ?? []
+  const canSubmit =
+    !submitting &&
+    termsAccepted &&
+    availableMethods.length > 0 &&
+    !!totals &&
+    !quoteLoading &&
+    stockIssues.length === 0
 
   return (
     <section className="checkout-section">
@@ -282,9 +353,9 @@ export default function CheckoutPage() {
               ) : availableMethods.length === 0 ? (
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '0.5rem 0' }}>No payment methods are currently available. Please try again later.</p>
               ) : (
-                <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="form-input" disabled={false}>
+                <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="form-input">
                   {availableMethods.map(m => (
-                    <option key={m.value} value={m.value} disabled={false}>{m.label}</option>
+                    <option key={m.value} value={m.value}>{m.label}</option>
                   ))}
                 </select>
               )}
@@ -303,36 +374,49 @@ export default function CheckoutPage() {
             </div>
 
             {error && <p className="checkout-error" role="alert" aria-live="assertive">{error}</p>}
-            <button type="submit" className="btn btn-primary checkout-submit" disabled={submitting || !termsAccepted || availableMethods.length === 0}>
-              {submitting ? 'Processing...' : `Place Order — $${total.toFixed(2)}`}
+            {quoteError && <p className="checkout-error" role="alert" aria-live="assertive">{quoteError}</p>}
+            {stockIssues.map(issue => (
+              <p key={issue.cartItemId} className="checkout-error" role="alert" aria-live="assertive">
+                {issue.available > 0
+                  ? `Only ${issue.available} left of ${issue.name} — please lower the quantity in your cart.`
+                  : `${issue.name} just sold out. Please remove it from your cart.`}
+              </p>
+            ))}
+            <button type="submit" className="btn btn-primary checkout-submit" disabled={!canSubmit}>
+              {submitting
+                ? 'Processing...'
+                : quoteLoading || !totals
+                  ? 'Calculating total...'
+                  : `Place Order — ${currencyFmt(totals.total)}`}
             </button>
           </form>
 
           <div className="checkout-sidebar">
-            <div className="checkout-summary glass">
+            <div className="checkout-summary glass" aria-busy={quoteLoading}>
               <h3>Summary</h3>
               <div className="checkout-items-list">
-                {items.map(item => (
-                  <div key={item.productId} className="checkout-item">
+                {(quote?.lines ?? []).map(line => (
+                  <div key={line.cartItemId} className="checkout-item">
                     <span className="checkout-item-name">
-                      {item.name} <span className="checkout-item-qty">× {item.quantity}</span>
-                      {item.purchaseType && (
-                        <span className={`cart-purchase-badge ${item.purchaseType === 'subscribe' ? 'cart-badge-subscribe' : 'cart-badge-onetime'}`}>
-                          {item.purchaseType === 'subscribe' ? '🔄 Subscribe' : '🛒 One-time'}
-                        </span>
-                      )}
+                      {line.name} <span className="checkout-item-qty">× {line.quantity}</span>
+                      <span className={`cart-purchase-badge ${line.purchaseType === 'subscribe' ? 'cart-badge-subscribe' : 'cart-badge-onetime'}`}>
+                        {line.purchaseType === 'subscribe' ? '🔄 Subscribe' : '🛒 One-time'}
+                      </span>
                     </span>
-                    <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    <span>{currencyFmt(line.lineTotal)}</span>
                   </div>
                 ))}
+                {!quote && quoteLoading && (
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Pricing your cart...</p>
+                )}
               </div>
 
               {/* Coupon section */}
               <div className="coupon-section">
-                {appliedCoupon ? (
+                {quote?.coupon ? (
                   <div className="coupon-applied">
-                    <span className="coupon-tag">🏷️ {appliedCoupon.code} ({appliedCoupon.type === 'percent' ? `${appliedCoupon.value}%` : `$${appliedCoupon.value}`} off)</span>
-                    <button type="button" className="coupon-remove" onClick={removeCoupon}>✕</button>
+                    <span className="coupon-tag">🏷️ {quote.coupon.code} ({quote.coupon.type === 'percent' ? `${quote.coupon.value}%` : `$${quote.coupon.value}`} off)</span>
+                    <button type="button" className="coupon-remove" onClick={removeCoupon} aria-label="Remove coupon">✕</button>
                   </div>
                 ) : (
                   <div className="coupon-input-row">
@@ -340,42 +424,75 @@ export default function CheckoutPage() {
                       type="text"
                       value={couponCode}
                       onChange={e => setCouponCode(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); applyCoupon() } }}
                       placeholder="Coupon code"
                       className="coupon-input"
+                      aria-label="Coupon code"
                     />
-                    <button type="button" className="btn btn-secondary coupon-apply-btn" onClick={applyCoupon} disabled={!couponCode.trim() || couponLoading}>
-                      {couponLoading ? '...' : 'Apply'}
+                    <button type="button" className="btn btn-secondary coupon-apply-btn" onClick={applyCoupon} disabled={!couponCode.trim() || quoteLoading}>
+                      {quoteLoading && activeCouponCode ? '...' : 'Apply'}
                     </button>
                   </div>
                 )}
-                {couponError && (
-                  <div className={`coupon-error-alert${couponError.toLowerCase().includes('email') ? ' coupon-error-highlight' : ''}`} role="alert" aria-live="assertive">
+                {quote?.couponError && (
+                  <div className={`coupon-error-alert${quote.couponError.toLowerCase().includes('email') ? ' coupon-error-highlight' : ''}`} role="alert" aria-live="assertive">
                     <span className="coupon-error-icon">⚠️</span>
-                    <span>{couponError}{couponError.toLowerCase().includes('email') ? ' — please fill in your email above first.' : ''}</span>
+                    <span>{quote.couponError}{quote.couponError.toLowerCase().includes('email') ? ' — please fill in your email above first.' : ''}</span>
                   </div>
                 )}
               </div>
 
-              <div className="checkout-totals">
-                <div className="checkout-subtotal-row">
-                  <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="checkout-subtotal-row">
-                  <span>Shipping</span>
-                  <span>{subtotal >= 50 ? <span style={{ color: 'var(--success, #22c55e)' }}>Free</span> : '$5.99'}</span>
-                </div>
-                {discount > 0 && (
-                  <div className="checkout-discount-row">
-                    <span>Discount</span>
-                    <span>-${discount.toFixed(2)}</span>
+              {totals && (
+                <div className="checkout-totals">
+                  {totals.promoDiscount > 0 && (
+                    <div className="checkout-subtotal-row">
+                      <span>Retail</span>
+                      <span style={{ textDecoration: 'line-through', color: 'var(--text-secondary)' }}>
+                        {currencyFmt(totals.baseSubtotal)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="checkout-subtotal-row">
+                    <span>Subtotal</span>
+                    <span>{currencyFmt(totals.subtotal)}</span>
                   </div>
-                )}
-                <div className="checkout-total">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  {totals.promoDiscount > 0 && (
+                    <div className="checkout-discount-row">
+                      <span>Bundle savings</span>
+                      <span>-{currencyFmt(totals.promoDiscount)}</span>
+                    </div>
+                  )}
+                  {totals.discount > 0 && (
+                    <div className="checkout-discount-row">
+                      <span>Coupon</span>
+                      <span>-{currencyFmt(totals.discount)}</span>
+                    </div>
+                  )}
+                  <div className="checkout-subtotal-row">
+                    <span>Shipping</span>
+                    <span>
+                      {totals.shipping === 0
+                        ? <span style={{ color: 'var(--success, #22c55e)' }}>Free</span>
+                        : currencyFmt(totals.shipping)}
+                    </span>
+                  </div>
+                  {totals.tax > 0 && (
+                    <div className="checkout-subtotal-row">
+                      <span>Tax</span>
+                      <span>{currencyFmt(totals.tax)}</span>
+                    </div>
+                  )}
+                  {totals.amountToFreeShipping > 0 && (
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '0.25rem 0 0' }}>
+                      Add {currencyFmt(totals.amountToFreeShipping)} more for free shipping.
+                    </p>
+                  )}
+                  <div className="checkout-total">
+                    <span>Total</span>
+                    <span>{currencyFmt(totals.total)}</span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <div className="checkout-trust-badges">
               <span>🔒 Secure Checkout</span>

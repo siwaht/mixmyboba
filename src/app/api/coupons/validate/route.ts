@@ -2,7 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { rateLimit } from '@/lib/rate-limit'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
+import { evaluateCoupon } from '@/lib/pricing'
 
+/**
+ * Previews a coupon against a caller-supplied subtotal.
+ *
+ * This is a convenience/preview endpoint only — the discount that actually gets
+ * charged is recomputed by `buildQuote` from database prices at order time,
+ * using the same `evaluateCoupon` rules so the two can never disagree.
+ */
 export async function POST(req: NextRequest) {
   try {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
@@ -18,57 +26,41 @@ export async function POST(req: NextRequest) {
     if (!code || typeof code !== 'string') {
       return NextResponse.json({ error: 'Coupon code required' }, { status: 400 })
     }
+    if (typeof subtotal !== 'number' || !Number.isFinite(subtotal) || subtotal < 0) {
+      return NextResponse.json({ error: 'Invalid subtotal' }, { status: 400 })
+    }
 
     const coupon = await prisma.coupon.findUnique({
       where: { code: code.toUpperCase().trim() },
     })
 
-    if (!coupon || !coupon.active) {
-      return NextResponse.json({ error: 'Invalid coupon code' }, { status: 404 })
-    }
-
-    if (coupon.expiresAt && new Date() > coupon.expiresAt) {
-      return NextResponse.json({ error: 'Coupon has expired' }, { status: 410 })
-    }
-
-    if (coupon.maxUses && coupon.usedCount >= coupon.maxUses) {
-      return NextResponse.json({ error: 'Coupon usage limit reached' }, { status: 410 })
-    }
-
-    if (coupon.maxUsesPerCustomer) {
-      if (!email) {
-        return NextResponse.json(
-          { error: 'Email is required to use this coupon' },
-          { status: 400 }
-        )
-      }
-      const customerUses = await prisma.order.count({
-        where: { email: email.toLowerCase().trim(), couponCode: coupon.code },
+    const normalisedEmail = email?.toLowerCase().trim() || ''
+    let priorCustomerUses = 0
+    if (coupon?.maxUsesPerCustomer != null && normalisedEmail) {
+      priorCustomerUses = await prisma.order.count({
+        where: {
+          email: normalisedEmail,
+          couponCode: coupon.code,
+          status: { not: 'cancelled' },
+        },
       })
-      if (customerUses >= coupon.maxUsesPerCustomer) {
-        return NextResponse.json(
-          { error: "You've already used this coupon" },
-          { status: 400 }
-        )
-      }
     }
 
-    if (subtotal < coupon.minOrder) {
-      return NextResponse.json(
-        { error: `Minimum order of ${coupon.minOrder.toFixed(2)} required` },
-        { status: 400 }
-      )
-    }
+    const result = evaluateCoupon(coupon, {
+      subtotal,
+      priorCustomerUses,
+      hasEmail: Boolean(normalisedEmail),
+    })
 
-    const discount = coupon.type === 'percent'
-      ? subtotal * (coupon.value / 100)
-      : Math.min(coupon.value, subtotal)
+    if (!result.ok) {
+      return NextResponse.json({ error: result.error }, { status: result.status })
+    }
 
     return NextResponse.json({
-      code: coupon.code,
-      type: coupon.type,
-      value: coupon.value,
-      discount: Math.round(discount * 100) / 100,
+      code: result.code,
+      type: result.type,
+      value: result.value,
+      discount: result.discount,
     })
   } catch (err) {
     console.error('Coupon validation error:', err)

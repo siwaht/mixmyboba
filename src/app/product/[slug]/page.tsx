@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: `${product.name} — Functional Boba Tea Mix`,
-    description: `${product.name} functional boba tea mix — ${product.purity}. Date-sweetened, adaptogen-infused, prebiotic fiber. ${product.description.slice(0, 120)}. Ships fast.`,
+    description: `${product.name} functional boba tea mix — ${product.servings}. Date-sweetened, adaptogen-infused, prebiotic fiber. ${product.description.slice(0, 120)}. Ships fast.`,
     openGraph: {
       title: `${product.name} | Mix My Boba`,
       description: product.description,
@@ -180,7 +180,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="product-specs">
               <div className="spec-row">
                 <span>Servings</span>
-                <span className="spec-value">{product.purity}</span>
+                <span className="spec-value">{product.servings}</span>
               </div>
               <div className="spec-row">
                 <span>Format</span>

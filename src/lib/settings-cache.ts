@@ -20,6 +20,8 @@ export async function getCachedJson<T>(
   fallback: T,
   ttlMs = DEFAULT_TTL_MS
 ): Promise<T> {
+  // Settings JSON files are admin-editable at runtime and live at the project
+  // root, so this path is resolved rather than statically imported.
   const fullPath = join(process.cwd(), relativePath)
   const now = Date.now()
 

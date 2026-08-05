@@ -3,7 +3,6 @@ import { getCurrentUser } from '@/lib/auth'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { join } from 'path'
 import { safeJson, isErrorResponse } from '@/lib/safe-json'
-import { emitWebhookEvent } from '@/lib/webhooks'
 
 const SETTINGS_PATH = join(process.cwd(), 'webhook-settings.json')
 

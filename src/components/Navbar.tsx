@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback, useSyncExternalStore } from 'react'
 import Link from 'next/link'
@@ -24,12 +24,13 @@ export default function Navbar() {
   const mounted = useClientMounted()
   const itemCount = useCartStore(s => s.itemCount)
   const [navLinks, setNavLinks] = useState<NavLink[]>([
-    { label: 'Shop', href: '/#store' },
+    { label: 'Shop', href: '/shop' },
     { label: 'Our Story', href: '/about' },
     { label: 'FAQ', href: '/faq' },
     { label: 'Compare', href: '/compare' },
+    { label: 'Contact', href: '/contact' },
   ])
-  const [logoEmoji, setLogoEmoji] = useState('🧋')
+  const [logoEmoji, setLogoEmoji] = useState('ðŸ§‹')
   const [logoText, setLogoText] = useState('mix my boba')
 
   useEffect(() => {

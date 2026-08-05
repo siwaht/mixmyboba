@@ -28,15 +28,12 @@ model Product {
   description     String
   imageUrl        String
   category        String
-  purity          String
+  /// Servings per bag, e.g. "20+ Servings"
+  servings        String
   stock           Int         @default(100)
   active          Boolean     @default(true)
-  // Research-specific fields
-  molecularWeight String?
-  sequence        String?
-  casNumber       String?
-  storageTemp     String      @default("-20°C")
-  form            String      @default("Lyophilized Powder")
+  storageTemp     String      @default("Cool & Dry")
+  form            String      @default("Instant Powder Mix")
   // Product tags (e.g. "best_seller", "fast_selling", "last_few_left", "staff_pick", "new")
   tag             String?
   // COA / Batch tracking
@@ -66,14 +63,16 @@ model ProductVariant {
   @@index([productId])
 }
 
+/// Third-party lab report for a production batch (heavy metals, microbials, etc.)
 model COA {
   id          String   @id @default(cuid())
   productId   String
   product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   batchNumber String
-  labName     String   @default("Janoshik Analytics")
+  labName     String   @default("Independent Lab")
   testDate    DateTime
-  purityResult String
+  /// Headline finding, e.g. "Passed — all limits within spec"
+  result      String
   fileUrl     String   // URL to the PDF
   createdAt   DateTime @default(now())
 
@@ -118,13 +117,16 @@ model Order {
   email           String
   phone           String?
   status          String      @default("pending") // pending | paid | shipped | delivered | cancelled
-  paymentMethod   String      @default("crypto") // crypto | ach | card
+  paymentMethod   String      @default("card") // card | paypal | cod | crypto | ach
   paymentRef      String?
   shippingAddress String
   subtotal        Float
   shipping        Float       @default(0)
+  tax             Float       @default(0)
   total           Float
   discount        Float       @default(0)
+  /// Set once stock has been returned, so a cancelled order can't be restocked twice.
+  stockRestored   Boolean     @default(false)
   couponCode      String?
   notes           String?
   createdAt       DateTime    @default(now())
@@ -144,9 +146,15 @@ model OrderItem {
   productId String
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
+  /// Price actually charged per unit, after the purchase-option promotion.
   price     Float
+  /// Catalogue price before the promotion, kept so historical savings stay auditable.
+  basePrice Float   @default(0)
+  variantId String?
   variantLabel String?
+  purchaseType String @default("onetime") // subscribe | onetime
 
   @@index([orderId])
   @@index([productId])
+  @@index([variantId])
 }

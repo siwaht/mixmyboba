@@ -29,7 +29,7 @@ export default function OrdersTab({ orders, filter, setFilter, search, setSearch
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [products, setProducts] = useState<ProductOption[]>([])
   const [createForm, setCreateForm] = useState({
-    email: '', shippingAddress: '', paymentMethod: 'card', status: 'pending', notes: '', discount: '0',
+    email: '', shippingAddress: '', paymentMethod: 'card', status: 'pending', notes: '', discount: '0', shipping: '0',
   })
   const [orderItems, setOrderItems] = useState<{ productId: string; quantity: number }[]>([{ productId: '', quantity: 1 }])
   const [createError, setCreateError] = useState('')
@@ -61,7 +61,7 @@ export default function OrdersTab({ orders, filter, setFilter, search, setSearch
       })
       if (!res.ok) { const d = await res.json(); setCreateError(d.error || 'Failed'); setCreating(false); return }
       setShowCreateForm(false)
-      setCreateForm({ email: '', shippingAddress: '', paymentMethod: 'card', status: 'pending', notes: '', discount: '0' })
+      setCreateForm({ email: '', shippingAddress: '', paymentMethod: 'card', status: 'pending', notes: '', discount: '0', shipping: '0' })
       setOrderItems([{ productId: '', quantity: 1 }])
       window.location.reload()
     } catch {
@@ -70,13 +70,17 @@ export default function OrdersTab({ orders, filter, setFilter, search, setSearch
     setCreating(false)
   }
 
+  // Mirrors the server's arithmetic in src/app/api/admin/orders/create/route.ts
+  // so the figure previewed here is the figure that gets saved.
   const getOrderTotal = () => {
     let subtotal = 0
     for (const item of orderItems) {
       const product = products.find(p => p.id === item.productId)
       if (product) subtotal += product.price * item.quantity
     }
-    return Math.max(0, subtotal - (parseFloat(createForm.discount) || 0))
+    const discount = Math.min(Math.max(parseFloat(createForm.discount) || 0, 0), subtotal)
+    const shipping = Math.max(parseFloat(createForm.shipping) || 0, 0)
+    return Math.max(0, subtotal - discount + shipping)
   }
 
   if (selectedOrder) {
@@ -176,10 +180,10 @@ export default function OrdersTab({ orders, filter, setFilter, search, setSearch
               Payment Method
               <select className="form-input" value={createForm.paymentMethod} onChange={e => setCreateForm({ ...createForm, paymentMethod: e.target.value })}>
                 <option value="card">Card</option>
-                <option value="crypto">Crypto</option>
-                <option value="ach">ACH</option>
                 <option value="paypal">PayPal</option>
-                <option value="manual">Manual / Offline</option>
+                <option value="cod">Cash on Delivery</option>
+                <option value="crypto">Crypto</option>
+                <option value="ach">ACH / Bank Transfer</option>
               </select>
             </label>
           </div>
@@ -208,7 +212,7 @@ export default function OrdersTab({ orders, filter, setFilter, search, setSearch
             ))}
           </div>
 
-          <div className="admin-form-grid" style={{ gridTemplateColumns: '1fr 1fr 1fr', marginTop: '0.75rem' }}>
+          <div className="admin-form-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', marginTop: '0.75rem' }}>
             <label className="form-label">
               Status
               <select className="form-input" value={createForm.status} onChange={e => setCreateForm({ ...createForm, status: e.target.value })}>
@@ -217,15 +221,22 @@ export default function OrdersTab({ orders, filter, setFilter, search, setSearch
             </label>
             <label className="form-label">
               Discount ($)
-              <input type="number" step="0.01" className="form-input" value={createForm.discount} onChange={e => setCreateForm({ ...createForm, discount: e.target.value })} />
+              <input type="number" step="0.01" min="0" className="form-input" value={createForm.discount} onChange={e => setCreateForm({ ...createForm, discount: e.target.value })} />
+            </label>
+            <label className="form-label">
+              Shipping ($)
+              <input type="number" step="0.01" min="0" className="form-input" value={createForm.shipping} onChange={e => setCreateForm({ ...createForm, shipping: e.target.value })} />
             </label>
             <div className="form-label">
-              Estimated Total
+              Order Total
               <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--accent-primary)', marginTop: '0.25rem' }}>
                 ${getOrderTotal().toFixed(2)}
               </div>
             </div>
           </div>
+          <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', margin: '0.25rem 0 0' }}>
+            Creating this order reduces stock, unless the status is set to cancelled.
+          </p>
 
           <label className="form-label" style={{ marginTop: '0.5rem' }}>
             Notes

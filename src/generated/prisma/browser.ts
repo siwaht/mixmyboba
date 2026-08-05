@@ -34,7 +34,7 @@ export type Product = Prisma.ProductModel
 export type ProductVariant = Prisma.ProductVariantModel
 /**
  * Model COA
- * 
+ * Third-party lab report for a production batch (heavy metals, microbials, etc.)
  */
 export type COA = Prisma.COAModel
 /**

@@ -37,17 +37,23 @@ export async function POST(
   const data = await safeJson<Record<string, string>>(req)
   if (isErrorResponse(data)) return data
 
-  if (!data.batchNumber || !data.purityResult || !data.fileUrl) {
-    return NextResponse.json({ error: 'batchNumber, purityResult, and fileUrl are required' }, { status: 400 })
+  const result = data.result || data.purityResult // accept the legacy field name
+  if (!data.batchNumber || !result || !data.fileUrl) {
+    return NextResponse.json({ error: 'batchNumber, result, and fileUrl are required' }, { status: 400 })
+  }
+
+  const testDate = data.testDate ? new Date(data.testDate) : new Date()
+  if (Number.isNaN(testDate.getTime())) {
+    return NextResponse.json({ error: 'testDate is not a valid date' }, { status: 400 })
   }
 
   const coa = await prisma.cOA.create({
     data: {
       productId: id,
       batchNumber: data.batchNumber,
-      labName: data.labName || 'Janoshik Analytics',
-      testDate: data.testDate ? new Date(data.testDate) : new Date(),
-      purityResult: data.purityResult,
+      labName: data.labName || 'Independent Lab',
+      testDate,
+      result,
       fileUrl: data.fileUrl,
     },
   })

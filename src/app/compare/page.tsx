@@ -9,7 +9,7 @@ import { useToast } from '@/components/Toast'
 
 interface CompareProduct {
   id: string; slug: string; name: string; price: number; imageUrl: string
-  category: string; purity: string; stock: number; form: string
+  category: string; servings: string; stock: number; form: string
   tag: string | null; startingPrice: number; variantCount: number
   avgRating: number | null; reviewCount: number
 }
@@ -65,7 +65,7 @@ export default function ComparePage() {
 
   const specs = [
     { label: 'Category', key: 'category' },
-    { label: 'Servings', key: 'purity' },
+    { label: 'Servings', key: 'servings' },
     { label: 'Format', key: 'form' },
     { label: 'Sizes', key: 'variantCount' },
     { label: 'Availability', key: 'stock' },

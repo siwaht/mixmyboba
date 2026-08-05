@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model COA
- * 
+ * Third-party lab report for a production batch (heavy metals, microbials, etc.)
  */
 export type COAModel = runtime.Types.Result.DefaultSelection<Prisma.$COAPayload>
 
@@ -30,7 +30,7 @@ export type COAMinAggregateOutputType = {
   batchNumber: string | null
   labName: string | null
   testDate: Date | null
-  purityResult: string | null
+  result: string | null
   fileUrl: string | null
   createdAt: Date | null
 }
@@ -41,7 +41,7 @@ export type COAMaxAggregateOutputType = {
   batchNumber: string | null
   labName: string | null
   testDate: Date | null
-  purityResult: string | null
+  result: string | null
   fileUrl: string | null
   createdAt: Date | null
 }
@@ -52,7 +52,7 @@ export type COACountAggregateOutputType = {
   batchNumber: number
   labName: number
   testDate: number
-  purityResult: number
+  result: number
   fileUrl: number
   createdAt: number
   _all: number
@@ -65,7 +65,7 @@ export type COAMinAggregateInputType = {
   batchNumber?: true
   labName?: true
   testDate?: true
-  purityResult?: true
+  result?: true
   fileUrl?: true
   createdAt?: true
 }
@@ -76,7 +76,7 @@ export type COAMaxAggregateInputType = {
   batchNumber?: true
   labName?: true
   testDate?: true
-  purityResult?: true
+  result?: true
   fileUrl?: true
   createdAt?: true
 }
@@ -87,7 +87,7 @@ export type COACountAggregateInputType = {
   batchNumber?: true
   labName?: true
   testDate?: true
-  purityResult?: true
+  result?: true
   fileUrl?: true
   createdAt?: true
   _all?: true
@@ -171,7 +171,7 @@ export type COAGroupByOutputType = {
   batchNumber: string
   labName: string
   testDate: Date
-  purityResult: string
+  result: string
   fileUrl: string
   createdAt: Date
   _count: COACountAggregateOutputType | null
@@ -203,7 +203,7 @@ export type COAWhereInput = {
   batchNumber?: Prisma.StringFilter<"COA"> | string
   labName?: Prisma.StringFilter<"COA"> | string
   testDate?: Prisma.DateTimeFilter<"COA"> | Date | string
-  purityResult?: Prisma.StringFilter<"COA"> | string
+  result?: Prisma.StringFilter<"COA"> | string
   fileUrl?: Prisma.StringFilter<"COA"> | string
   createdAt?: Prisma.DateTimeFilter<"COA"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -215,7 +215,7 @@ export type COAOrderByWithRelationInput = {
   batchNumber?: Prisma.SortOrder
   labName?: Prisma.SortOrder
   testDate?: Prisma.SortOrder
-  purityResult?: Prisma.SortOrder
+  result?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   product?: Prisma.ProductOrderByWithRelationInput
@@ -230,7 +230,7 @@ export type COAWhereUniqueInput = Prisma.AtLeast<{
   batchNumber?: Prisma.StringFilter<"COA"> | string
   labName?: Prisma.StringFilter<"COA"> | string
   testDate?: Prisma.DateTimeFilter<"COA"> | Date | string
-  purityResult?: Prisma.StringFilter<"COA"> | string
+  result?: Prisma.StringFilter<"COA"> | string
   fileUrl?: Prisma.StringFilter<"COA"> | string
   createdAt?: Prisma.DateTimeFilter<"COA"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -242,7 +242,7 @@ export type COAOrderByWithAggregationInput = {
   batchNumber?: Prisma.SortOrder
   labName?: Prisma.SortOrder
   testDate?: Prisma.SortOrder
-  purityResult?: Prisma.SortOrder
+  result?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.COACountOrderByAggregateInput
@@ -259,7 +259,7 @@ export type COAScalarWhereWithAggregatesInput = {
   batchNumber?: Prisma.StringWithAggregatesFilter<"COA"> | string
   labName?: Prisma.StringWithAggregatesFilter<"COA"> | string
   testDate?: Prisma.DateTimeWithAggregatesFilter<"COA"> | Date | string
-  purityResult?: Prisma.StringWithAggregatesFilter<"COA"> | string
+  result?: Prisma.StringWithAggregatesFilter<"COA"> | string
   fileUrl?: Prisma.StringWithAggregatesFilter<"COA"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"COA"> | Date | string
 }
@@ -269,7 +269,7 @@ export type COACreateInput = {
   batchNumber: string
   labName?: string
   testDate: Date | string
-  purityResult: string
+  result: string
   fileUrl: string
   createdAt?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutCoasInput
@@ -281,7 +281,7 @@ export type COAUncheckedCreateInput = {
   batchNumber: string
   labName?: string
   testDate: Date | string
-  purityResult: string
+  result: string
   fileUrl: string
   createdAt?: Date | string
 }
@@ -291,7 +291,7 @@ export type COAUpdateInput = {
   batchNumber?: Prisma.StringFieldUpdateOperationsInput | string
   labName?: Prisma.StringFieldUpdateOperationsInput | string
   testDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purityResult?: Prisma.StringFieldUpdateOperationsInput | string
+  result?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutCoasNestedInput
@@ -303,7 +303,7 @@ export type COAUncheckedUpdateInput = {
   batchNumber?: Prisma.StringFieldUpdateOperationsInput | string
   labName?: Prisma.StringFieldUpdateOperationsInput | string
   testDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purityResult?: Prisma.StringFieldUpdateOperationsInput | string
+  result?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -314,7 +314,7 @@ export type COACreateManyInput = {
   batchNumber: string
   labName?: string
   testDate: Date | string
-  purityResult: string
+  result: string
   fileUrl: string
   createdAt?: Date | string
 }
@@ -324,7 +324,7 @@ export type COAUpdateManyMutationInput = {
   batchNumber?: Prisma.StringFieldUpdateOperationsInput | string
   labName?: Prisma.StringFieldUpdateOperationsInput | string
   testDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purityResult?: Prisma.StringFieldUpdateOperationsInput | string
+  result?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -335,7 +335,7 @@ export type COAUncheckedUpdateManyInput = {
   batchNumber?: Prisma.StringFieldUpdateOperationsInput | string
   labName?: Prisma.StringFieldUpdateOperationsInput | string
   testDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purityResult?: Prisma.StringFieldUpdateOperationsInput | string
+  result?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -356,7 +356,7 @@ export type COACountOrderByAggregateInput = {
   batchNumber?: Prisma.SortOrder
   labName?: Prisma.SortOrder
   testDate?: Prisma.SortOrder
-  purityResult?: Prisma.SortOrder
+  result?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -367,7 +367,7 @@ export type COAMaxOrderByAggregateInput = {
   batchNumber?: Prisma.SortOrder
   labName?: Prisma.SortOrder
   testDate?: Prisma.SortOrder
-  purityResult?: Prisma.SortOrder
+  result?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -378,7 +378,7 @@ export type COAMinOrderByAggregateInput = {
   batchNumber?: Prisma.SortOrder
   labName?: Prisma.SortOrder
   testDate?: Prisma.SortOrder
-  purityResult?: Prisma.SortOrder
+  result?: Prisma.SortOrder
   fileUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -430,7 +430,7 @@ export type COACreateWithoutProductInput = {
   batchNumber: string
   labName?: string
   testDate: Date | string
-  purityResult: string
+  result: string
   fileUrl: string
   createdAt?: Date | string
 }
@@ -440,7 +440,7 @@ export type COAUncheckedCreateWithoutProductInput = {
   batchNumber: string
   labName?: string
   testDate: Date | string
-  purityResult: string
+  result: string
   fileUrl: string
   createdAt?: Date | string
 }
@@ -479,7 +479,7 @@ export type COAScalarWhereInput = {
   batchNumber?: Prisma.StringFilter<"COA"> | string
   labName?: Prisma.StringFilter<"COA"> | string
   testDate?: Prisma.DateTimeFilter<"COA"> | Date | string
-  purityResult?: Prisma.StringFilter<"COA"> | string
+  result?: Prisma.StringFilter<"COA"> | string
   fileUrl?: Prisma.StringFilter<"COA"> | string
   createdAt?: Prisma.DateTimeFilter<"COA"> | Date | string
 }
@@ -489,7 +489,7 @@ export type COACreateManyProductInput = {
   batchNumber: string
   labName?: string
   testDate: Date | string
-  purityResult: string
+  result: string
   fileUrl: string
   createdAt?: Date | string
 }
@@ -499,7 +499,7 @@ export type COAUpdateWithoutProductInput = {
   batchNumber?: Prisma.StringFieldUpdateOperationsInput | string
   labName?: Prisma.StringFieldUpdateOperationsInput | string
   testDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purityResult?: Prisma.StringFieldUpdateOperationsInput | string
+  result?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -509,7 +509,7 @@ export type COAUncheckedUpdateWithoutProductInput = {
   batchNumber?: Prisma.StringFieldUpdateOperationsInput | string
   labName?: Prisma.StringFieldUpdateOperationsInput | string
   testDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purityResult?: Prisma.StringFieldUpdateOperationsInput | string
+  result?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -519,7 +519,7 @@ export type COAUncheckedUpdateManyWithoutProductInput = {
   batchNumber?: Prisma.StringFieldUpdateOperationsInput | string
   labName?: Prisma.StringFieldUpdateOperationsInput | string
   testDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purityResult?: Prisma.StringFieldUpdateOperationsInput | string
+  result?: Prisma.StringFieldUpdateOperationsInput | string
   fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -532,7 +532,7 @@ export type COASelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   batchNumber?: boolean
   labName?: boolean
   testDate?: boolean
-  purityResult?: boolean
+  result?: boolean
   fileUrl?: boolean
   createdAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -544,7 +544,7 @@ export type COASelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   batchNumber?: boolean
   labName?: boolean
   testDate?: boolean
-  purityResult?: boolean
+  result?: boolean
   fileUrl?: boolean
   createdAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -556,7 +556,7 @@ export type COASelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   batchNumber?: boolean
   labName?: boolean
   testDate?: boolean
-  purityResult?: boolean
+  result?: boolean
   fileUrl?: boolean
   createdAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -568,12 +568,12 @@ export type COASelectScalar = {
   batchNumber?: boolean
   labName?: boolean
   testDate?: boolean
-  purityResult?: boolean
+  result?: boolean
   fileUrl?: boolean
   createdAt?: boolean
 }
 
-export type COAOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "batchNumber" | "labName" | "testDate" | "purityResult" | "fileUrl" | "createdAt", ExtArgs["result"]["cOA"]>
+export type COAOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "batchNumber" | "labName" | "testDate" | "result" | "fileUrl" | "createdAt", ExtArgs["result"]["cOA"]>
 export type COAInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
 }
@@ -595,7 +595,10 @@ export type $COAPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     batchNumber: string
     labName: string
     testDate: Date
-    purityResult: string
+    /**
+     * Headline finding, e.g. "Passed — all limits within spec"
+     */
+    result: string
     fileUrl: string
     createdAt: Date
   }, ExtArgs["result"]["cOA"]>
@@ -1027,7 +1030,7 @@ export interface COAFieldRefs {
   readonly batchNumber: Prisma.FieldRef<"COA", 'String'>
   readonly labName: Prisma.FieldRef<"COA", 'String'>
   readonly testDate: Prisma.FieldRef<"COA", 'DateTime'>
-  readonly purityResult: Prisma.FieldRef<"COA", 'String'>
+  readonly result: Prisma.FieldRef<"COA", 'String'>
   readonly fileUrl: Prisma.FieldRef<"COA", 'String'>
   readonly createdAt: Prisma.FieldRef<"COA", 'DateTime'>
 }

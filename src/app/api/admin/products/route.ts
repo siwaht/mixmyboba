@@ -15,7 +15,12 @@ export async function GET() {
     return NextResponse.json({ error: 'Admin only' }, { status: 403 })
   }
 
-  const products = await prisma.product.findMany({ orderBy: { createdAt: 'desc' } })
+  // Variants come along so the products table can show, and link through to,
+  // the sizes each product is sold in.
+  const products = await prisma.product.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: { variants: { orderBy: { price: 'asc' } } },
+  })
   return NextResponse.json(products)
 }
 

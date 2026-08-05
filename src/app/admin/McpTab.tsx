@@ -15,7 +15,7 @@ const MCP_TOOLS: McpTool[] = [
   { name: 'get_dashboard_stats', description: 'Revenue, orders, customers, top products, low stock alerts', category: 'Dashboard' },
   // Products
   { name: 'list_products', description: 'List all products', category: 'Products' },
-  { name: 'get_product', description: 'Get full product details with variants, COAs, reviews', category: 'Products' },
+  { name: 'get_product', description: 'Get full product details with sizes, lab reports, reviews', category: 'Products' },
   { name: 'search_products', description: 'Search storefront by name/category', category: 'Products' },
   { name: 'create_product', description: 'Create product with all fields', category: 'Products' },
   { name: 'update_product', description: 'Update any product fields', category: 'Products' },
@@ -23,14 +23,14 @@ const MCP_TOOLS: McpTool[] = [
   { name: 'upload_product_image', description: 'Upload image via base64, get public URL', category: 'Products' },
   { name: 'export_products_csv', description: 'Export all products as CSV', category: 'Products' },
   // Variants
-  { name: 'list_product_variants', description: 'List size/dosage variants', category: 'Variants' },
-  { name: 'create_product_variant', description: 'Add variant (e.g. 5mg, 10mg)', category: 'Variants' },
-  { name: 'update_product_variant', description: 'Update variant price/stock/label', category: 'Variants' },
-  { name: 'delete_product_variant', description: 'Remove a variant', category: 'Variants' },
-  // COAs
-  { name: 'list_product_coas', description: 'List COAs for a product', category: 'COAs' },
-  { name: 'create_product_coa', description: 'Add a COA with batch/purity/lab info', category: 'COAs' },
-  { name: 'delete_product_coa', description: 'Remove a COA', category: 'COAs' },
+  { name: 'list_product_variants', description: 'List bag sizes for a product', category: 'Sizes' },
+  { name: 'create_product_variant', description: 'Add a size (e.g. Large 500g)', category: 'Sizes' },
+  { name: 'update_product_variant', description: 'Update size price/stock/label', category: 'Sizes' },
+  { name: 'delete_product_variant', description: 'Remove a size', category: 'Sizes' },
+  // Lab reports
+  { name: 'list_product_coas', description: 'List lab reports for a product', category: 'Lab Reports' },
+  { name: 'create_product_coa', description: 'Add a lab report with batch/result/lab info', category: 'Lab Reports' },
+  { name: 'delete_product_coa', description: 'Remove a lab report', category: 'Lab Reports' },
   // Orders
   { name: 'list_orders', description: 'List/filter/search orders', category: 'Orders' },
   { name: 'get_order', description: 'Full order details with line items', category: 'Orders' },

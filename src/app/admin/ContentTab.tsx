@@ -181,7 +181,7 @@ export default function ContentTab({ settings, setSettings, onSave, saved }: Pro
           <button className="admin-link-btn" onClick={addStat}>+ Add Stat</button>
         </h3>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-          Key statistics displayed below the marquee (e.g. &quot;99.8%&quot; / &quot;Minimum Purity&quot;).
+          Key statistics displayed below the marquee (e.g. &quot;20+&quot; / &quot;Cups Per Bag&quot;).
         </p>
         <div className="admin-badges-editor">
           {statsBar.map((stat, i) => (

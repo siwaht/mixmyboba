@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useCartStore } from '@/lib/cartStore'
 import { useToast } from '@/components/Toast'
-import { DISCOUNTS, discountedPrice, type PurchaseType } from '@/lib/pricing'
+import { DISCOUNTS, buildCartItemId, discountedPrice, type PurchaseType } from '@/lib/pricing'
 
 interface Variant {
   id: string
@@ -29,16 +29,23 @@ export default function AddToCartButton({ product, variants = [], disabled }: Pr
 
   const basePrice = selectedVariant?.price ?? product.price
   const currentPrice = discountedPrice(basePrice, purchaseType)
-  const outOfStock = disabled || (selectedVariant && selectedVariant.stock <= 0)
+  // Cap the quantity at what's on the shelf for the selected size, so the order
+  // endpoint doesn't have to reject the cart after the fact.
+  const maxQty = selectedVariant?.stock ?? Infinity
+  const outOfStock = disabled || (selectedVariant != null && selectedVariant.stock <= 0)
 
   const handleAdd = () => {
     if (variants.length > 0 && !selectedVariant) {
       showToast('Please select a size first')
       return
     }
+    if (qty > maxQty) {
+      showToast(`Only ${maxQty} left in that size`)
+      return
+    }
     for (let i = 0; i < qty; i++) {
       addItem({
-        productId: selectedVariant ? `${product.id}__${selectedVariant.id}` : product.id,
+        productId: buildCartItemId(product.id, selectedVariant?.id),
         slug: product.slug,
         name: selectedVariant ? `${product.name} (${selectedVariant.label})` : product.name,
         price: currentPrice,
@@ -103,9 +110,9 @@ export default function AddToCartButton({ product, variants = [], disabled }: Pr
 
       <div className="qty-and-cart">
         <div className="qty-selector">
-          <button onClick={() => setQty(Math.max(1, qty - 1))} disabled={qty <= 1} aria-label="Decrease quantity">−</button>
+          <button type="button" onClick={() => setQty(Math.max(1, qty - 1))} disabled={qty <= 1} aria-label="Decrease quantity">−</button>
           <span>{qty}</span>
-          <button onClick={() => setQty(qty + 1)} aria-label="Increase quantity">+</button>
+          <button type="button" onClick={() => setQty(Math.min(maxQty, qty + 1))} disabled={qty >= maxQty} aria-label="Increase quantity">+</button>
         </div>
         <button
           className="btn btn-primary add-to-cart-main"

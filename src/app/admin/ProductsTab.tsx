@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
+import VariantEditor from './VariantEditor'
 
 interface ProductTag {
   slug: string
@@ -12,15 +13,16 @@ interface ProductTag {
 
 interface Product {
   id: string; slug: string; name: string; price: number; description: string
-  imageUrl: string; category: string; purity: string; stock: number; active: boolean
+  imageUrl: string; category: string; servings: string; stock: number; active: boolean
   tag?: string | null
+  variants?: { id: string; label: string; price: number; stock: number; active: boolean }[]
 }
 
 interface Props {
   products: Product[]
   showForm: boolean
   setShowForm: (v: boolean) => void
-  form: { slug: string; name: string; price: string; description: string; imageUrl: string; category: string; purity: string; stock: string; tag: string }
+  form: { slug: string; name: string; price: string; description: string; imageUrl: string; category: string; servings: string; stock: string; tag: string }
   setForm: (f: Props['form']) => void
   formError: string
   editingProduct: Product | null
@@ -33,8 +35,16 @@ interface Props {
 
 export default function ProductsTab({ products, showForm, setShowForm, form, setForm, formError, editingProduct, onSubmit, onReset, onEdit, onToggle, onDelete }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
+  const imageRef = useRef<HTMLInputElement>(null)
   const [importResult, setImportResult] = useState<{ imported: number; skipped: number; errors: string[] } | null>(null)
   const [importing, setImporting] = useState(false)
+
+  // Product image upload
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState('')
+
+  // Which product's sizes are being edited
+  const [variantProduct, setVariantProduct] = useState<Product | null>(null)
 
   // Dynamic tags
   const [tags, setTags] = useState<ProductTag[]>([])
@@ -77,6 +87,30 @@ export default function ProductsTab({ products, showForm, setShowForm, form, set
     }
     setImporting(false)
     if (fileRef.current) fileRef.current.value = ''
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setUploadError('')
+    const body = new FormData()
+    body.append('file', file)
+    if (form.slug.trim()) body.append('filename', form.slug.trim())
+    try {
+      const res = await fetch('/api/admin/upload', { method: 'POST', body })
+      const data = await res.json()
+      if (!res.ok) {
+        setUploadError(data.error || 'Upload failed')
+      } else {
+        setForm({ ...form, imageUrl: data.url })
+      }
+    } catch {
+      setUploadError('Upload failed')
+    } finally {
+      setUploading(false)
+      if (imageRef.current) imageRef.current.value = ''
+    }
   }
 
   const addTag = async () => {
@@ -288,23 +322,26 @@ export default function ProductsTab({ products, showForm, setShowForm, form, set
           <div className="admin-form-grid">
             <label className="form-label">
               Slug
-              <input required className="form-input" value={form.slug} onChange={e => setForm({ ...form, slug: e.target.value })} placeholder="bpc-157" />
+              <input required className="form-input" value={form.slug} onChange={e => setForm({ ...form, slug: e.target.value })} placeholder="taro-milk-tea" />
             </label>
             <label className="form-label">
               Name
-              <input required className="form-input" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="BPC-157" />
+              <input required className="form-input" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Taro Milk Tea" />
             </label>
             <label className="form-label">
               Price ($)
-              <input required type="number" step="0.01" className="form-input" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} placeholder="49.99" />
+              <input required type="number" step="0.01" min="0.01" className="form-input" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} placeholder="26.99" />
             </label>
             <label className="form-label">
               Category
-              <input required className="form-input" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} placeholder="Recovery" />
+              <input required className="form-input" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} placeholder="Classic" list="admin-category-suggestions" />
+              <datalist id="admin-category-suggestions">
+                {[...new Set(products.map(p => p.category))].sort().map(c => <option key={c} value={c} />)}
+              </datalist>
             </label>
             <label className="form-label">
-              Purity
-              <input required className="form-input" value={form.purity} onChange={e => setForm({ ...form, purity: e.target.value })} placeholder="20+ Servings" />
+              Servings per bag
+              <input required className="form-input" value={form.servings} onChange={e => setForm({ ...form, servings: e.target.value })} placeholder="20+ Servings" />
             </label>
             <label className="form-label">
               Stock
@@ -321,9 +358,45 @@ export default function ProductsTab({ products, showForm, setShowForm, form, set
             </label>
           </div>
           <label className="form-label" style={{ marginTop: '0.5rem' }}>
-            Image URL
-            <input required className="form-input" value={form.imageUrl} onChange={e => setForm({ ...form, imageUrl: e.target.value })} placeholder="https://..." />
+            Product Image
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                required
+                className="form-input"
+                style={{ flex: '1 1 240px' }}
+                value={form.imageUrl}
+                onChange={e => setForm({ ...form, imageUrl: e.target.value })}
+                placeholder="/products/taro.jpg or https://..."
+              />
+              <button
+                type="button"
+                className="btn btn-secondary"
+                style={{ fontSize: '0.82rem', padding: '0.45rem 0.75rem', whiteSpace: 'nowrap' }}
+                onClick={() => imageRef.current?.click()}
+                disabled={uploading}
+              >
+                {uploading ? '⏳ Uploading...' : '🖼️ Upload'}
+              </button>
+              <input
+                ref={imageRef}
+                type="file"
+                accept="image/png,image/jpeg,image/gif,image/webp,image/avif,image/svg+xml"
+                onChange={handleImageUpload}
+                style={{ display: 'none' }}
+              />
+            </div>
           </label>
+          {uploadError && <p style={{ color: 'var(--error)', fontSize: '0.8rem', margin: '0.25rem 0 0' }}>{uploadError}</p>}
+          {form.imageUrl && (
+            <Image
+              src={form.imageUrl}
+              alt="Product image preview"
+              width={72}
+              height={72}
+              style={{ borderRadius: 8, objectFit: 'cover', marginTop: '0.5rem' }}
+              unoptimized
+            />
+          )}
           <label className="form-label">
             Description
             <textarea required className="form-input" rows={2} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Product description..." />
@@ -334,6 +407,16 @@ export default function ProductsTab({ products, showForm, setShowForm, form, set
             <button type="button" className="btn btn-secondary" onClick={onReset}>Cancel</button>
           </div>
         </form>
+      )}
+
+      {/* Size / variant editor */}
+      {variantProduct && (
+        <VariantEditor
+          key={variantProduct.id}
+          productId={variantProduct.id}
+          productName={variantProduct.name}
+          onClose={() => setVariantProduct(null)}
+        />
       )}
 
       {/* Bulk Tag Bar */}
@@ -363,7 +446,8 @@ export default function ProductsTab({ products, showForm, setShowForm, form, set
               <th>Price</th>
               <th>Category</th>
               <th>Tag</th>
-              <th>Purity</th>
+              <th>Servings</th>
+              <th>Sizes</th>
               <th>Stock</th>
               <th>Status</th>
               <th>Actions</th>
@@ -397,7 +481,17 @@ export default function ProductsTab({ products, showForm, setShowForm, form, set
                       <span style={{ color: 'var(--text-tertiary)', fontSize: '0.8rem' }}>—</span>
                     )}
                   </td>
-                  <td>{p.purity}</td>
+                  <td>{p.servings}</td>
+                  <td>
+                    <button
+                      className="admin-action-btn"
+                      onClick={() => setVariantProduct(variantProduct?.id === p.id ? null : p)}
+                      title="Manage sizes, their prices and stock"
+                      style={{ whiteSpace: 'nowrap' }}
+                    >
+                      📐 {p.variants?.length ?? 0}
+                    </button>
+                  </td>
                   <td>
                     <span style={{ color: p.stock < 20 ? 'var(--error)' : p.stock < 50 ? '#eab308' : 'var(--success)' }}>
                       {p.stock}

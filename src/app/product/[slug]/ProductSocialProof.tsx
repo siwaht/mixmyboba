@@ -8,7 +8,7 @@ import { discountedPrice } from '@/lib/pricing'
 import { useToast } from '@/components/Toast'
 
 interface RelatedProduct {
-  id: string; slug: string; name: string; price: number; imageUrl: string; purity: string; category: string
+  id: string; slug: string; name: string; price: number; imageUrl: string; servings: string; category: string
 }
 
 // Simulated viewing counter — generates a believable number based on product ID hash
