@@ -164,7 +164,7 @@ export default function ReviewsTab() {
           {reviews.length === 0 ? 'No reviews have been submitted yet.' : 'No reviews match this filter.'}
         </div>
       ) : (
-        <div className="admin-orders-table">
+        <div className="admin-orders-table admin-reviews-table">
           <table>
             <thead>
               <tr>
