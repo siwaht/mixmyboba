@@ -175,8 +175,9 @@ console.log(JSON.stringify({
   hasPaymentSettings: Boolean(paymentSettings),
   hasWebhookSettings: Boolean(webhooks),
   hasAnalytics: Boolean(analytics),
+  hasAdminStats: Boolean(adminStats),
   quotedProductId: product.id,
   createdAndCancelledOrder: createdOrder.id,
-  mcpReadToolsPassed: 6 + 21,
+  mcpReadToolsPassed: mcpReadCaseCount,
   mcpWriteOperationsPassed: 6,
 }))
