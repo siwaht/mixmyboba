@@ -1,8 +1,8 @@
-# CellulaLabs Admin MCP Server
+# MixMyBoba Admin MCP Server
 
-Full AI agent control of the CellulaLabs e-commerce site via Model Context Protocol.
+Full AI agent control of the MixMyBoba e-commerce site via Model Context Protocol.
 
-## What's New in v3.0.0
+## What's New in v4.0.0
 
 - **Structured error handling** — Tool results use `isError: true` for HTTP 4xx/5xx, so AI clients can distinguish success from failure
 - **Request timeouts** — 30s timeout prevents hung requests from blocking the server
@@ -13,10 +13,12 @@ Full AI agent control of the CellulaLabs e-commerce site via Model Context Proto
 - **Pagination support** — `list_products`, `list_orders`, `list_customers`, `list_reviews` accept `page`/`limit`
 - **CSV import tools** — `import_products_csv` and `import_customers_csv` for round-trip data management
 - **Coupon validation** — `validate_coupon` tool for pre-order coupon checks
-- **MCP Resources** — 8 browsable resources for store overview, inventory, orders, products, customers, and coupons
-- **MCP Prompts** — 4 pre-built workflow templates for sales reports, restocking, customer insights, and fulfillment
+- **MCP Resources** — 7 browsable resources plus 3 parameterized resource templates for store overview, inventory, orders, products, customers, and content
+- **MCP Prompts** — 5 pre-built workflow templates for content audits, sales reports, restocking, customer insights, and fulfillment
 
 ## Quick Setup
+
+The server supports local stdio clients and an authenticated Streamable HTTP endpoint for always-on remote agents.
 
 1. Install dependencies:
    ```bash
@@ -31,22 +33,24 @@ Full AI agent control of the CellulaLabs e-commerce site via Model Context Proto
    ```
 
 3. Add the token to `.kiro/settings/mcp.json`:
+
+The generated token is an admin credential. Store it only in the client environment configuration; do not commit it to source control.
    ```json
    {
      "mcpServers": {
-       "cellulalabs-admin": {
+       "mixmyboba-admin": {
          "command": "node",
          "args": ["mcp-server/index.js"],
          "env": {
-           "CELLULA_BASE_URL": "http://localhost:5000",
-           "CELLULA_ADMIN_TOKEN": "<paste-token-here>"
+           "MIXMYBOBA_BASE_URL": "http://localhost:5000",
+           "MIXMYBOBA_ADMIN_TOKEN": "<paste-token-here>"
          }
        }
      }
    }
    ```
 
-## 47 Tools — Full Site Control
+## 61 Tools — Full Site Control
 
 ### Infrastructure
 | Tool | Description |
@@ -140,15 +144,26 @@ Full AI agent control of the CellulaLabs e-commerce site via Model Context Proto
 ### Payment Settings (2 tools)
 | Tool | Description |
 |------|-------------|
-| `get_payment_settings` | Get Stripe/PayPal/Crypto/ACH config |
-| `update_payment_settings` | Configure payment gateways |
+| `get_payment_settings` | Get Stripe/PayPal/Crypto/ACH/COD config |
+| `update_payment_settings` | Configure gateways, tax, shipping rate, and free-shipping threshold |
 
 ### Activity Feed (1 tool)
 | Tool | Description |
 |------|-------------|
 | `get_recent_activity` | Real-time feed of store events (last 24h default) |
 
-## 8 Resources — Browsable Data
+### Webhooks (3 tools)
+| Tool | Description |
+|------|-------------|
+| `get_webhook_settings` | Read webhook settings and endpoints |
+| `update_webhook_settings` | Update webhook settings |
+| `test_webhook` | Send a sample event to an endpoint |
+
+### Remote HTTP mode
+
+For an always-on remote agent, run the server on a protected host with `MCP_TRANSPORT=http`, `MCP_HOST=0.0.0.0`, `MCP_PORT=8787`, `MIXMYBOBA_BASE_URL=https://your-store.example`, `MIXMYBOBA_ADMIN_TOKEN=<admin-token>`, and `MIXMYBOBA_MCP_ACCESS_TOKEN=<agent-access-token>`. Reverse proxy `/mcp` through HTTPS and pass the access token as `Authorization: Bearer <agent-access-token>`. The HTTP mode maintains one stateful MCP session at a time; use separate processes or a session-aware deployment when multiple agents are required.
+
+## 7 Resources + 3 Resource Templates — Browsable Data
 
 | Resource URI | Description |
 |---|---|

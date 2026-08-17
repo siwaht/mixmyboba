@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { prisma } from './db'
 import { getJwtSecret } from './jwt-secret'
 
@@ -49,12 +49,12 @@ export function authCookieOptions(request: { headers: { get(name: string): strin
 export async function getCurrentUser(request?: { headers: { get(name: string): string | null } }) {
   let token: string | undefined
 
-  // 1. Try Bearer token from Authorization header (for API consumers)
-  if (request) {
-    const authHeader = request.headers.get('authorization')
-    if (authHeader?.startsWith('Bearer ')) {
-      token = authHeader.slice(7)
-    }
+  // 1. Try Bearer token from the supplied request (for API consumers)
+  // or Next's request headers when routes call this helper without arguments.
+  const requestHeaders = request ? request.headers : await headers()
+  const authHeader = requestHeaders.get('authorization')
+  if (authHeader?.startsWith('Bearer ')) {
+    token = authHeader.slice(7)
   }
 
   // 2. Fall back to cookie

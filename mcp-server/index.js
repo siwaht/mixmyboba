@@ -1,14 +1,16 @@
 #!/usr/bin/env node
+import { randomUUID } from "node:crypto";
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 
 // ═══════════════════════════════════════════════════════════════════
 // CONFIGURATION & CONSTANTS
 // ═══════════════════════════════════════════════════════════════════
 
-const BASE_URL = process.env.CELLULA_BASE_URL || "http://localhost:5000";
-const ADMIN_TOKEN = process.env.CELLULA_ADMIN_TOKEN || "";
+const BASE_URL = (process.env.MIXMYBOBA_BASE_URL || process.env.CELLULA_BASE_URL || "http://localhost:5000").replace(/\/$/, "");
+const ADMIN_TOKEN = process.env.MIXMYBOBA_ADMIN_TOKEN || process.env.CELLULA_ADMIN_TOKEN || "";
 const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_RETRIES = 3;
 const RETRY_BASE_DELAY_MS = 500;
@@ -35,9 +37,16 @@ async function api(path, options = {}) {
   const url = `${BASE_URL}${path}`;
   const headers = {
     ...(options.isFormData ? {} : { "Content-Type": "application/json" }),
-    ...(ADMIN_TOKEN ? { Cookie: `auth-token=${ADMIN_TOKEN}` } : {}),
+    ...(ADMIN_TOKEN
+      ? {
+          Authorization: `Bearer ${ADMIN_TOKEN}`,
+          Cookie: `auth-token=${ADMIN_TOKEN}`,
+        }
+      : {}),
     ...options.headers,
   };
+  const method = (options.method || "GET").toUpperCase();
+  const retryable = ["GET", "HEAD", "OPTIONS"].includes(method);
   const fetchOpts = { ...options, headers, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) };
   delete fetchOpts.isFormData;
 
@@ -52,14 +61,14 @@ async function api(path, options = {}) {
       if (res.status === 429) {
         const retryAfter = parseInt(res.headers.get("retry-after") || "5", 10);
         log("warn", "Rate limited", { path, retryAfter, attempt });
-        if (attempt < MAX_RETRIES) {
+        if (retryable && attempt < MAX_RETRIES) {
           await sleep(retryAfter * 1000);
           continue;
         }
       }
 
       // Retry on transient server errors (502, 503, 504)
-      if ([502, 503, 504].includes(res.status) && attempt < MAX_RETRIES) {
+      if (retryable && [502, 503, 504].includes(res.status) && attempt < MAX_RETRIES) {
         const delay = RETRY_BASE_DELAY_MS * Math.pow(2, attempt);
         log("warn", "Transient error, retrying", { path, status: res.status, attempt, delay });
         await sleep(delay);
@@ -88,13 +97,13 @@ async function api(path, options = {}) {
       lastError = err;
       if (err.name === "TimeoutError" || err.name === "AbortError") {
         log("error", "Request timeout", { path, attempt, timeout: REQUEST_TIMEOUT_MS });
-        if (attempt < MAX_RETRIES) {
+        if (retryable && attempt < MAX_RETRIES) {
           await sleep(RETRY_BASE_DELAY_MS * Math.pow(2, attempt));
           continue;
         }
       } else {
-        log("error", "Request failed", { path, attempt, error: err.message });
-        if (attempt < MAX_RETRIES) {
+        log("error", "Request failed", { path, method, attempt, error: err.message });
+        if (retryable && attempt < MAX_RETRIES) {
           await sleep(RETRY_BASE_DELAY_MS * Math.pow(2, attempt));
           continue;
         }
@@ -143,10 +152,10 @@ function errorResult(message) {
 // ═══════════════════════════════════════════════════════════════════
 
 const server = new McpServer({
-  name: "cellulalabs-admin",
+  name: "mixmyboba-admin",
   version: "4.0.0",
   description:
-    "Full admin control of the CellulaLabs e-commerce site. Manage products, orders, customers, inventory, coupons, reviews, site content, page content (navbar, homepage, about, FAQ, policies, footer, SEO), payment settings, analytics, and data import/export.",
+    "Full admin control of the MixMyBoba e-commerce site. Manage products, orders, customers, inventory, coupons, reviews, site content, page content (navbar, homepage, about, FAQ, policies, footer, SEO), payment settings, analytics, webhooks, and data import/export.",
 });
 
 // ═══════════════════════════════════════════════════════════════════
@@ -155,7 +164,7 @@ const server = new McpServer({
 
 server.tool(
   "health_check",
-  "Check connectivity to the CellulaLabs backend. Returns status, response time, and server info. Use this to verify the MCP server can reach the backend before running batch operations.",
+  "Check connectivity to the MixMyBoba backend. Returns status, response time, and server info. Use this to verify the MCP server can reach the backend before running batch operations.",
   {},
   async () => {
     const start = Date.now();
@@ -168,6 +177,8 @@ server.tool(
         backendUrl: BASE_URL,
         authenticated: !!ADMIN_TOKEN,
         httpStatus: r.status,
+        response: r.data,
+
       });
     } catch (err) {
       return errorResult(
@@ -268,23 +279,20 @@ server.tool(
 
 server.tool(
   "create_product",
-  "Create a new product in the store. Requires slug, name, price, description, imageUrl, category, and purity. Optionally set stock, scientific fields (molecularWeight, sequence, casNumber), storage info, batch tracking, and a product tag (best_seller, fast_selling, last_few_left, staff_pick, new, popular).",
+  "Create a new boba product. Requires the fields accepted by the store admin API: slug, name, price, description, imageUrl, category, and servings. Optionally set stock, active status, storage, product form, tag, batch number, and lot number.",
   {
-    slug: z.string().describe("URL-friendly slug, lowercase alphanumeric with hyphens only, e.g. 'bpc-157'"),
-    name: z.string().describe("Product display name, e.g. 'BPC-157'"),
-    price: z.number().describe("Price in USD"),
+    slug: z.string().describe("URL-friendly slug, lowercase alphanumeric with hyphens only, e.g. 'classic-milk-tea'"),
+    name: z.string().describe("Product display name, e.g. 'Classic Milk Tea'"),
+    price: z.number().positive().describe("Price in USD"),
     description: z.string().describe("Product description"),
     imageUrl: z.string().describe("Product image URL (use upload_product_image first to get a URL)"),
-    category: z.string().describe("Product category, e.g. 'Recovery', 'Weight Loss', 'Cognitive'"),
-    purity: z.string().describe("Purity percentage, e.g. '99.8%'"),
-    stock: z.number().optional().describe("Initial stock quantity (default 100)"),
+    category: z.string().describe("Product category, e.g. 'Milk Tea' or 'Fruit Tea'"),
+    servings: z.string().describe("Servings per bag, e.g. '20+ Servings'"),
+    stock: z.number().int().min(0).optional().describe("Initial stock quantity (default 100)"),
     active: z.boolean().optional().describe("Whether product is active (default true)"),
-    tag: z.string().optional().describe("Product tag/badge: 'best_seller', 'fast_selling', 'last_few_left', 'staff_pick', 'new', 'popular', or null to remove"),
-    molecularWeight: z.string().optional().describe("Molecular weight, e.g. '1419.53 g/mol'"),
-    sequence: z.string().optional().describe("Amino acid sequence"),
-    casNumber: z.string().optional().describe("CAS registry number"),
-    storageTemp: z.string().optional().describe("Storage temperature (default '-20°C')"),
-    form: z.string().optional().describe("Product form (default 'Lyophilized Powder')"),
+    tag: z.string().nullable().optional().describe("Product tag slug, or null to remove"),
+    storageTemp: z.string().optional().describe("Storage instructions (default 'Cool & Dry')"),
+    form: z.string().optional().describe("Product form (default 'Instant Powder Mix')"),
     batchNumber: z.string().optional().describe("Current batch number"),
     lotNumber: z.string().optional().describe("Current lot number"),
   },
@@ -299,22 +307,19 @@ server.tool(
 
 server.tool(
   "update_product",
-  "Update any fields on an existing product. Pass only the fields you want to change.",
+  "Update any fields on an existing boba product. Pass only the fields you want to change. Fields match the store admin API.",
   {
     id: z.string().describe("Product ID"),
     slug: z.string().optional(),
     name: z.string().optional(),
-    price: z.number().optional(),
+    price: z.number().positive().optional(),
     description: z.string().optional(),
     imageUrl: z.string().optional(),
     category: z.string().optional(),
-    purity: z.string().optional(),
-    stock: z.number().optional(),
+    servings: z.string().optional(),
+    stock: z.number().int().min(0).optional(),
     active: z.boolean().optional(),
-    tag: z.string().optional().describe("Product tag/badge: 'best_seller', 'fast_selling', 'last_few_left', 'staff_pick', 'new', 'popular', or empty string to remove"),
-    molecularWeight: z.string().optional(),
-    sequence: z.string().optional(),
-    casNumber: z.string().optional(),
+    tag: z.string().nullable().optional().describe("Product tag slug, or null/empty string to remove"),
     storageTemp: z.string().optional(),
     form: z.string().optional(),
     batchNumber: z.string().optional(),
@@ -466,7 +471,7 @@ server.tool(
   {
     productId: z.string().describe("Product ID"),
     batchNumber: z.string().describe("Batch number for this COA"),
-    purityResult: z.string().describe("Purity test result, e.g. '99.8%'"),
+    result: z.string().describe("Lab result or finding, e.g. 'Passed — all limits within spec'"),
     fileUrl: z.string().describe("URL to the COA PDF file"),
     labName: z.string().optional().describe("Testing lab name (default 'Janoshik Analytics')"),
     testDate: z.string().optional().describe("Test date in ISO format (default now)"),
@@ -556,14 +561,18 @@ server.tool(
   {
     email: z.string().describe("Customer email address"),
     shippingAddress: z.string().describe("Full shipping address"),
+    phone: z.string().optional().describe("Customer phone number"),
     items: z.array(z.object({
       productId: z.string().describe("Product ID"),
-      quantity: z.number().describe("Quantity"),
-    })).describe("Array of items with productId and quantity"),
-    paymentMethod: z.enum(["card", "crypto", "ach", "paypal", "cod", "manual"]).optional().describe("Payment method (default: card)"),
-    status: z.enum(["pending", "paid", "shipped", "delivered"]).optional().describe("Initial status (default: pending)"),
+      variantId: z.string().optional().describe("Optional product variant ID"),
+      quantity: z.number().int().positive().describe("Quantity"),
+      price: z.number().min(0).optional().describe("Optional manual unit-price override"),
+    })).describe("Array of order line items"),
+    paymentMethod: z.enum(["card", "crypto", "ach", "paypal", "cod"]).optional().describe("Payment method (default: card)"),
+    status: z.enum(["pending", "paid", "shipped", "delivered", "cancelled"]).optional().describe("Initial status (default: pending)"),
     notes: z.string().optional().describe("Internal order notes"),
-    discount: z.string().optional().describe("Discount amount in dollars, e.g. '10'"),
+    discount: z.number().min(0).optional().describe("Discount amount in dollars"),
+    shipping: z.number().min(0).optional().describe("Shipping amount in dollars"),
   },
   async (args) => {
     const r = await api("/api/admin/orders/create", {
@@ -714,7 +723,8 @@ server.tool(
     type: z.enum(["percent", "fixed"]).describe("'percent' for percentage off, 'fixed' for dollar amount off"),
     value: z.number().describe("Discount value — percentage (e.g. 20 for 20%) or dollar amount (e.g. 10 for $10)"),
     minOrder: z.number().optional().describe("Minimum order amount to use this coupon (default 0)"),
-    maxUses: z.number().optional().describe("Maximum number of times this coupon can be used (blank = unlimited)"),
+    maxUses: z.number().int().positive().nullable().optional().describe("Maximum total redemptions (null = unlimited)"),
+    maxUsesPerCustomer: z.number().int().positive().nullable().optional().describe("Maximum redemptions per customer (null = unlimited)"),
     expiresAt: z.string().optional().describe("Expiration date in ISO format, e.g. '2026-12-31'"),
   },
   async (args) => {
@@ -1095,8 +1105,9 @@ server.tool(
     }).optional(),
     general: z.object({
       currency: z.string().optional(),
-      taxRate: z.number().optional(),
-      freeShippingThreshold: z.number().optional(),
+      taxRate: z.number().min(0).optional(),
+      shippingRate: z.number().min(0).optional(),
+      freeShippingThreshold: z.number().min(0).optional(),
     }).optional(),
   },
   async (args) => {
@@ -1314,7 +1325,7 @@ server.tool(
 
 server.tool(
   "import_products_csv",
-  "Import products from CSV data. Creates new products or updates existing ones (matched by slug). CSV must have headers: slug, name, price. Optional: description, imageUrl, category, purity, stock, active, tag, molecularWeight, sequence, casNumber, storageTemp, form, batchNumber, lotNumber. Returns count of imported, skipped, and any errors.",
+  "Import products from CSV data. Creates new products or updates existing ones (matched by slug). CSV must have headers: slug, name, price, description, imageUrl, category, servings. Optional: stock, active, tag, storageTemp, form, batchNumber, lotNumber. Returns count of imported, skipped, and any errors.",
   {
     csvData: z.string().describe("Raw CSV text with headers. First row must be column names."),
   },
@@ -1363,6 +1374,63 @@ server.tool(
   {},
   async () => {
     const r = await api("/api/admin/export/products");
+    return result(r);
+  }
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// WEBHOOKS — Event delivery configuration and diagnostics
+// ═══════════════════════════════════════════════════════════════════
+
+server.tool(
+  "get_webhook_settings",
+  "Get webhook delivery settings, subscribed event types, endpoints, retry policy, timeout, and low-stock threshold. Secrets are masked.",
+  {},
+  async () => {
+    const r = await api("/api/admin/webhooks");
+    return result(r);
+  }
+);
+
+server.tool(
+  "update_webhook_settings",
+  "Update webhook delivery settings. Pass the full settings object returned by get_webhook_settings, or only the fields you want to change; masked secrets are preserved.",
+  {
+    enabled: z.boolean().optional(),
+    secret: z.string().optional(),
+    endpoints: z.array(z.object({
+      id: z.string(),
+      label: z.string().optional(),
+      url: z.string().url(),
+      events: z.array(z.string()),
+      active: z.boolean(),
+      createdAt: z.string().optional(),
+    })).optional(),
+    events: z.record(z.string(), z.object({ enabled: z.boolean(), description: z.string() })).optional(),
+    lowStockThreshold: z.number().int().min(0).optional(),
+    retryAttempts: z.number().int().min(0).optional(),
+    timeoutMs: z.number().int().min(100).optional(),
+  },
+  async (args) => {
+    const r = await api("/api/admin/webhooks", {
+      method: "PUT",
+      body: JSON.stringify(args),
+    });
+    return result(r);
+  }
+);
+
+server.tool(
+  "test_webhook",
+  "Send a signed sample order.created event to a webhook URL and report the HTTP result.",
+  {
+    url: z.string().url().describe("Webhook endpoint URL to test"),
+  },
+  async (args) => {
+    const r = await api("/api/admin/webhooks", {
+      method: "POST",
+      body: JSON.stringify(args),
+    });
     return result(r);
   }
 );
@@ -1589,7 +1657,7 @@ server.prompt(
         role: "user",
         content: {
           type: "text",
-          text: `Generate a comprehensive weekly sales report for the CellulaLabs store.
+          text: `Generate a comprehensive weekly sales report for the MixMyBoba store.
 
 Use the get_analytics tool with period="${period}" to fetch the data, then format a clear report covering:
 1. Total revenue and order count for the period
@@ -1702,6 +1770,112 @@ Steps:
 // START SERVER
 // ═══════════════════════════════════════════════════════════════════
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
-log("info", "CellulaLabs MCP server v4.0.0 started", { baseUrl: BASE_URL, authenticated: !!ADMIN_TOKEN });
+async function startStdio() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  log("info", "MixMyBoba MCP server started in stdio mode", {
+    baseUrl: BASE_URL,
+    authenticated: !!ADMIN_TOKEN,
+    tools: 61,
+  });
+}
+
+async function startHttp() {
+  const { createServer } = await import("node:http");
+  const { StreamableHTTPServerTransport } = await import("@modelcontextprotocol/sdk/server/streamableHttp.js");
+  const port = Number(process.env.MCP_PORT || 8787);
+  const host = process.env.MCP_HOST || "0.0.0.0";
+  const accessToken = process.env.MIXMYBOBA_MCP_ACCESS_TOKEN || process.env.CELLULA_MCP_ACCESS_TOKEN || ADMIN_TOKEN;
+
+  if (!accessToken) {
+    throw new Error("MIXMYBOBA_MCP_ACCESS_TOKEN or MIXMYBOBA_ADMIN_TOKEN is required for HTTP MCP mode");
+  }
+
+  let transport;
+  let connected = false;
+
+  const sendJson = (res, status, payload) => {
+    if (!res.headersSent) {
+      res.statusCode = status;
+      res.setHeader("Content-Type", "application/json");
+    }
+    res.end(JSON.stringify(payload));
+  };
+
+  const readBody = async (req) => {
+    const chunks = [];
+    for await (const chunk of req) chunks.push(Buffer.from(chunk));
+    if (chunks.length === 0) return undefined;
+    return JSON.parse(Buffer.concat(chunks).toString("utf8"));
+  };
+
+  const httpServer = createServer(async (req, res) => {
+    if (req.url !== "/mcp") {
+      sendJson(res, 404, { error: "Not found" });
+      return;
+    }
+    if (req.method !== "POST" && req.method !== "GET" && req.method !== "DELETE") {
+      res.setHeader("Allow", "GET, POST, DELETE");
+      sendJson(res, 405, { error: "Method not allowed" });
+      return;
+    }
+
+    const auth = req.headers.authorization || "";
+    if (auth !== `Bearer ${accessToken}`) {
+      res.setHeader("WWW-Authenticate", "Bearer");
+      sendJson(res, 401, { error: "Unauthorized" });
+      return;
+    }
+
+    try {
+      const body = req.method === "POST" ? await readBody(req) : undefined;
+      const sessionId = req.headers["mcp-session-id"];
+
+      if (!transport) {
+        if (!body || !isInitializeRequest(body)) {
+          sendJson(res, 400, { error: "The first MCP request must be an initialize request" });
+          return;
+        }
+        transport = new StreamableHTTPServerTransport({
+          sessionIdGenerator: () => randomUUID(),
+          onsessioninitialized: (id) => log("info", "MCP HTTP session initialized", { sessionId: id }),
+        });
+        transport.onclose = () => {
+          log("info", "MCP HTTP session closed", { sessionId: transport?.sessionId });
+          transport = undefined;
+          connected = false;
+        };
+        await server.connect(transport);
+        connected = true;
+      } else if (!sessionId || sessionId !== transport.sessionId) {
+        sendJson(res, 404, { error: "Unknown or missing MCP session" });
+        return;
+      }
+
+      if (!connected) {
+        sendJson(res, 503, { error: "MCP server is not connected" });
+        return;
+      }
+      await transport.handleRequest(req, res, body);
+    } catch (error) {
+      log("error", "MCP HTTP request failed", { error: error instanceof Error ? error.message : String(error) });
+      sendJson(res, 500, { error: "Internal MCP server error" });
+    }
+  });
+
+  httpServer.listen(port, host, () => {
+    log("info", "MixMyBoba MCP server started in HTTP mode", {
+      host,
+      port,
+      baseUrl: BASE_URL,
+      tools: 61,
+    });
+  });
+}
+
+const transportMode = (process.env.MCP_TRANSPORT || "stdio").toLowerCase();
+if (transportMode === "http") {
+  await startHttp();
+} else {
+  await startStdio();
+}

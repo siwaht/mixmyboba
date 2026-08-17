@@ -47,6 +47,7 @@ export interface PaymentSettings {
   general: {
     currency: string
     taxRate: number
+    shippingRate: number
     freeShippingThreshold: number
   }
 }
@@ -86,6 +87,7 @@ const DEFAULT_SETTINGS: PaymentSettings = {
   general: {
     currency: 'USD',
     taxRate: 0,
+    shippingRate: 9.99,
     freeShippingThreshold: 200,
   },
 }
@@ -175,6 +177,7 @@ export async function PUT(req: NextRequest) {
     general: {
       currency: data.general?.currency ?? current.general.currency,
       taxRate: data.general?.taxRate ?? current.general.taxRate,
+      shippingRate: data.general?.shippingRate ?? current.general.shippingRate ?? 9.99,
       freeShippingThreshold: data.general?.freeShippingThreshold ?? current.general.freeShippingThreshold,
     },
   }

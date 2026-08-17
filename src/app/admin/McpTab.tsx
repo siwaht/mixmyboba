@@ -61,10 +61,34 @@ const MCP_TOOLS: McpTool[] = [
   // Payment Settings
   { name: 'get_payment_settings', description: 'Get Stripe/PayPal/Crypto/ACH config', category: 'Payments' },
   { name: 'update_payment_settings', description: 'Configure payment gateways', category: 'Payments' },
+  // Product Tags
+  { name: 'list_product_tags', description: 'List product tag definitions', category: 'Product Tags' },
+  { name: 'create_product_tag', description: 'Create a product tag definition', category: 'Product Tags' },
+  { name: 'delete_product_tag', description: 'Delete a product tag definition', category: 'Product Tags' },
+  { name: 'bulk_assign_tag', description: 'Assign or remove a tag from multiple products', category: 'Product Tags' },
+  // Auto-tagging
+  { name: 'get_auto_tag_settings', description: 'Get automatic tag rules', category: 'Auto-tagging' },
+  { name: 'update_auto_tag_settings', description: 'Update automatic tag rules', category: 'Auto-tagging' },
+  { name: 'run_auto_tags', description: 'Run automatic tag rules now', category: 'Auto-tagging' },
+  // Content and data tools
+  { name: 'get_page_content', description: 'Read navbar, homepage, FAQ, policies, footer, and SEO content', category: 'Site Content' },
+  { name: 'update_page_content', description: 'Update editable page content and SEO metadata', category: 'Site Content' },
+  { name: 'import_products_csv', description: 'Bulk import or update products from CSV', category: 'Data' },
+  { name: 'import_customers_csv', description: 'Bulk import or update customers from CSV', category: 'Data' },
+  { name: 'validate_coupon', description: 'Validate a coupon against an order subtotal', category: 'Coupons' },
+  // Analytics
+  { name: 'get_tag_analytics', description: 'Measure products, units sold, and revenue by tag', category: 'Analytics' },
+  { name: 'get_revenue_analytics', description: 'Revenue trends by time, category, and payment method', category: 'Analytics' },
+  { name: 'get_customer_ltv', description: 'Customer lifetime value and churn-risk analytics', category: 'Analytics' },
+  { name: 'get_analytics', description: 'Revenue trends, AOV, repeat rate, top/worst products, coupon usage', category: 'Analytics' },
+  // Infrastructure
+  { name: 'health_check', description: 'Check MCP-to-backend connectivity and authentication', category: 'Infrastructure' },
+  // Webhooks
+  { name: 'get_webhook_settings', description: 'Read webhook delivery settings and endpoints', category: 'Webhooks' },
+  { name: 'update_webhook_settings', description: 'Update webhook events, endpoints, retries, and thresholds', category: 'Webhooks' },
+  { name: 'test_webhook', description: 'Send a sample event to a webhook endpoint', category: 'Webhooks' },
   // Activity Feed
   { name: 'get_recent_activity', description: 'Real-time feed of orders, reviews, signups, stock changes & alerts', category: 'Activity Feed' },
-  // Analytics
-  { name: 'get_analytics', description: 'Revenue trends, AOV, repeat rate, top/worst products, coupon usage', category: 'Analytics' },
 ]
 
 const CATEGORIES = [...new Set(MCP_TOOLS.map(t => t.category))]
@@ -89,7 +113,7 @@ export default function McpTab() {
       const res = await fetch('/api/admin/stats')
       if (res.ok) {
         setConnectionStatus('connected')
-        setServerInfo({ version: '2.0.0', tools: MCP_TOOLS.length })
+        setServerInfo({ version: '4.0.0', tools: MCP_TOOLS.length })
       } else {
         setConnectionStatus('disconnected')
       }
@@ -174,12 +198,12 @@ export default function McpTab() {
 
   const mcpConfigJson = `{
   "mcpServers": {
-    "cellulalabs-admin": {
+    "mixmyboba-admin": {
       "command": "node",
       "args": ["mcp-server/index.js"],
       "env": {
-        "CELLULA_BASE_URL": "${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000'}",
-        "CELLULA_ADMIN_TOKEN": "${generatedToken || '<paste-token-here>'}"
+        "MIXMYBOBA_BASE_URL": "${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000'}",
+        "MIXMYBOBA_ADMIN_TOKEN": "${generatedToken || '<paste-token-here>'}"
       }
     }
   }
@@ -234,7 +258,7 @@ export default function McpTab() {
             <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: 0 }}>
               The <strong style={{ color: 'var(--text-primary)' }}>Model Context Protocol (MCP)</strong> lets AI agents 
               (like Claude, Cursor, Kiro, or custom agents) control your store directly. Instead of clicking through the admin panel, 
-              an AI agent can list products, create orders, update inventory, manage coupons, and more — all through a standardized protocol.
+              an AI agent can list products, create orders, update inventory, edit site content, manage coupons, and more — all through a standardized protocol.
             </p>
           </div>
 
@@ -327,7 +351,7 @@ export default function McpTab() {
           <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
             <h3 className="admin-card-title">📋 MCP Configuration</h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-              Add this to your AI tool&apos;s MCP config file (e.g. <code>.kiro/settings/mcp.json</code>, <code>claude_desktop_config.json</code>, or Cursor settings).
+              Add this to your AI tool&apos;s MCP config file (e.g. <code>.kiro/settings/mcp.json</code>, <code>claude_desktop_config.json</code>, or Cursor settings). The local configuration uses stdio; for an always-on remote agent, run the server with <code>MCP_TRANSPORT=http</code> and expose its <code>/mcp</code> endpoint behind HTTPS.
             </p>
             <div style={{ position: 'relative' }}>
               <pre style={{
